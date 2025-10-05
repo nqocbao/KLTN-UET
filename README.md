@@ -26,11 +26,13 @@ KLTN UET/
 ## 🚀 Công nghệ sử dụng
 
 ### Frontend
+
 - **Next.js** - React Framework
 - **TypeScript** - Type Safety
 - **Tailwind CSS** - Styling
 
 ### Backend
+
 - **Node.js** - Runtime
 - **Express.js** - Web Framework
 - **TypeScript** - Type Safety
@@ -49,11 +51,13 @@ KLTN UET/
 ## 🔧 Cài đặt
 
 ### Prerequisites
+
 - Node.js >= 18.x
 - MongoDB
 - npm/yarn/pnpm
 
 ### Client Setup
+
 ```bash
 cd client
 npm install
@@ -61,6 +65,7 @@ npm run dev
 ```
 
 ### Server Setup
+
 ```bash
 cd server
 npm install
@@ -70,6 +75,7 @@ npm run dev
 ## 🌐 Environment Variables
 
 ### Server (.env)
+
 ```env
 PORT=5000
 MONGODB_URI=mongodb://localhost:27017/kltn_uet
@@ -77,6 +83,7 @@ JWT_SECRET=your_secret_key
 ```
 
 ### Client (.env.local)
+
 ```env
 NEXT_PUBLIC_API_URL=http://localhost:5000
 ```
