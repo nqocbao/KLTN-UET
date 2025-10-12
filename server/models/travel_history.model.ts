@@ -7,6 +7,7 @@ const travelHistorySchema = new mongoose.Schema({
   transport_id: { type: mongoose.Schema.Types.ObjectId, ref: "Transport" },
   airline_id: { type: mongoose.Schema.Types.ObjectId, ref: "Airline" },
   destination_id: { type: mongoose.Schema.Types.ObjectId, ref: "Destination" },
+  tour_id: { type: mongoose.Schema.Types.ObjectId, ref: "Tour" },
   visited_at: { type: Date },
 });
 

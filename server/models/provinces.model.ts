@@ -1,7 +1,12 @@
 import mongoose from "mongoose";
 
 const provinceSchema = new mongoose.Schema({
-  name: { type: String, trim: true },
+  country_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Country",
+    required: true,
+  },
+  name: { type: String },
 });
 
 const Province = mongoose.model("Province", provinceSchema);

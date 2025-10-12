@@ -2,16 +2,16 @@ import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
   {
-    name: { type: String, trim: true },
-    email: { type: String, trim: true },
+    name: { type: String },
+    email: { type: String },
     password: { type: String, required: true },
-    phone: { type: String, required: true, trim: true },
-    role: { type: String, trim: true },
+    phone: { type: String, required: true },
+    role: { type: String },
     images: { type: mongoose.Schema.Types.Mixed }, // JSON
     address_id: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
   },
   {
-    timestamps: true, // Tự động thêm createdAt và updatedAt
+    timestamps: true,
   }
 );
 

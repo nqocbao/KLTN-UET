@@ -5,7 +5,7 @@ const transportSchema = new mongoose.Schema({
   address_id: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
   type: {
     type: String,
-    enum: ["bus", "train", "car", "other"],
+    enum: ["bus", "train", "car", "ship", "plane", "other"],
   },
   description: { type: String },
   rating: { type: Number, min: 0, max: 5 },

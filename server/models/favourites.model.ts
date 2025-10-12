@@ -11,6 +11,7 @@ const favouriteSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Destination",
     },
+    tour_id: { type: mongoose.Schema.Types.ObjectId, ref: "Tour" },
   },
   {
     timestamps: true,

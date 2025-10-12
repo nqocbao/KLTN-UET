@@ -5,6 +5,7 @@ import mongoose from "mongoose";
 import morgan from "morgan";
 import helmet from "helmet";
 import { connectDatabase } from "./config/database.js";
+import adminRoutes from "./routes/admin/index.js";
 
 dotenv.config();
 
@@ -19,6 +20,9 @@ connectDatabase();
 app.get("/", (_, res) => {
   res.send("Backend is running 🚀");
 });
+
+// Mount admin routes
+app.use("/api/admin", adminRoutes);
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

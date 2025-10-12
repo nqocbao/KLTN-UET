@@ -14,12 +14,12 @@ const reviewSchema = new mongoose.Schema(
         "guide",
       ],
     },
-    target_id: { type: mongoose.Schema.Types.ObjectId }, // Reference đến bảng tương ứng với target_type
+    target_id: { type: mongoose.Schema.Types.ObjectId },
     rating: { type: Number, min: 0, max: 5 },
     comment: { type: String },
   },
   {
-    timestamps: true, // Tự động thêm createdAt và updatedAt
+    timestamps: { createdAt: "created_at", updatedAt: false },
   }
 );
 

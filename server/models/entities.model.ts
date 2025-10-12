@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
 const entitySchema = new mongoose.Schema({
-  name: { type: String, required: true, trim: true },
-  value: { type: String, trim: true },
+  name: { type: String, required: true },
+  value: { type: String },
   extra: { type: mongoose.Schema.Types.Mixed }, // JSON
 });
 

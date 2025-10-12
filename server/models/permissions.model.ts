@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 const permissionSchema = new mongoose.Schema({
-  name: { type: String, trim: true },
+  name: { type: String },
   description: { type: String },
 });
 

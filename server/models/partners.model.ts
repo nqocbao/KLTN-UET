@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const partnerSchema = new mongoose.Schema(
   {
-    name: { type: String, trim: true },
+    name: { type: String },
     type: {
       type: String,
       enum: ["hotel", "restaurant", "transport", "airline", "other"],
@@ -11,6 +11,7 @@ const partnerSchema = new mongoose.Schema(
     images: { type: mongoose.Schema.Types.Mixed }, // JSON
     logo_url: { type: String },
     banner_url: { type: String },
+    country_id: { type: mongoose.Schema.Types.ObjectId, ref: "Country" },
     address_id: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
   },
   {
