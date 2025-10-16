@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import LanguageSwitcher from "./LanguageSwitcher";
+import { ThemeToggle } from "./ThemeToggle";
 
 export default function Navbar() {
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -40,21 +41,7 @@ export default function Navbar() {
           <LanguageSwitcher />
 
           {/* Theme Toggle */}
-          <button className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800">
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-              />
-            </svg>
-          </button>
+          <ThemeToggle />
 
           {/* Notifications */}
           <div className="relative">
@@ -63,7 +50,7 @@ export default function Navbar() {
               className="relative p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
             >
               <svg
-                className="w-5 h-5"
+                className="w-5 h-5 text-gray-700 dark:text-gray-300"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -82,7 +69,9 @@ export default function Navbar() {
             {showNotifications && (
               <div className="absolute right-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2">
                 <div className="px-4 py-2 border-b border-gray-200 dark:border-gray-700">
-                  <h3 className="font-semibold">Notifications</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">
+                    Notifications
+                  </h3>
                 </div>
                 <div className="max-h-96 overflow-y-auto">
                   {[1, 2, 3].map((i) => (
@@ -90,10 +79,10 @@ export default function Navbar() {
                       key={i}
                       className="px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer"
                     >
-                      <p className="text-sm font-medium">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white">
                         New booking received
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                         2 minutes ago
                       </p>
                     </div>
@@ -113,11 +102,15 @@ export default function Navbar() {
                 A
               </div>
               <div className="text-left hidden md:block">
-                <p className="text-sm font-semibold">Admin User</p>
-                <p className="text-xs text-gray-500">Administrator</p>
+                <p className="text-sm font-semibold text-gray-900 dark:text-white">
+                  Admin User
+                </p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">
+                  Administrator
+                </p>
               </div>
               <svg
-                className="w-4 h-4 text-gray-400"
+                className="w-4 h-4 text-gray-400 dark:text-gray-500"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -136,13 +129,13 @@ export default function Navbar() {
               <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 py-2">
                 <a
                   href="#"
-                  className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Profile
                 </a>
                 <a
                   href="#"
-                  className="block px-4 py-2 text-sm hover:bg-gray-50 dark:hover:bg-gray-700"
+                  className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Settings
                 </a>

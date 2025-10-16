@@ -1,3 +1,8 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
+
 interface Activity {
   id: number;
   user: string;
@@ -43,60 +48,54 @@ const activities: Activity[] = [
 ];
 
 export default function RecentActivity() {
-  const getTypeColor = (type: Activity["type"]) => {
-    switch (type) {
-      case "create":
-        return "bg-green-100 dark:bg-green-900/20 text-green-600 dark:text-green-400";
-      case "update":
-        return "bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400";
-      case "delete":
-        return "bg-red-100 dark:bg-red-900/20 text-red-600 dark:text-red-400";
-      case "view":
-        return "bg-gray-100 dark:bg-gray-900/20 text-gray-600 dark:text-gray-400";
-      default:
-        return "bg-gray-100 dark:bg-gray-900/20 text-gray-600 dark:text-gray-400";
-    }
-  };
-
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-      <div className="flex items-center justify-between mb-6">
-        <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-          Recent Activity
-        </h3>
-        <button className="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+    <Card className="border-0">
+      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-4">
+        <CardTitle>Recent Activity</CardTitle>
+        <Button variant="ghost" size="sm" className="text-primary">
           View All
-        </button>
-      </div>
-
-      <div className="space-y-4">
-        {activities.map((activity) => (
-          <div
-            key={activity.id}
-            className="flex items-start space-x-4 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors"
-          >
+        </Button>
+      </CardHeader>
+      <CardContent>
+        <div className="space-y-4">
+          {activities.map((activity) => (
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold ${getTypeColor(
-                activity.type
-              )}`}
+              key={activity.id}
+              className="flex items-start space-x-4 p-3 rounded-lg hover:bg-accent transition-colors"
             >
-              {activity.user[0]}
+              <Avatar className="h-8 w-8">
+                <AvatarFallback
+                  className={cn(
+                    "text-xs font-semibold",
+                    activity.type === "create" &&
+                      "bg-green-100 text-green-700 dark:bg-green-900/20 dark:text-green-400",
+                    activity.type === "update" &&
+                      "bg-blue-100 text-blue-700 dark:bg-blue-900/20 dark:text-blue-400",
+                    activity.type === "delete" &&
+                      "bg-red-100 text-red-700 dark:bg-red-900/20 dark:text-red-400",
+                    activity.type === "view" &&
+                      "bg-gray-100 text-gray-700 dark:bg-gray-900/20 dark:text-gray-400"
+                  )}
+                >
+                  {activity.user[0]}
+                </AvatarFallback>
+              </Avatar>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm">
+                  <span className="font-semibold">{activity.user}</span>{" "}
+                  <span className="text-muted-foreground">
+                    {activity.action}
+                  </span>{" "}
+                  <span className="font-medium">{activity.target}</span>
+                </p>
+                <p className="text-xs text-muted-foreground mt-1">
+                  {activity.time}
+                </p>
+              </div>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-900 dark:text-white">
-                <span className="font-semibold">{activity.user}</span>{" "}
-                <span className="text-gray-600 dark:text-gray-400">
-                  {activity.action}
-                </span>{" "}
-                <span className="font-medium">{activity.target}</span>
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                {activity.time}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
+          ))}
+        </div>
+      </CardContent>
+    </Card>
   );
 }
