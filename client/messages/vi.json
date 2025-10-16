@@ -1,0 +1,122 @@
+{
+  "common": {
+    "welcome": "Chào mừng",
+    "loading": "Đang tải...",
+    "save": "Lưu",
+    "cancel": "Hủy",
+    "delete": "Xóa",
+    "edit": "Sửa",
+    "search": "Tìm kiếm",
+    "filter": "Lọc",
+    "export": "Xuất",
+    "import": "Nhập",
+    "actions": "Thao tác",
+    "status": "Trạng thái",
+    "active": "Hoạt động",
+    "inactive": "Không hoạt động",
+    "total": "Tổng",
+    "language": "Ngôn ngữ"
+  },
+  "navigation": {
+    "dashboard": "Tổng quan",
+    "tours": "Tour du lịch",
+    "users": "Người dùng",
+    "destinations": "Điểm đến",
+    "hotels": "Khách sạn",
+    "restaurants": "Nhà hàng",
+    "countries": "Quốc gia",
+    "settings": "Cài đặt",
+    "analytics": "Phân tích",
+    "reports": "Báo cáo",
+    "logout": "Đăng xuất"
+  },
+  "dashboard": {
+    "title": "Tổng quan",
+    "overview": "Tổng quan",
+    "totalRevenue": "Tổng doanh thu",
+    "totalBookings": "Tổng đặt chỗ",
+    "totalUsers": "Tổng người dùng",
+    "totalTours": "Tổng tour",
+    "recentActivity": "Hoạt động gần đây",
+    "topDestinations": "Điểm đến hàng đầu",
+    "salesChart": "Biểu đồ doanh số",
+    "bookingStats": "Thống kê đặt chỗ",
+    "last7Days": "7 ngày qua",
+    "last30Days": "30 ngày qua",
+    "thisMonth": "Tháng này",
+    "thisYear": "Năm này"
+  },
+  "tours": {
+    "title": "Quản lý Tour",
+    "addNew": "Thêm Tour mới",
+    "tourName": "Tên Tour",
+    "destination": "Điểm đến",
+    "price": "Giá",
+    "duration": "Thời gian",
+    "capacity": "Sức chứa",
+    "description": "Mô tả",
+    "status": "Trạng thái",
+    "featured": "Nổi bật",
+    "days": "ngày",
+    "people": "người"
+  },
+  "users": {
+    "title": "Quản lý Người dùng",
+    "addNew": "Thêm người dùng mới",
+    "name": "Tên",
+    "email": "Email",
+    "phone": "Số điện thoại",
+    "role": "Vai trò",
+    "joinedDate": "Ngày tham gia",
+    "lastActive": "Hoạt động lần cuối",
+    "admin": "Quản trị viên",
+    "customer": "Khách hàng",
+    "guide": "Hướng dẫn viên"
+  },
+  "destinations": {
+    "title": "Quản lý Điểm đến",
+    "addNew": "Thêm điểm đến mới",
+    "name": "Tên",
+    "country": "Quốc gia",
+    "description": "Mô tả",
+    "image": "Hình ảnh",
+    "popularity": "Độ phổ biến"
+  },
+  "hotels": {
+    "title": "Quản lý Khách sạn",
+    "addNew": "Thêm khách sạn mới",
+    "name": "Tên",
+    "location": "Vị trí",
+    "rating": "Đánh giá",
+    "rooms": "Phòng",
+    "priceRange": "Khoảng giá"
+  },
+  "restaurants": {
+    "title": "Quản lý Nhà hàng",
+    "addNew": "Thêm nhà hàng mới",
+    "name": "Tên",
+    "cuisine": "Ẩm thực",
+    "rating": "Đánh giá",
+    "priceLevel": "Mức giá"
+  },
+  "countries": {
+    "title": "Quản lý Quốc gia",
+    "addNew": "Thêm quốc gia mới",
+    "name": "Tên",
+    "code": "Mã",
+    "continent": "Châu lục",
+    "currency": "Tiền tệ"
+  },
+  "settings": {
+    "title": "Cài đặt",
+    "general": "Cài đặt chung",
+    "profile": "Hồ sơ",
+    "security": "Bảo mật",
+    "notifications": "Thông báo",
+    "language": "Ngôn ngữ",
+    "timezone": "múi giờ",
+    "theme": "Giao diện",
+    "lightMode": "Sáng",
+    "darkMode": "Tối"
+  }
+}

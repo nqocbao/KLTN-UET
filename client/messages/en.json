@@ -1,0 +1,122 @@
+{
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "search": "Search",
+    "filter": "Filter",
+    "export": "Export",
+    "import": "Import",
+    "actions": "Actions",
+    "status": "Status",
+    "active": "Active",
+    "inactive": "Inactive",
+    "total": "Total",
+    "language": "Language"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "tours": "Tours",
+    "users": "Users",
+    "destinations": "Destinations",
+    "hotels": "Hotels",
+    "restaurants": "Restaurants",
+    "countries": "Countries",
+    "settings": "Settings",
+    "analytics": "Analytics",
+    "reports": "Reports",
+    "logout": "Logout"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "overview": "Overview",
+    "totalRevenue": "Total Revenue",
+    "totalBookings": "Total Bookings",
+    "totalUsers": "Total Users",
+    "totalTours": "Total Tours",
+    "recentActivity": "Recent Activity",
+    "topDestinations": "Top Destinations",
+    "salesChart": "Sales Chart",
+    "bookingStats": "Booking Statistics",
+    "last7Days": "Last 7 days",
+    "last30Days": "Last 30 days",
+    "thisMonth": "This month",
+    "thisYear": "This year"
+  },
+  "tours": {
+    "title": "Tours Management",
+    "addNew": "Add New Tour",
+    "tourName": "Tour Name",
+    "destination": "Destination",
+    "price": "Price",
+    "duration": "Duration",
+    "capacity": "Capacity",
+    "description": "Description",
+    "status": "Status",
+    "featured": "Featured",
+    "days": "days",
+    "people": "people"
+  },
+  "users": {
+    "title": "Users Management",
+    "addNew": "Add New User",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "role": "Role",
+    "joinedDate": "Joined Date",
+    "lastActive": "Last Active",
+    "admin": "Admin",
+    "customer": "Customer",
+    "guide": "Guide"
+  },
+  "destinations": {
+    "title": "Destinations Management",
+    "addNew": "Add New Destination",
+    "name": "Name",
+    "country": "Country",
+    "description": "Description",
+    "image": "Image",
+    "popularity": "Popularity"
+  },
+  "hotels": {
+    "title": "Hotels Management",
+    "addNew": "Add New Hotel",
+    "name": "Name",
+    "location": "Location",
+    "rating": "Rating",
+    "rooms": "Rooms",
+    "priceRange": "Price Range"
+  },
+  "restaurants": {
+    "title": "Restaurants Management",
+    "addNew": "Add New Restaurant",
+    "name": "Name",
+    "cuisine": "Cuisine",
+    "rating": "Rating",
+    "priceLevel": "Price Level"
+  },
+  "countries": {
+    "title": "Countries Management",
+    "addNew": "Add New Country",
+    "name": "Name",
+    "code": "Code",
+    "continent": "Continent",
+    "currency": "Currency"
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General Settings",
+    "profile": "Profile",
+    "security": "Security",
+    "notifications": "Notifications",
+    "language": "Language",
+    "timezone": "Timezone",
+    "theme": "Theme",
+    "lightMode": "Light Mode",
+    "darkMode": "Dark Mode"
+  }
+}
