@@ -1,14 +1,33 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Province from "../../models/provinces.model.js";
 
 // Get all provinces
 export const getAllProvinces = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { country_id } = req.query;
     const filter = country_id ? { country_id } : {};
 
-    const provinces = await Province.find(filter).populate("country_id");
-    res.status(200).json({ success: true, data: provinces });
+    const provinces = await Province.find(filter)
+      .populate("country_id")
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Province.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: provinces,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

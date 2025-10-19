@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Message from "../../models/messages.model.js";
 
 // Get all messages

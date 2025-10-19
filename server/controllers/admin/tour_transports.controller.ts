@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import TourTransport from "../../models/tour_transports.model.js";
 
 // Get all tour transports

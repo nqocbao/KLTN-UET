@@ -1,9 +1,13 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Destination from "../../models/destinations.model.js";
 
 // Get all destinations
 export const getAllDestinations = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { category, country_id } = req.query;
     const filter: any = {};
 
@@ -12,9 +16,22 @@ export const getAllDestinations = async (req: Request, res: Response) => {
 
     const destinations = await Destination.find(filter)
       .populate("country_id")
-      .populate("address_id");
+      .populate("address_id")
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json({ success: true, data: destinations });
+    const total = await Destination.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: destinations,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

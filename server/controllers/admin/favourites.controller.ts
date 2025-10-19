@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Favourite from "../../models/favourites.model.js";
 
 // Get all favourites

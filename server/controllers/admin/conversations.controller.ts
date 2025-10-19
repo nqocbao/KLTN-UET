@@ -1,17 +1,34 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Conversation from "../../models/conversations.model.js";
 
 // Get all conversations
 export const getAllConversations = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { user_id } = req.query;
     const filter = user_id ? { user_id } : {};
 
     const conversations = await Conversation.find(filter)
       .populate("user_id")
-      .sort({ started_at: -1 });
+      .sort({ started_at: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json({ success: true, data: conversations });
+    const total = await Conversation.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: conversations,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

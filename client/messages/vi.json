@@ -15,7 +15,9 @@
     "active": "Hoạt động",
     "inactive": "Không hoạt động",
     "total": "Tổng",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "reset": "Đặt lại",
+    "noResults": "Không tìm thấy kết quả"
   },
   "navigation": {
     "dashboard": "Tổng quan",
@@ -25,6 +27,7 @@
     "hotels": "Khách sạn",
     "restaurants": "Nhà hàng",
     "countries": "Quốc gia",
+    "provinces": "Tỉnh thành",
     "settings": "Cài đặt",
     "analytics": "Phân tích",
     "reports": "Báo cáo",
@@ -99,6 +102,24 @@
     "rating": "Đánh giá",
     "priceLevel": "Mức giá"
   },
+  "airlines": {
+    "title": "Quản lý Hãng hàng không",
+    "addNew": "Thêm hãng hàng không mới",
+    "name": "Tên",
+    "code": "Mã",
+    "country": "Quốc gia"
+  },
+  "transports": {
+    "title": "Quản lý Phương tiện",
+    "addNew": "Thêm phương tiện mới",
+    "name": "Tên",
+    "type": "Loại",
+    "capacity": "Sức chứa",
+    "provider": "Nhà cung cấp",
+    "price": "Giá",
+    "rating": "Đánh giá",
+    "status": "Trạng thái"
+  },
   "countries": {
     "title": "Quản lý Quốc gia",
     "addNew": "Thêm quốc gia mới",
@@ -106,6 +127,66 @@
     "code": "Mã",
     "continent": "Châu lục",
     "currency": "Tiền tệ"
+  },
+  "partners": {
+    "title": "Quản lý Đối tác",
+    "addNew": "Thêm đối tác mới",
+    "name": "Tên",
+    "type": "Loại",
+    "contact": "Liên hệ",
+    "rating": "Đánh giá",
+    "totalTours": "Tổng số Tour"
+  },
+  "guides": {
+    "title": "Quản lý Hướng dẫn viên",
+    "addNew": "Thêm hướng dẫn viên mới",
+    "name": "Tên",
+    "language": "Ngôn ngữ",
+    "experience": "Kinh nghiệm",
+    "rating": "Đánh giá"
+  },
+  "reviews": {
+    "title": "Quản lý Đánh giá",
+    "rating": "Đánh giá",
+    "comment": "Bình luận"
+  },
+  "roles": {
+    "title": "Quản lý Vai trò",
+    "addNew": "Thêm vai trò mới",
+    "name": "Tên",
+    "description": "Mô tả"
+  },
+  "permissions": {
+    "title": "Quản lý Quyền hạn",
+    "addNew": "Thêm quyền hạn mới",
+    "name": "Tên",
+    "resource": "Tài nguyên",
+    "action": "Hành động"
+  },
+  "provinces": {
+    "title": "Quản lý Tỉnh thành",
+    "addNew": "Thêm tỉnh thành mới",
+    "name": "Tên",
+    "code": "Mã",
+    "country": "Quốc gia"
+  },
+  "districts": {
+    "title": "Quản lý Quận/Huyện",
+    "addNew": "Thêm quận/huyện mới",
+    "name": "Tên",
+    "code": "Mã",
+    "country": "Quốc gia",
+    "province": "Tỉnh thành",
+    "wards": "Phường/Xã",
+    "population": "Dân số",
+    "area": "Diện tích"
+  },
+  "wards": {
+    "title": "Quản lý Phường/Xã",
+    "addNew": "Thêm phường/xã mới",
+    "name": "Tên",
+    "code": "Mã",
+    "district": "Quận/Huyện"
   },
   "settings": {
     "title": "Cài đặt",

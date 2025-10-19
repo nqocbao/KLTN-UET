@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Intent from "../../models/intents.model.js";
 
 // Get all intents

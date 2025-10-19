@@ -1,14 +1,33 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import District from "../../models/districts.model.js";
 
 // Get all districts
 export const getAllDistricts = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { province_id } = req.query;
     const filter = province_id ? { province_id } : {};
 
-    const districts = await District.find(filter).populate("province_id");
-    res.status(200).json({ success: true, data: districts });
+    const districts = await District.find(filter)
+      .populate("province_id")
+      .skip(skip)
+      .limit(limit);
+
+    const total = await District.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: districts,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

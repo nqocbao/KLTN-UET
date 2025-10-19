@@ -1,9 +1,13 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Tour from "../../models/tours.model.js";
 
 // Get all tours
 export const getAllTours = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { country_id, guide_id } = req.query;
     const filter: any = {};
 
@@ -12,9 +16,22 @@ export const getAllTours = async (req: Request, res: Response) => {
 
     const tours = await Tour.find(filter)
       .populate("country_id")
-      .populate("guide_id");
+      .populate("guide_id")
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json({ success: true, data: tours });
+    const total = await Tour.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: tours,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

@@ -1,14 +1,33 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Ward from "../../models/wards.model.js";
 
 // Get all wards
 export const getAllWards = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { district_id } = req.query;
     const filter = district_id ? { district_id } : {};
 
-    const wards = await Ward.find(filter).populate("district_id");
-    res.status(200).json({ success: true, data: wards });
+    const wards = await Ward.find(filter)
+      .populate("district_id")
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Ward.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: wards,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

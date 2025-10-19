@@ -1,17 +1,34 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Airline from "../../models/airlines.model.js";
 
 // Get all airlines
 export const getAllAirlines = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { country } = req.query;
     const filter = country ? { country } : {};
 
     const airlines = await Airline.find(filter)
       .populate("partner_id")
-      .populate("address_id");
+      .populate("address_id")
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json({ success: true, data: airlines });
+    const total = await Airline.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: airlines,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

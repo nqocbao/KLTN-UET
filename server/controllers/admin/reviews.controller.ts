@@ -1,9 +1,13 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Review from "../../models/reviews.model.js";
 
 // Get all reviews
 export const getAllReviews = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { target_type, target_id, user_id } = req.query;
     const filter: any = {};
 
@@ -13,9 +17,22 @@ export const getAllReviews = async (req: Request, res: Response) => {
 
     const reviews = await Review.find(filter)
       .populate("user_id")
-      .sort({ created_at: -1 });
+      .sort({ created_at: -1 })
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json({ success: true, data: reviews });
+    const total = await Review.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: reviews,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

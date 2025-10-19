@@ -1,59 +1,76 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
-
-const mockHotels = [
-  {
-    id: 1,
-    name: "Grand Luxury Hotel",
-    location: "Hanoi, Vietnam",
-    rating: 4.8,
-    rooms: 120,
-    priceRange: "$150-300",
-    amenities: ["WiFi", "Pool", "Spa", "Restaurant"],
-    image: "🏨",
-    status: "active",
-  },
-  {
-    id: 2,
-    name: "Beachfront Resort",
-    location: "Da Nang, Vietnam",
-    rating: 4.9,
-    rooms: 200,
-    priceRange: "$200-450",
-    amenities: ["Beach", "WiFi", "Pool", "Bar"],
-    image: "🏖️",
-    status: "active",
-  },
-  {
-    id: 3,
-    name: "Mountain View Lodge",
-    location: "Sapa, Vietnam",
-    rating: 4.6,
-    rooms: 50,
-    priceRange: "$80-180",
-    amenities: ["WiFi", "Restaurant", "Parking"],
-    image: "⛰️",
-    status: "active",
-  },
-  {
-    id: 4,
-    name: "City Center Hotel",
-    location: "Ho Chi Minh, Vietnam",
-    rating: 4.7,
-    rooms: 150,
-    priceRange: "$100-250",
-    amenities: ["WiFi", "Gym", "Restaurant", "Bar"],
-    image: "🏙️",
-    status: "active",
-  },
-];
+import { hotelsApi } from "@/lib/services";
+import type { Hotel } from "@/types/api";
 
 export default function HotelsPage() {
+  const [hotels, setHotels] = useState<Hotel[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const t = useTranslations("hotels");
   const tCommon = useTranslations("common");
+
+  const fetchHotels = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await hotelsApi.getAll({
+        page: currentPage,
+        limit: 10,
+      });
+
+      if (response.success) {
+        setHotels(response.data);
+        setTotalPages(response.pagination?.totalPages || 1);
+      }
+    } catch (err) {
+      console.error("Error fetching hotels:", err);
+      setError("Failed to load hotels. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    fetchHotels();
+  }, [fetchHotels]);
+
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this hotel?")) return;
+
+    try {
+      await hotelsApi.delete(id);
+      fetchHotels();
+    } catch (err) {
+      console.error("Error deleting hotel:", err);
+      alert("Failed to delete hotel. Please try again.");
+    }
+  };
+
+  const filteredHotels = hotels.filter((hotel) =>
+    hotel.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg">{tCommon("loading")}</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg text-red-600">{error}</div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -75,42 +92,30 @@ export default function HotelsPage() {
 
       {/* Filters */}
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-4">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <input
-              type="text"
-              placeholder={tCommon("search")}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-          <select className="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>{t("location")}</option>
-            <option>Hanoi</option>
-            <option>Da Nang</option>
-            <option>Ho Chi Minh</option>
-          </select>
-          <select className="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <option>{t("rating")}</option>
-            <option>5 stars</option>
-            <option>4 stars</option>
-            <option>3 stars</option>
-          </select>
-        </div>
+        <input
+          type="text"
+          placeholder={tCommon("search")}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
       </div>
 
       {/* Hotels Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {mockHotels.map((hotel) => (
+        {filteredHotels.map((hotel) => (
           <div
-            key={hotel.id}
+            key={hotel._id}
             className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow"
           >
             <div className="flex">
               {/* Image Section */}
               <div className="w-48 h-48 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-6xl flex-shrink-0">
-                {hotel.image}
+                {hotel.images && hotel.images.length > 0 ? (
+                  <div className="w-full h-full bg-cover bg-center" style={{backgroundImage: `url(${hotel.images[0]})`}}></div>
+                ) : (
+                  "🏨"
+                )}
               </div>
 
               {/* Content Section */}
@@ -119,9 +124,6 @@ export default function HotelsPage() {
                   <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
                     {hotel.name}
                   </h3>
-                  <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
-                    {hotel.status}
-                  </span>
                 </div>
 
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
@@ -143,18 +145,11 @@ export default function HotelsPage() {
                   </div>
                 </div>
 
-                <div className="mb-4">
-                  <div className="flex flex-wrap gap-2">
-                    {hotel.amenities.map((amenity, idx) => (
-                      <span
-                        key={idx}
-                        className="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded"
-                      >
-                        {amenity}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                {hotel.description && (
+                  <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">
+                    {hotel.description}
+                  </p>
+                )}
 
                 <div className="flex gap-2 pt-3 border-t border-gray-200 dark:border-gray-700">
                   <button className="flex-1 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors text-sm font-medium">
@@ -163,7 +158,10 @@ export default function HotelsPage() {
                   <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm">
                     {tCommon("edit")}
                   </button>
-                  <button className="px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm">
+                  <button
+                    onClick={() => handleDelete(hotel._id)}
+                    className="px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm"
+                  >
                     {tCommon("delete")}
                   </button>
                 </div>
@@ -172,6 +170,38 @@ export default function HotelsPage() {
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex justify-center items-center gap-4">
+          <span className="text-sm text-gray-600 dark:text-gray-400">
+            Page {currentPage} of {totalPages}
+          </span>
+          <div className="flex gap-2">
+            <button
+              onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+              disabled={currentPage === 1}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+              disabled={currentPage === totalPages}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Empty State */}
+      {filteredHotels.length === 0 && (
+        <div className="text-center py-12">
+          <p className="text-gray-500 dark:text-gray-400">No hotels found</p>
+        </div>
+      )}
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -182,7 +212,7 @@ export default function HotelsPage() {
                 Total Hotels
               </p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                {mockHotels.length}
+                {hotels.length}
               </p>
             </div>
             <div className="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center text-2xl">
@@ -198,7 +228,7 @@ export default function HotelsPage() {
                 Total Rooms
               </p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                520
+                {hotels.reduce((acc, hotel) => acc + (hotel.rooms || 0), 0)}
               </p>
             </div>
             <div className="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center text-2xl">
@@ -214,7 +244,7 @@ export default function HotelsPage() {
                 Avg Rating
               </p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                4.75
+                {hotels.length > 0 ? (hotels.reduce((acc, hotel) => acc + (hotel.rating || 0), 0) / hotels.length).toFixed(2) : "0"}
               </p>
             </div>
             <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center text-2xl">
@@ -227,14 +257,14 @@ export default function HotelsPage() {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-400 mb-1">
-                Partnerships
+                Active Hotels
               </p>
               <p className="text-2xl font-bold text-gray-900 dark:text-white">
-                48
+                {hotels.length}
               </p>
             </div>
             <div className="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-full flex items-center justify-center text-2xl">
-              🤝
+              ✓
             </div>
           </div>
         </div>

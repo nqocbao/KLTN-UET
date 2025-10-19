@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import TourReview from "../../models/tour_reviews.model.js";
 
 // Get all tour reviews

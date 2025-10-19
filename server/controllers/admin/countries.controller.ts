@@ -1,11 +1,29 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Country from "../../models/countries.model.js";
 
 // Get all countries
 export const getAllCountries = async (req: Request, res: Response) => {
   try {
-    const countries = await Country.find();
-    res.status(200).json({ success: true, data: countries });
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const countries = await Country.find()
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Country.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      data: countries,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

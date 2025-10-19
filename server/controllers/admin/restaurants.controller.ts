@@ -1,17 +1,34 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Restaurant from "../../models/restaurants.model.js";
 
 // Get all restaurants
 export const getAllRestaurants = async (req: Request, res: Response) => {
   try {
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+    
     const { cuisine_type } = req.query;
     const filter = cuisine_type ? { cuisine_type } : {};
 
     const restaurants = await Restaurant.find(filter)
       .populate("partner_id")
-      .populate("address_id");
+      .populate("address_id")
+      .skip(skip)
+      .limit(limit);
 
-    res.status(200).json({ success: true, data: restaurants });
+    const total = await Restaurant.countDocuments(filter);
+
+    res.status(200).json({
+      success: true,
+      data: restaurants,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import TravelHistory from "../../models/travel_history.model.js";
 
 // Get all travel history

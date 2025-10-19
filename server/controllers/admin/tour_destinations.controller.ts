@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import TourDestination from "../../models/tour_destinations.model.js";
 
 // Get all tour destinations

@@ -1,11 +1,29 @@
-import { Request, Response } from "express";
+import type { Request, Response } from "express";
 import Permission from "../../models/permissions.model.js";
 
 // Get all permissions
 export const getAllPermissions = async (req: Request, res: Response) => {
   try {
-    const permissions = await Permission.find();
-    res.status(200).json({ success: true, data: permissions });
+    const page = parseInt(req.query.page as string) || 1;
+    const limit = parseInt(req.query.limit as string) || 10;
+    const skip = (page - 1) * limit;
+
+    const permissions = await Permission.find()
+      .skip(skip)
+      .limit(limit);
+
+    const total = await Permission.countDocuments();
+
+    res.status(200).json({
+      success: true,
+      data: permissions,
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    });
   } catch (error: any) {
     res.status(500).json({ success: false, message: error.message });
   }

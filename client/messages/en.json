@@ -15,7 +15,9 @@
     "active": "Active",
     "inactive": "Inactive",
     "total": "Total",
-    "language": "Language"
+    "language": "Language",
+    "reset": "Reset",
+    "noResults": "No results found"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -25,6 +27,7 @@
     "hotels": "Hotels",
     "restaurants": "Restaurants",
     "countries": "Countries",
+    "provinces": "Provinces",
     "settings": "Settings",
     "analytics": "Analytics",
     "reports": "Reports",
@@ -99,6 +102,24 @@
     "rating": "Rating",
     "priceLevel": "Price Level"
   },
+  "airlines": {
+    "title": "Airlines Management",
+    "addNew": "Add New Airline",
+    "name": "Name",
+    "code": "Code",
+    "country": "Country"
+  },
+  "transports": {
+    "title": "Transports Management",
+    "addNew": "Add New Transport",
+    "name": "Name",
+    "type": "Type",
+    "capacity": "Capacity",
+    "provider": "Provider",
+    "price": "Price",
+    "rating": "Rating",
+    "status": "Status"
+  },
   "countries": {
     "title": "Countries Management",
     "addNew": "Add New Country",
@@ -106,6 +127,66 @@
     "code": "Code",
     "continent": "Continent",
     "currency": "Currency"
+  },
+  "partners": {
+    "title": "Partners Management",
+    "addNew": "Add New Partner",
+    "name": "Name",
+    "type": "Type",
+    "contact": "Contact",
+    "rating": "Rating",
+    "totalTours": "Total Tours"
+  },
+  "guides": {
+    "title": "Guides Management",
+    "addNew": "Add New Guide",
+    "name": "Name",
+    "language": "Language",
+    "experience": "Experience",
+    "rating": "Rating"
+  },
+  "reviews": {
+    "title": "Reviews Management",
+    "rating": "Rating",
+    "comment": "Comment"
+  },
+  "roles": {
+    "title": "Roles Management",
+    "addNew": "Add New Role",
+    "name": "Name",
+    "description": "Description"
+  },
+  "permissions": {
+    "title": "Permissions Management",
+    "addNew": "Add New Permission",
+    "name": "Name",
+    "resource": "Resource",
+    "action": "Action"
+  },
+  "provinces": {
+    "title": "Provinces Management",
+    "addNew": "Add New Province",
+    "name": "Name",
+    "code": "Code",
+    "country": "Country"
+  },
+  "districts": {
+    "title": "Districts Management",
+    "addNew": "Add New District",
+    "name": "Name",
+    "code": "Code",
+    "country": "Country",
+    "province": "Province",
+    "wards": "Wards",
+    "population": "Population",
+    "area": "Area"
+  },
+  "wards": {
+    "title": "Wards Management",
+    "addNew": "Add New Ward",
+    "name": "Name",
+    "code": "Code",
+    "district": "District"
   },
   "settings": {
     "title": "Settings",

@@ -1,45 +1,96 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
-
-const mockTours = [
-  {
-    id: 1,
-    name: "Bali Paradise Adventure",
-    destination: "Bali, Indonesia",
-    price: 1299,
-    duration: "7 days",
-    capacity: 20,
-    status: "active",
-    featured: true,
-  },
-  {
-    id: 2,
-    name: "Tokyo Culture Experience",
-    destination: "Tokyo, Japan",
-    price: 2499,
-    duration: "10 days",
-    capacity: 15,
-    status: "active",
-    featured: true,
-  },
-  {
-    id: 3,
-    name: "Paris Romantic Getaway",
-    destination: "Paris, France",
-    price: 1899,
-    duration: "5 days",
-    capacity: 12,
-    status: "active",
-    featured: false,
-  },
-];
+import { toursApi } from "@/lib/services";
+import type { Tour } from "@/types/api";
 
 export default function ToursPage() {
+  const [tours, setTours] = useState<Tour[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const t = useTranslations("tours");
   const tCommon = useTranslations("common");
+
+  // Fetch tours from API
+  const fetchTours = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const response = await toursApi.getAll({
+        page: currentPage,
+        limit: 10,
+      });
+
+      if (response.success) {
+        setTours(response.data);
+        setTotalPages(response.pagination?.totalPages || 1);
+      }
+    } catch (err) {
+      console.error("Error fetching tours:", err);
+      setError("Failed to load tours. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage]);
+
+  useEffect(() => {
+    fetchTours();
+  }, [fetchTours]);
+
+  // Handle delete tour
+  const handleDelete = async (id: string) => {
+    if (!confirm("Are you sure you want to delete this tour?")) return;
+
+    try {
+      await toursApi.delete(id);
+      fetchTours(); // Refresh the list
+    } catch (err) {
+      console.error("Error deleting tour:", err);
+      alert("Failed to delete tour. Please try again.");
+    }
+  };
+
+  // Handle toggle featured
+  const handleToggleFeatured = async (id: string) => {
+    try {
+      await toursApi.toggleFeatured(id);
+      fetchTours(); // Refresh the list
+    } catch (err) {
+      console.error("Error toggling featured:", err);
+      alert("Failed to update tour. Please try again.");
+    }
+  };
+
+  // Filter logic
+  const filteredTours = tours.filter((tour) =>
+    tour.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-lg">{tCommon("loading")}</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center h-64">
+        <div className="text-lg text-red-600 mb-4">{error}</div>
+        <button
+          onClick={fetchTours}
+          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -108,52 +159,101 @@ export default function ToursPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-              {mockTours.map((tour) => (
-                <tr
-                  key={tour.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
-                >
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      <div>
-                        <div className="text-sm font-medium text-gray-900 dark:text-white">
-                          {tour.name}
-                        </div>
-                        {tour.featured && (
-                          <span className="text-xs text-yellow-600 dark:text-yellow-400">
-                            ⭐ {t("featured")}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                    {tour.destination}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">
-                    ${tour.price}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                    {tour.duration}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <span className="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400">
-                      {tour.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3">
-                      {tCommon("edit")}
-                    </button>
-                    <button className="text-red-600 hover:text-red-800 dark:text-red-400">
-                      {tCommon("delete")}
-                    </button>
+              {filteredTours.length === 0 ? (
+                <tr>
+                  <td
+                    colSpan={6}
+                    className="px-6 py-8 text-center text-gray-500 dark:text-gray-400"
+                  >
+                    No tours found
                   </td>
                 </tr>
-              ))}
+              ) : (
+                filteredTours.map((tour) => (
+                  <tr
+                    key={tour._id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700"
+                  >
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div>
+                          <div className="text-sm font-medium text-gray-900 dark:text-white">
+                            {tour.name}
+                          </div>
+                          {tour.featured && (
+                            <span className="text-xs text-yellow-600 dark:text-yellow-400">
+                              ⭐ {t("featured")}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                      {tour.destination}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">
+                      ${tour.price}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
+                      {tour.duration} {t("days")}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-2 py-1 text-xs font-semibold rounded-full ${
+                        tour.status === 'active' 
+                          ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400'
+                          : 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-400'
+                      }`}>
+                        {tour.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <button 
+                        onClick={() => handleToggleFeatured(tour._id)}
+                        className="text-yellow-600 hover:text-yellow-800 dark:text-yellow-400 mr-3"
+                      >
+                        {tour.featured ? "⭐" : "☆"}
+                      </button>
+                      <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3">
+                        {tCommon("edit")}
+                      </button>
+                      <button 
+                        onClick={() => handleDelete(tour._id)}
+                        className="text-red-600 hover:text-red-800 dark:text-red-400"
+                      >
+                        {tCommon("delete")}
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6 px-6 pb-6">
+            <div className="text-sm text-gray-700 dark:text-gray-300">
+              Page {currentPage} of {totalPages}
+            </div>
+            <div className="flex space-x-2">
+              <button
+                onClick={() => setCurrentPage((prev) => Math.max(1, prev - 1))}
+                disabled={currentPage === 1}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                Previous
+              </button>
+              <button
+                onClick={() => setCurrentPage((prev) => Math.min(totalPages, prev + 1))}
+                disabled={currentPage === totalPages}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50 dark:hover:bg-gray-700"
+              >
+                Next
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -1,13 +1,18 @@
 "use client";
 
 import { Link, usePathname } from "@/i18n/routing";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
 
 export default function Sidebar() {
   const pathname = usePathname();
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const t = useTranslations("navigation");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const menuItems = [
     {
@@ -26,6 +31,7 @@ export default function Sidebar() {
         { label: t("restaurants"), href: "/admin/restaurants", icon: "🍽️" },
         { label: "Airlines", href: "/admin/airlines", icon: "✈️" },
         { label: "Transports", href: "/admin/transports", icon: "🚗" },
+        { label: "Partners", href: "/admin/partners", icon: "🤝" },
       ],
     },
     {
@@ -111,7 +117,7 @@ export default function Sidebar() {
             )}
             <ul className="space-y-1">
               {section.items.map((item, itemIdx) => {
-                const isActive = pathname === item.href;
+                const isActive = mounted && pathname === item.href;
                 return (
                   <li key={itemIdx}>
                     <Link
