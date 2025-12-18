@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { restaurantsApi } from "@/lib/services";
 import type { Restaurant } from "@/types/api";
+import { RestaurantDialog } from "@/components/admin/modals/RestaurantDialog";
+import { DeleteConfirmDialog } from "@/components/admin/modals/DeleteConfirmDialog";
 
 export default function RestaurantsPage() {
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
@@ -13,6 +15,10 @@ export default function RestaurantsPage() {
   const [selectedCuisine, setSelectedCuisine] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingRestaurant, setEditingRestaurant] = useState<Restaurant | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const t = useTranslations("restaurants");
   const tCommon = useTranslations("common");
 
@@ -41,15 +47,29 @@ export default function RestaurantsPage() {
     fetchRestaurants();
   }, [fetchRestaurants]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this restaurant?")) return;
-
+  const handleDelete = async () => {
+    if (!deletingId) return;
     try {
-      await restaurantsApi.delete(id);
+      await restaurantsApi.delete(deletingId);
       fetchRestaurants();
+      setDeletingId(null);
     } catch (err) {
       console.error("Error deleting restaurant:", err);
       alert("Failed to delete restaurant. Please try again.");
+    }
+  };
+
+  const handleSave = async (data: any) => {
+    try {
+      if (editingRestaurant) {
+        await restaurantsApi.update(editingRestaurant._id, data);
+      } else {
+        await restaurantsApi.create(data);
+      }
+      fetchRestaurants();
+    } catch (err) {
+      console.error("Error saving restaurant:", err);
+      alert("Failed to save restaurant. Please try again.");
     }
   };
 
@@ -95,7 +115,10 @@ export default function RestaurantsPage() {
             Manage restaurant partners and dining options
           </p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+        <button 
+          onClick={() => { setEditingRestaurant(null); setDialogOpen(true); }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+        >
           <span>➕</span>
           {t("addNew")}
         </button>
@@ -183,15 +206,15 @@ export default function RestaurantsPage() {
 
               {/* Actions */}
               <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
-                <button className="flex-1 px-3 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors text-sm font-medium">
-                  View
-                </button>
-                <button className="px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm">
-                  {tCommon("edit")}
+                <button 
+                  onClick={() => { setEditingRestaurant(restaurant); setDialogOpen(true); }}
+                  className="flex-1 px-3 py-2 border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors text-sm"
+                >
+                  ✏️ {tCommon("edit")}
                 </button>
                 <button 
-                  onClick={() => handleDelete(restaurant._id)}
-                  className="px-3 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm"
+                  onClick={() => { setDeletingId(restaurant._id); setDeleteDialogOpen(true); }}
+                  className="px-3 py-2 border border-red-600 text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-sm"
                 >
                   🗑️
                 </button>
@@ -253,6 +276,21 @@ export default function RestaurantsPage() {
           <div className="text-blue-100 text-sm">Current Page</div>
         </div>
       </div>
+
+      <RestaurantDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onSave={handleSave}
+        restaurant={editingRestaurant}
+      />
+
+      <DeleteConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={handleDelete}
+        title="Delete Restaurant"
+        description="Are you sure you want to delete this restaurant? This action cannot be undone."
+      />
     </div>
   );
 }

@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { airlinesApi, type Airline } from "@/lib/services/other.service";
+import { AirlineDialog } from "@/components/admin/modals/AirlineDialog";
+import { DeleteConfirmDialog } from "@/components/admin/modals/DeleteConfirmDialog";
 
 export default function AirlinesPage() {
   const [airlines, setAirlines] = useState<Airline[]>([]);
@@ -11,6 +13,10 @@ export default function AirlinesPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingAirline, setEditingAirline] = useState<Airline | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const t = useTranslations("airlines");
   const tCommon = useTranslations("common");
 
@@ -39,15 +45,29 @@ export default function AirlinesPage() {
     fetchAirlines();
   }, [fetchAirlines]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this airline?")) return;
-
+  const handleDelete = async () => {
+    if (!deletingId) return;
     try {
-      await airlinesApi.delete(id);
+      await airlinesApi.delete(deletingId);
       fetchAirlines();
+      setDeletingId(null);
     } catch (err) {
       console.error("Error deleting airline:", err);
       alert("Failed to delete airline. Please try again.");
+    }
+  };
+
+  const handleSave = async (data: any) => {
+    try {
+      if (editingAirline) {
+        await airlinesApi.update(editingAirline._id, data);
+      } else {
+        await airlinesApi.create(data);
+      }
+      fetchAirlines();
+    } catch (err) {
+      console.error("Error saving airline:", err);
+      alert("Failed to save airline. Please try again.");
     }
   };
 
@@ -83,7 +103,7 @@ export default function AirlinesPage() {
             Manage airline companies and their information
           </p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button onClick={() => { setEditingAirline(null); setDialogOpen(true); }} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
           {t("addNew")}
         </button>
       </div>
@@ -136,11 +156,11 @@ export default function AirlinesPage() {
               </div>
             </div>
             <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">
-              <button className="flex-1 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
+              <button onClick={() => { setEditingAirline(airline); setDialogOpen(true); }} className="flex-1 px-3 py-2 text-sm text-blue-600 dark:text-blue-400 border border-blue-600 dark:border-blue-400 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
                 {tCommon("edit")}
               </button>
               <button
-                onClick={() => handleDelete(airline._id)}
+                onClick={() => { setDeletingId(airline._id); setDeleteDialogOpen(true); }}
                 className="flex-1 px-3 py-2 text-sm text-red-600 dark:text-red-400 border border-red-600 dark:border-red-400 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
               >
                 {tCommon("delete")}
@@ -176,6 +196,9 @@ export default function AirlinesPage() {
           </div>
         </div>
       )}
+
+      <AirlineDialog open={dialogOpen} onOpenChange={setDialogOpen} onSave={handleSave} airline={editingAirline} />
+      <DeleteConfirmDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} onConfirm={handleDelete} title="Delete Airline" description="Are you sure you want to delete this airline? This action cannot be undone." />
     </div>
   );
 }

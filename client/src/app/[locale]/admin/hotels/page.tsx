@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { hotelsApi } from "@/lib/services";
 import type { Hotel } from "@/types/api";
+import { HotelDialog } from "@/components/admin/modals/HotelDialog";
+import { DeleteConfirmDialog } from "@/components/admin/modals/DeleteConfirmDialog";
 
 export default function HotelsPage() {
   const [hotels, setHotels] = useState<Hotel[]>([]);
@@ -12,6 +14,10 @@ export default function HotelsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingHotel, setEditingHotel] = useState<Hotel | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const t = useTranslations("hotels");
   const tCommon = useTranslations("common");
 
@@ -40,15 +46,29 @@ export default function HotelsPage() {
     fetchHotels();
   }, [fetchHotels]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this hotel?")) return;
-
+  const handleDelete = async () => {
+    if (!deletingId) return;
     try {
-      await hotelsApi.delete(id);
+      await hotelsApi.delete(deletingId);
       fetchHotels();
+      setDeletingId(null);
     } catch (err) {
       console.error("Error deleting hotel:", err);
       alert("Failed to delete hotel. Please try again.");
+    }
+  };
+
+  const handleSave = async (data: any) => {
+    try {
+      if (editingHotel) {
+        await hotelsApi.update(editingHotel._id, data);
+      } else {
+        await hotelsApi.create(data);
+      }
+      fetchHotels();
+    } catch (err) {
+      console.error("Error saving hotel:", err);
+      alert("Failed to save hotel. Please try again.");
     }
   };
 
@@ -84,7 +104,10 @@ export default function HotelsPage() {
             Manage hotel partnerships and accommodations
           </p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+        <button 
+          onClick={() => { setEditingHotel(null); setDialogOpen(true); }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+        >
           <span>➕</span>
           {t("addNew")}
         </button>
@@ -155,11 +178,11 @@ export default function HotelsPage() {
                   <button className="flex-1 px-4 py-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors text-sm font-medium">
                     View Details
                   </button>
-                  <button className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm">
+                  <button onClick={() => { setEditingHotel(hotel); setDialogOpen(true); }} className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors text-sm">
                     {tCommon("edit")}
                   </button>
                   <button
-                    onClick={() => handleDelete(hotel._id)}
+                    onClick={() => { setDeletingId(hotel._id); setDeleteDialogOpen(true); }}
                     className="px-4 py-2 text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-colors text-sm"
                   >
                     {tCommon("delete")}
@@ -269,6 +292,9 @@ export default function HotelsPage() {
           </div>
         </div>
       </div>
+
+      <HotelDialog open={dialogOpen} onOpenChange={setDialogOpen} onSave={handleSave} hotel={editingHotel} />
+      <DeleteConfirmDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} onConfirm={handleDelete} title="Delete Hotel" description="Are you sure you want to delete this hotel? This action cannot be undone." />
     </div>
   );
 }

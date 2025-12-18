@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { partnersApi, type Partner } from "@/lib/services/other.service";
+import { PartnerDialog } from "@/components/admin/modals/PartnerDialog";
+import { DeleteConfirmDialog } from "@/components/admin/modals/DeleteConfirmDialog";
 
 export default function PartnersPage() {
   const [partners, setPartners] = useState<Partner[]>([]);
@@ -11,6 +13,10 @@ export default function PartnersPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingPartner, setEditingPartner] = useState<Partner | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const t = useTranslations("partners");
   const tCommon = useTranslations("common");
 
@@ -39,15 +45,29 @@ export default function PartnersPage() {
     fetchPartners();
   }, [fetchPartners]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this partner?")) return;
-
+  const handleDelete = async () => {
+    if (!deletingId) return;
     try {
-      await partnersApi.delete(id);
+      await partnersApi.delete(deletingId);
       fetchPartners();
+      setDeletingId(null);
     } catch (err) {
       console.error("Error deleting partner:", err);
       alert("Failed to delete partner. Please try again.");
+    }
+  };
+
+  const handleSave = async (data: any) => {
+    try {
+      if (editingPartner) {
+        await partnersApi.update(editingPartner._id, data);
+      } else {
+        await partnersApi.create(data);
+      }
+      fetchPartners();
+    } catch (err) {
+      console.error("Error saving partner:", err);
+      alert("Failed to save partner. Please try again.");
     }
   };
 
@@ -83,7 +103,7 @@ export default function PartnersPage() {
             Manage business partners and collaborators
           </p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button onClick={() => { setEditingPartner(null); setDialogOpen(true); }} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
           {t("addNew")}
         </button>
       </div>
@@ -190,11 +210,11 @@ export default function PartnersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3">
+                    <button onClick={() => { setEditingPartner(partner); setDialogOpen(true); }} className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3">
                       {tCommon("edit")}
                     </button>
                     <button
-                      onClick={() => handleDelete(partner._id)}
+                      onClick={() => { setDeletingId(partner._id); setDeleteDialogOpen(true); }}
                       className="text-red-600 hover:text-red-800 dark:text-red-400"
                     >
                       {tCommon("delete")}
@@ -233,6 +253,9 @@ export default function PartnersPage() {
           </div>
         </div>
       )}
+
+      <PartnerDialog open={dialogOpen} onOpenChange={setDialogOpen} onSave={handleSave} partner={editingPartner} />
+      <DeleteConfirmDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} onConfirm={handleDelete} title="Delete Partner" description="Are you sure you want to delete this partner? This action cannot be undone." />
     </div>
   );
 }

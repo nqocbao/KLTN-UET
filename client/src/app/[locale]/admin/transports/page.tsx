@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { transportsApi, type Transport } from "@/lib/services/other.service";
+import { TransportDialog } from "@/components/admin/modals/TransportDialog";
+import { DeleteConfirmDialog } from "@/components/admin/modals/DeleteConfirmDialog";
 
 export default function TransportsPage() {
   const [transports, setTransports] = useState<Transport[]>([]);
@@ -11,6 +13,10 @@ export default function TransportsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingTransport, setEditingTransport] = useState<Transport | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const t = useTranslations("transports");
   const tCommon = useTranslations("common");
 
@@ -39,15 +45,29 @@ export default function TransportsPage() {
     fetchTransports();
   }, [fetchTransports]);
 
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this transport?")) return;
-
+  const handleDelete = async () => {
+    if (!deletingId) return;
     try {
-      await transportsApi.delete(id);
+      await transportsApi.delete(deletingId);
       fetchTransports();
+      setDeletingId(null);
     } catch (err) {
       console.error("Error deleting transport:", err);
       alert("Failed to delete transport. Please try again.");
+    }
+  };
+
+  const handleSave = async (data: any) => {
+    try {
+      if (editingTransport) {
+        await transportsApi.update(editingTransport._id, data);
+      } else {
+        await transportsApi.create(data);
+      }
+      fetchTransports();
+    } catch (err) {
+      console.error("Error saving transport:", err);
+      alert("Failed to save transport. Please try again.");
     }
   };
 
@@ -83,7 +103,7 @@ export default function TransportsPage() {
             Manage transportation options and providers
           </p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button onClick={() => { setEditingTransport(null); setDialogOpen(true); }} className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
           {t("addNew")}
         </button>
       </div>
@@ -184,11 +204,11 @@ export default function TransportsPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3">
+                    <button onClick={() => { setEditingTransport(transport); setDialogOpen(true); }} className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3">
                       {tCommon("edit")}
                     </button>
                     <button
-                      onClick={() => handleDelete(transport._id)}
+                      onClick={() => { setDeletingId(transport._id); setDeleteDialogOpen(true); }}
                       className="text-red-600 hover:text-red-800 dark:text-red-400"
                     >
                       {tCommon("delete")}
@@ -227,6 +247,9 @@ export default function TransportsPage() {
           </div>
         </div>
       )}
+
+      <TransportDialog open={dialogOpen} onOpenChange={setDialogOpen} onSave={handleSave} transport={editingTransport} />
+      <DeleteConfirmDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} onConfirm={handleDelete} title="Delete Transport" description="Are you sure you want to delete this transport? This action cannot be undone." />
     </div>
   );
 }

@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { toursApi } from "@/lib/services";
 import type { Tour } from "@/types/api";
+import { TourDialog } from "@/components/admin/modals/TourDialog";
+import { DeleteConfirmDialog } from "@/components/admin/modals/DeleteConfirmDialog";
 
 export default function ToursPage() {
   const [tours, setTours] = useState<Tour[]>([]);
@@ -12,6 +14,10 @@ export default function ToursPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingTour, setEditingTour] = useState<Tour | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const t = useTranslations("tours");
   const tCommon = useTranslations("common");
 
@@ -42,12 +48,12 @@ export default function ToursPage() {
   }, [fetchTours]);
 
   // Handle delete tour
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this tour?")) return;
-
+  const handleDelete = async () => {
+    if (!deletingId) return;
     try {
-      await toursApi.delete(id);
-      fetchTours(); // Refresh the list
+      await toursApi.delete(deletingId);
+      fetchTours();
+      setDeletingId(null);
     } catch (err) {
       console.error("Error deleting tour:", err);
       alert("Failed to delete tour. Please try again.");
@@ -62,6 +68,20 @@ export default function ToursPage() {
     } catch (err) {
       console.error("Error toggling featured:", err);
       alert("Failed to update tour. Please try again.");
+    }
+  };
+
+  const handleSave = async (data: any) => {
+    try {
+      if (editingTour) {
+        await toursApi.update(editingTour._id, data);
+      } else {
+        await toursApi.create(data);
+      }
+      fetchTours();
+    } catch (err) {
+      console.error("Error saving tour:", err);
+      alert("Failed to save tour. Please try again.");
     }
   };
 
@@ -104,7 +124,10 @@ export default function ToursPage() {
             Manage all your tour packages
           </p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button 
+          onClick={() => { setEditingTour(null); setDialogOpen(true); }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
           {t("addNew")}
         </button>
       </div>
@@ -213,11 +236,14 @@ export default function ToursPage() {
                       >
                         {tour.featured ? "⭐" : "☆"}
                       </button>
-                      <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3">
+                      <button 
+                        onClick={() => { setEditingTour(tour); setDialogOpen(true); }}
+                        className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3"
+                      >
                         {tCommon("edit")}
                       </button>
                       <button 
-                        onClick={() => handleDelete(tour._id)}
+                        onClick={() => { setDeletingId(tour._id); setDeleteDialogOpen(true); }}
                         className="text-red-600 hover:text-red-800 dark:text-red-400"
                       >
                         {tCommon("delete")}
@@ -255,6 +281,21 @@ export default function ToursPage() {
           </div>
         )}
       </div>
+
+      <TourDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onSave={handleSave}
+        tour={editingTour}
+      />
+
+      <DeleteConfirmDialog
+        open={deleteDialogOpen}
+        onOpenChange={setDeleteDialogOpen}
+        onConfirm={handleDelete}
+        title="Delete Tour"
+        description="Are you sure you want to delete this tour? This action cannot be undone."
+      />
     </div>
   );
 }

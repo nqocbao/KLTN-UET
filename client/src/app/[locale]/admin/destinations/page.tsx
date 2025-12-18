@@ -4,6 +4,8 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { destinationsApi } from "@/lib/services";
 import type { Destination } from "@/types/api";
+import { DestinationDialog } from "@/components/admin/modals/DestinationDialog";
+import { DeleteConfirmDialog } from "@/components/admin/modals/DeleteConfirmDialog";
 
 export default function DestinationsPage() {
   const [destinations, setDestinations] = useState<Destination[]>([]);
@@ -13,6 +15,12 @@ export default function DestinationsPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingDestination, setEditingDestination] = useState<Destination | null>(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [countries, setCountries] = useState<any[]>([]);
   const t = useTranslations("destinations");
   const tCommon = useTranslations("common");
 
@@ -42,23 +50,48 @@ export default function DestinationsPage() {
     fetchDestinations();
   }, [fetchDestinations]);
 
-  // Handle delete destination
-  const handleDelete = async (id: string) => {
-    if (!confirm("Are you sure you want to delete this destination?")) return;
+  useEffect(() => {
+    import("@/lib/services").then(({ countriesApi }) => {
+      countriesApi.getAll({ limit: 1000 }).then((res) => {
+        if (res.success) setCountries(res.data);
+      });
+    });
+  }, []);
 
+  // Handle delete destination
+  const handleDelete = async () => {
+    if (!deletingId) return;
     try {
-      await destinationsApi.delete(id);
-      fetchDestinations(); // Refresh the list
+      await destinationsApi.delete(deletingId);
+      fetchDestinations();
+      setDeletingId(null);
     } catch (err) {
       console.error("Error deleting destination:", err);
       alert("Failed to delete destination. Please try again.");
     }
   };
 
+  // Handle save destination
+  const handleSave = async (data: any) => {
+    try {
+      if (editingDestination) {
+        await destinationsApi.update(editingDestination._id, data);
+      } else {
+        await destinationsApi.create(data);
+      }
+      fetchDestinations();
+    } catch (err) {
+      console.error("Error saving destination:", err);
+      alert("Failed to save destination. Please try again.");
+    }
+  };
+
   // Filter logic
-  const filteredDestinations = destinations.filter((dest) =>
-    dest.name?.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredDestinations = destinations.filter((dest) => {
+    const matchesSearch = dest.name?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCountry = !selectedCountry || (dest as any).country_id?._id === selectedCountry;
+    return matchesSearch && matchesCountry;
+  });
 
   if (loading) {
     return (
@@ -88,7 +121,10 @@ export default function DestinationsPage() {
             Manage travel destinations and attractions
           </p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2">
+        <button 
+          onClick={() => { setEditingDestination(null); setDialogOpen(true); }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+        >
           <span>➕</span>
           {t("addNew")}
         </button>
@@ -105,6 +141,20 @@ export default function DestinationsPage() {
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
             />
+          </div>
+          <div className="w-full md:w-64">
+            <select
+              value={selectedCountry}
+              onChange={(e) => setSelectedCountry(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All Countries</option>
+              {countries.map((country) => (
+                <option key={country._id} value={country._id}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="flex gap-1 bg-gray-100 dark:bg-gray-700 rounded-lg p-1">
             <button
@@ -140,9 +190,9 @@ export default function DestinationsPage() {
               className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-shadow"
             >
               <div className="h-48 bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
-                {dest.image ? (
+                {(dest as any).banner_url ? (
                   <img 
-                    src={dest.image} 
+                    src={(dest as any).banner_url} 
                     alt={dest.name}
                     className="w-full h-full object-cover"
                   />
@@ -157,19 +207,20 @@ export default function DestinationsPage() {
                   </h3>
                 </div>
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  📍 {dest.country}
+                  📍 {(dest as any).country_id?.name || 'N/A'}
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">
                   {dest.description}
                 </p>
                 <div className="flex items-center gap-2 pt-3 border-t border-gray-200 dark:border-gray-700">
                   <button
+                    onClick={() => { setEditingDestination(dest); setDialogOpen(true); }}
                     className="flex-1 px-3 py-1.5 text-sm border border-blue-600 text-blue-600 rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors"
                   >
                     ✏️ Edit
                   </button>
                   <button
-                    onClick={() => handleDelete(dest._id)}
+                    onClick={() => { setDeletingId(dest._id); setDeleteDialogOpen(true); }}
                     className="flex-1 px-3 py-1.5 text-sm border border-red-600 text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
                   >
                     🗑️ Delete
@@ -214,7 +265,7 @@ export default function DestinationsPage() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="text-sm text-gray-500 dark:text-gray-400">
-                      {dest.country}
+                      {(dest as any).country_id?.name || 'N/A'}
                     </div>
                   </td>
                   <td className="px-6 py-4">
@@ -223,11 +274,14 @@ export default function DestinationsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <button className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4">
+                    <button 
+                      onClick={() => { setEditingDestination(dest); setDialogOpen(true); }}
+                      className="text-blue-600 hover:text-blue-900 dark:hover:text-blue-400 mr-4"
+                    >
                       {tCommon("edit")}
                     </button>
                     <button
-                      onClick={() => handleDelete(dest._id)}
+                      onClick={() => { setDeletingId(dest._id); setDeleteDialogOpen(true); }}
                       className="text-red-600 hover:text-red-900 dark:hover:text-red-400"
                     >
                       {tCommon("delete")}
@@ -273,6 +327,9 @@ export default function DestinationsPage() {
           </p>
         </div>
       )}
+
+      <DestinationDialog open={dialogOpen} onOpenChange={setDialogOpen} onSave={handleSave} destination={editingDestination} />
+      <DeleteConfirmDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen} onConfirm={handleDelete} title="Delete Destination" description="Are you sure you want to delete this destination? This action cannot be undone." />
     </div>
   );
 }
