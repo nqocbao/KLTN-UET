@@ -5,24 +5,23 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import type { Restaurant } from "@/types/api";
+import type { User } from "@/types/api";
 import { addressesApi, type Address } from "@/lib/services";
 
-interface RestaurantDialogProps {
+interface UserDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSave: (data: any) => Promise<void>;
-  restaurant?: Restaurant | null;
+  user?: User | null;
 }
 
-export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: RestaurantDialogProps) {
+export function UserDialog({ open, onOpenChange, onSave, user }: UserDialogProps) {
   const [formData, setFormData] = useState({
     name: "",
-    image_url: "",
-    cuisine: "",
-    rating: 0,
-    priceLevel: 1,
-    description: "",
+    email: "",
+    password: "",
+    phone: "",
+    role: "Customer",
     address_id: "",
     location: "",
   });
@@ -57,29 +56,30 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
   }, [open, fetchAddresses]);
 
   useEffect(() => {
-    if (restaurant) {
-      const addressId = (restaurant as any).address_id?._id || (restaurant as any).address_id || "";
+    if (user) {
+      // Handle address_id similar to HotelDialog
+      const addressId = (user as any).address_id?._id || (user as any).address_id || "";
+      
       setFormData({
-        name: restaurant.name || "",
-        image_url: (restaurant as any).image_url || "",
-        cuisine: restaurant.cuisine || "",
-        rating: restaurant.rating || 0,
-        priceLevel: restaurant.priceLevel || 1,
-        description: restaurant.description || "",
+        name: user.name || "",
+        email: user.email || "",
+        password: "", // Don't show password on edit
+        phone: user.phone || "",
+        role: user.role || "Customer",
         address_id: addressId,
-        location: restaurant.location || "",
+        location: "", // Will be set by address search
       });
-      // Set selected address if exists
+
       // Set selected address if exists
       if (addressId) {
-        // Try to find in loaded addresses first (guaranteed to be fully populated)
+        // Try to find in loaded addresses first
         const foundAddr = addresses.find((a) => a._id === addressId);
         if (foundAddr) {
           setSelectedAddress(foundAddr);
           setAddressSearch(formatAddress(foundAddr));
-        } else if (typeof (restaurant as any).address_id === "object") {
+        } else if (typeof (user as any).address_id === "object") {
           // Fallback to embedded object
-          const addr = (restaurant as any).address_id;
+          const addr = (user as any).address_id;
           setSelectedAddress(addr);
           setAddressSearch(formatAddress(addr));
         }
@@ -87,18 +87,17 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
     } else {
       setFormData({
         name: "",
-        image_url: "",
-        cuisine: "",
-        rating: 0,
-        priceLevel: 1,
-        description: "",
+        email: "",
+        password: "",
+        phone: "",
+        role: "Customer",
         address_id: "",
         location: "",
       });
       setSelectedAddress(null);
       setAddressSearch("");
     }
-  }, [restaurant, open, addresses]);
+  }, [user, open, addresses]);
 
   // Format address for display
   const formatAddress = (addr: Address): string => {
@@ -126,14 +125,21 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.address_id) {
-      alert("Vui lòng chọn địa chỉ!");
-      return;
-    }
     setLoading(true);
     try {
-      console.log("Submitting restaurant data:", formData);
-      await onSave(formData);
+      // Remove password if empty on edit
+      const dataToSubmit = { ...formData };
+      if (user && !dataToSubmit.password) {
+        delete (dataToSubmit as any).password;
+      }
+      
+      // Handle empty address_id (optional field)
+      if (!dataToSubmit.address_id) {
+        delete (dataToSubmit as any).address_id;
+      }
+      
+      console.log("Submitting user data:", dataToSubmit);
+      await onSave(dataToSubmit);
       onOpenChange(false);
     } finally {
       setLoading(false);
@@ -144,41 +150,75 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{restaurant ? "Sửa Nhà hàng" : "Thêm Nhà hàng mới"}</DialogTitle>
+          <DialogTitle>{user ? "Edit User" : "Add New User"}</DialogTitle>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
-            <label className="text-sm font-medium">Tên nhà hàng <span className="text-red-500">*</span></label>
+            <label className="text-sm font-medium">Full Name <span className="text-red-500">*</span></label>
             <Input
               value={formData.name}
               onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-              placeholder="Nhập tên nhà hàng"
+              placeholder="John Doe"
               required
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Image URL</label>
+            <label className="text-sm font-medium">Email <span className="text-red-500">*</span></label>
             <Input
-              value={formData.image_url}
-              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-              placeholder="https://example.com/image.jpg"
+              type="email"
+              value={formData.email}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="john@example.com"
+              required
             />
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Loại ẩm thực <span className="text-red-500">*</span></label>
+            <label className="text-sm font-medium">
+              Password {user && <span className="text-gray-500 font-normal">(Leave blank to keep current)</span>}
+              {!user && <span className="text-red-500">*</span>}
+            </label>
             <Input
-              value={formData.cuisine}
-              onChange={(e) => setFormData({ ...formData, cuisine: e.target.value })}
-              placeholder="VD: Việt Nam, Nhật Bản, Hàn Quốc..."
+              type="password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              placeholder="••••••••"
+              required={!user}
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Phone <span className="text-red-500">*</span></label>
+            <Input
+              value={formData.phone}
+              onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+              placeholder="+84 123 456 789"
               required
             />
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Role</label>
+            <Select
+              value={formData.role}
+              onValueChange={(value) => setFormData({ ...formData, role: value })}
+            >
+              <SelectTrigger><SelectValue /></SelectTrigger>
+              <SelectContent>
+                <SelectItem value="Customer">Customer</SelectItem>
+                <SelectItem value="Admin">Admin</SelectItem>
+                <SelectItem value="Guide">Guide</SelectItem>
+                <SelectItem value="Partner">Partner</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
 
           {/* Address Picker */}
           <div className="space-y-2">
-            <label className="text-sm font-medium">Địa chỉ <span className="text-red-500">*</span></label>
+            <label className="text-sm font-medium">
+              Address <span className="text-gray-500 font-normal">(Optional)</span>
+            </label>
             <div className="relative">
               <Input
                 value={addressSearch}
@@ -191,7 +231,7 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
                   }
                 }}
                 onFocus={() => setShowAddressDropdown(true)}
-                placeholder="Tìm kiếm địa chỉ..."
+                placeholder="Search address..."
                 className={selectedAddress ? "border-green-500" : ""}
               />
               {selectedAddress && (
@@ -202,9 +242,9 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
               {showAddressDropdown && (
                 <div className="absolute z-50 w-full mt-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg max-h-60 overflow-y-auto">
                   {loadingAddresses ? (
-                    <div className="p-3 text-center text-gray-500">Đang tải...</div>
+                    <div className="p-3 text-center text-gray-500">Loading...</div>
                   ) : filteredAddresses.length === 0 ? (
-                    <div className="p-3 text-center text-gray-500">Không tìm thấy địa chỉ</div>
+                    <div className="p-3 text-center text-gray-500">No address found</div>
                   ) : (
                     filteredAddresses.map((addr) => (
                       <button
@@ -236,52 +276,12 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Đánh giá</label>
-              <Input
-                type="number"
-                step="0.1"
-                min="0"
-                max="5"
-                value={formData.rating}
-                onChange={(e) => setFormData({ ...formData, rating: parseFloat(e.target.value) || 0 })}
-              />
-            </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Mức giá</label>
-              <Select
-                value={formData.priceLevel.toString()}
-                onValueChange={(value) => setFormData({ ...formData, priceLevel: parseInt(value) })}
-              >
-                <SelectTrigger><SelectValue /></SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="1">$ - Bình dân</SelectItem>
-                  <SelectItem value="2">$$ - Trung bình</SelectItem>
-                  <SelectItem value="3">$$$ - Cao cấp</SelectItem>
-                  <SelectItem value="4">$$$$ - Sang trọng</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-sm font-medium">Mô tả</label>
-            <textarea
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-              placeholder="Nhập mô tả..."
-              rows={3}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-700 rounded-lg bg-gray-50 dark:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
           <DialogFooter>
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={loading}>
-              Hủy
+              Cancel
             </Button>
             <Button type="submit" disabled={loading}>
-              {loading ? "Đang lưu..." : restaurant ? "Cập nhật" : "Tạo mới"}
+              {loading ? "Saving..." : user ? "Save Changes" : "Create User"}
             </Button>
           </DialogFooter>
         </form>

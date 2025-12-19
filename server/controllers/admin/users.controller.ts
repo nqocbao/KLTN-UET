@@ -9,7 +9,14 @@ export const getAllUsers = async (req: Request, res: Response) => {
     const skip = (page - 1) * limit;
 
     const users = await User.find()
-      .populate("address_id")
+      .populate({
+        path: "address_id",
+        populate: [
+          { path: "province_id" },
+          { path: "district_id" },
+          { path: "ward_id" },
+        ],
+      })
       .skip(skip)
       .limit(limit)
       .select("-password");
@@ -35,7 +42,14 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const getUserById = async (req: Request, res: Response) => {
   try {
     const user = await User.findById(req.params.id)
-      .populate("address_id")
+      .populate({
+        path: "address_id",
+        populate: [
+          { path: "province_id" },
+          { path: "district_id" },
+          { path: "ward_id" },
+        ],
+      })
       .select("-password");
 
     if (!user) {

@@ -136,9 +136,19 @@ export default function HotelsPage() {
           >
             <div className="flex">
               {/* Image Section */}
-              <div className="w-48 h-48 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-6xl flex-shrink-0">
-                {hotel.images && hotel.images.length > 0 ? (
-                  <div className="w-full h-full bg-cover bg-center" style={{backgroundImage: `url(${hotel.images[0]})`}}></div>
+              <div className="w-48 h-48 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-6xl flex-shrink-0 overflow-hidden">
+                {(hotel as any).image_url ? (
+                  <img 
+                    src={(hotel as any).image_url} 
+                    alt={hotel.name} 
+                    className="w-full h-full object-cover"
+                  />
+                ) : hotel.images && hotel.images.length > 0 ? (
+                  <img 
+                    src={hotel.images[0]} 
+                    alt={hotel.name} 
+                    className="w-full h-full object-cover"
+                  />
                 ) : (
                   "🏨"
                 )}
@@ -153,7 +163,9 @@ export default function HotelsPage() {
                 </div>
 
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
-                  📍 {hotel.location}
+                  📍 {(hotel as any).address_id?.ward_id?.name && `${(hotel as any).address_id.ward_id.name}, `}
+                  {(hotel as any).address_id?.district_id?.name && `${(hotel as any).address_id.district_id.name}, `}
+                  {(hotel as any).address_id?.province_id?.name || hotel.location || "Chưa có địa chỉ"}
                 </p>
 
                 <div className="flex items-center gap-4 mb-3">

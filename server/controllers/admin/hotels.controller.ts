@@ -10,7 +10,14 @@ export const getAllHotels = async (req: Request, res: Response) => {
 
     const hotels = await Hotel.find()
       .populate("partner_id")
-      .populate("address_id")
+      .populate({
+        path: "address_id",
+        populate: [
+          { path: "province_id" },
+          { path: "district_id" },
+          { path: "ward_id" },
+        ],
+      })
       .skip(skip)
       .limit(limit);
 
@@ -36,7 +43,14 @@ export const getHotelById = async (req: Request, res: Response) => {
   try {
     const hotel = await Hotel.findById(req.params.id)
       .populate("partner_id")
-      .populate("address_id");
+      .populate({
+        path: "address_id",
+        populate: [
+          { path: "province_id" },
+          { path: "district_id" },
+          { path: "ward_id" },
+        ],
+      });
 
     if (!hotel) {
       return res.status(404).json({
@@ -64,6 +78,9 @@ export const createHotel = async (req: Request, res: Response) => {
 // Update hotel
 export const updateHotel = async (req: Request, res: Response) => {
   try {
+    console.log("Updating hotel:", req.params.id);
+    console.log("Update data:", req.body);
+
     const hotel = await Hotel.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true,

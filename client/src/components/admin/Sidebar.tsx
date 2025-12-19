@@ -53,10 +53,7 @@ export default function Sidebar() {
     {
       title: "Location",
       items: [
-        { label: t("countries"), href: "/admin/countries", icon: "🌏" },
-        { label: "Provinces", href: "/admin/provinces", icon: "🏙️" },
-        { label: "Districts", href: "/admin/districts", icon: "🏘️" },
-        { label: "Wards", href: "/admin/wards", icon: "🏠" },
+        { label: "Địa điểm", href: "/admin/locations", icon: "📍" },
       ],
     },
   ];

@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useTranslations } from "next-intl";
 import { usersApi } from "@/lib/services";
 import type { User } from "@/types/api";
+import { UserDialog } from "@/components/admin/modals/UserDialog";
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -14,6 +15,8 @@ export default function UsersPage() {
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
   const t = useTranslations("users");
   const tCommon = useTranslations("common");
 
@@ -53,6 +56,21 @@ export default function UsersPage() {
     } catch (err) {
       console.error("Error deleting user:", err);
       alert("Failed to delete user. Please try again.");
+    }
+  };
+
+  // Handle save user
+  const handleSave = async (data: any) => {
+    try {
+      if (editingUser) {
+        await usersApi.update(editingUser._id, data);
+      } else {
+        await usersApi.create(data);
+      }
+      fetchUsers();
+    } catch (err) {
+      console.error("Error saving user:", err);
+      alert("Failed to save user. Please try again.");
     }
   };
 
@@ -99,7 +117,13 @@ export default function UsersPage() {
             Manage all registered users
           </p>
         </div>
-        <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+        <button 
+          onClick={() => {
+            setEditingUser(null);
+            setDialogOpen(true);
+          }}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+        >
           {t("addNew")}
         </button>
       </div>
@@ -230,7 +254,13 @@ export default function UsersPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm">
-                    <button className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3">
+                    <button 
+                      onClick={() => {
+                        setEditingUser(user);
+                        setDialogOpen(true);
+                      }}
+                      className="text-blue-600 hover:text-blue-800 dark:text-blue-400 mr-3"
+                    >
                       {tCommon("edit")}
                     </button>
                     <button 
@@ -272,6 +302,13 @@ export default function UsersPage() {
           </div>
         )}
       </div>
+
+      <UserDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        onSave={handleSave}
+        user={editingUser}
+      />
     </div>
   );
 }

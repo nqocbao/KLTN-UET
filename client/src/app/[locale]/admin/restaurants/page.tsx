@@ -179,8 +179,16 @@ export default function RestaurantsPage() {
             className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden hover:shadow-lg transition-all hover:-translate-y-1"
           >
             {/* Header with Image */}
-            <div className="relative h-40 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-7xl">
-              🍽️
+            <div className="relative h-40 bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-7xl overflow-hidden">
+              {(restaurant as any).image_url ? (
+                <img 
+                  src={(restaurant as any).image_url} 
+                  alt={restaurant.name} 
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                "🍽️"
+              )}
             </div>
 
             {/* Content */}
@@ -197,13 +205,13 @@ export default function RestaurantsPage() {
                 </p>
               )}
 
-              {restaurant.location && (
-                <div className="flex items-center gap-2 mb-3">
-                  <span className="text-sm text-gray-600 dark:text-gray-400">
-                    📍 {restaurant.location}
-                  </span>
-                </div>
-              )}
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-sm text-gray-600 dark:text-gray-400">
+                  📍 {(restaurant as any).address_id?.ward_id?.name && `${(restaurant as any).address_id.ward_id.name}, `}
+                  {(restaurant as any).address_id?.district_id?.name && `${(restaurant as any).address_id.district_id.name}, `}
+                  {(restaurant as any).address_id?.province_id?.name || restaurant.location || "Chưa có địa chỉ"}
+                </span>
+              </div>
 
               {/* Actions */}
               <div className="flex gap-2 pt-4 border-t border-gray-200 dark:border-gray-700">

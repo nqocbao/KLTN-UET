@@ -98,6 +98,19 @@ export interface Conversation {
   updatedAt: string;
 }
 
+// Address type
+export interface Address {
+  _id: string;
+  country_id?: any;
+  province_id?: any;
+  district_id?: any;
+  ward_id?: any;
+  address_detail?: string;
+  postal_code?: string;
+  latitude?: number;
+  longitude?: number;
+}
+
 /**
  * Airlines API Service
  */
@@ -328,5 +341,38 @@ export const conversationsApi = {
 
   delete: (id: string) => {
     return apiClient.delete<ApiResponse<void>>(`/admin/conversations/${id}`);
+  },
+};
+
+/**
+ * Addresses API Service
+ */
+export const addressesApi = {
+  getAll: (params?: PaginationParams) => {
+    return apiClient.get<PaginatedResponse<Address>>("/admin/addresses", {
+      params,
+    });
+  },
+
+  getById: (id: string) => {
+    return apiClient.get<ApiResponse<Address>>(`/admin/addresses/${id}`);
+  },
+
+  create: (data: Partial<Address>) => {
+    return apiClient.post<ApiResponse<Address>>("/admin/addresses", data);
+  },
+
+  update: (id: string, data: Partial<Address>) => {
+    return apiClient.put<ApiResponse<Address>>(`/admin/addresses/${id}`, data);
+  },
+
+  delete: (id: string) => {
+    return apiClient.delete<ApiResponse<void>>(`/admin/addresses/${id}`);
+  },
+
+  search: (query: string) => {
+    return apiClient.get<PaginatedResponse<Address>>("/admin/addresses", {
+      params: { search: query, limit: 20 },
+    });
   },
 };

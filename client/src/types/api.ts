@@ -37,6 +37,7 @@ export interface User {
   phone?: string;
   role: string;
   avatar?: string;
+  address_id?: any;
   createdAt: string;
   updatedAt: string;
 }
@@ -75,6 +76,7 @@ export interface Hotel {
   name: string;
   image_url?: string;
   location: string;
+  address_id?: any; // Populated Address or string ID
   rating: number;
   rooms: number;
   priceRange: string;
@@ -93,6 +95,7 @@ export interface Restaurant {
   rating: number;
   priceLevel: number;
   location: string;
+  address_id?: any; // Populated Address or string ID
   description?: string;
   images?: string[];
   createdAt: string;

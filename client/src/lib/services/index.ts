@@ -24,6 +24,7 @@ export {
   rolesApi,
   permissionsApi,
   conversationsApi,
+  addressesApi,
 } from "./other.service";
 
 // Export types
@@ -36,4 +37,5 @@ export type {
   Role,
   Permission,
   Conversation,
+  Address,
 } from "./other.service";

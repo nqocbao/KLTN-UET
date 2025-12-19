@@ -2,6 +2,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { Header } from "@/components/common/Header";
+import { HeroSection } from "@/components/home/HeroSection";
+import { TopDestinations } from "@/components/home/TopDestinations";
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -19,33 +22,31 @@ export default async function LocalePage({
     notFound();
   }
 
-  // Providing all messages to the client
-  // side is the easiest way to get started
   const messages = await getMessages();
 
   return (
     <NextIntlClientProvider messages={messages}>
-      <div className="min-h-screen bg-gray-50">
-        <div className="container mx-auto px-4 py-16">
-          <h1 className="text-4xl font-bold text-center mb-8">
-            {locale === "vi"
-              ? "Chào mừng đến với Admin Dashboard"
-              : "Welcome to Admin Dashboard"}
-          </h1>
-          <p className="text-center text-gray-600 mb-8">
-            {locale === "vi"
-              ? "Vui lòng truy cập /admin để vào trang quản trị"
-              : "Please visit /admin to access the admin panel"}
-          </p>
-          <div className="flex justify-center gap-4">
-            <a
-              href={`/${locale}/admin`}
-              className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-            >
-              {locale === "vi" ? "Đi đến Admin" : "Go to Admin"}
-            </a>
+      <div className="min-h-screen bg-gray-50 flex flex-col">
+        <Header />
+        <main className="flex-1">
+          <HeroSection />
+          <TopDestinations />
+          
+          {/* Placeholder for other sections */}
+          <div className="container mx-auto px-4 py-12 text-center">
+             <div className="p-8 bg-white rounded-xl shadow-sm border border-gray-100">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">Khám phá thêm</h3>
+                <p className="text-gray-500">Nhiều ưu đãi hấp dẫn đang chờ đón bạn.</p>
+             </div>
           </div>
-        </div>
+        </main>
+        
+        {/* Simple Footer Placeholder */}
+        <footer className="bg-gray-100 py-8 border-t border-gray-200 mt-auto">
+          <div className="container mx-auto px-4 text-center text-gray-500 text-sm">
+            &copy; 2025 VivuTravel. All rights reserved.
+          </div>
+        </footer>
       </div>
     </NextIntlClientProvider>
   );

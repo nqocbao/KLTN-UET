@@ -13,7 +13,14 @@ export const getAllRestaurants = async (req: Request, res: Response) => {
 
     const restaurants = await Restaurant.find(filter)
       .populate("partner_id")
-      .populate("address_id")
+      .populate({
+        path: "address_id",
+        populate: [
+          { path: "province_id" },
+          { path: "district_id" },
+          { path: "ward_id" },
+        ],
+      })
       .skip(skip)
       .limit(limit);
 
@@ -39,7 +46,14 @@ export const getRestaurantById = async (req: Request, res: Response) => {
   try {
     const restaurant = await Restaurant.findById(req.params.id)
       .populate("partner_id")
-      .populate("address_id");
+      .populate({
+        path: "address_id",
+        populate: [
+          { path: "province_id" },
+          { path: "district_id" },
+          { path: "ward_id" },
+        ],
+      });
 
     if (!restaurant) {
       return res.status(404).json({
@@ -67,6 +81,9 @@ export const createRestaurant = async (req: Request, res: Response) => {
 // Update restaurant
 export const updateRestaurant = async (req: Request, res: Response) => {
   try {
+    console.log("Updating restaurant:", req.params.id);
+    console.log("Update data:", req.body);
+
     const restaurant = await Restaurant.findByIdAndUpdate(
       req.params.id,
       req.body,
