@@ -52,6 +52,7 @@ export default function HotelsPage() {
       await hotelsApi.delete(deletingId);
       fetchHotels();
       setDeletingId(null);
+      setDeleteDialogOpen(false);
     } catch (err) {
       console.error("Error deleting hotel:", err);
       alert("Failed to delete hotel. Please try again.");
@@ -75,6 +76,8 @@ export default function HotelsPage() {
   const filteredHotels = hotels.filter((hotel) =>
     hotel.name?.toLowerCase().includes(searchTerm.toLowerCase())
   );
+
+  // console.log("day ne=>>>>>>>>>>",hotels, "    ", filteredHotels)
 
   if (loading) {
     return (

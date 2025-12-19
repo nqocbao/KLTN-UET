@@ -15,14 +15,14 @@ interface RestaurantDialogProps {
 }
 
 export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: RestaurantDialogProps) {
-  const [formData, setFormData] = useState({ name: "", cuisine: "", rating: 0, priceLevel: 1, location: "", description: "" });
+  const [formData, setFormData] = useState({ name: "", image_url: "", cuisine: "", rating: 0, priceLevel: 1, location: "", description: "" });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (restaurant) {
-      setFormData({ name: restaurant.name || "", cuisine: restaurant.cuisine || "", rating: restaurant.rating || 0, priceLevel: restaurant.priceLevel || 1, location: restaurant.location || "", description: restaurant.description || "" });
+      setFormData({ name: restaurant.name || "", image_url: restaurant.image_url || "", cuisine: restaurant.cuisine || "", rating: restaurant.rating || 0, priceLevel: restaurant.priceLevel || 1, location: restaurant.location || "", description: restaurant.description || "" });
     } else {
-      setFormData({ name: "", cuisine: "", rating: 0, priceLevel: 1, location: "", description: "" });
+      setFormData({ name: "", image_url: "", cuisine: "", rating: 0, priceLevel: 1, location: "", description: "" });
     }
   }, [restaurant, open]);
 
@@ -47,6 +47,10 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
           <div className="space-y-2">
             <label className="text-sm font-medium">Name</label>
             <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Image URL</label>
+            <Input value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} placeholder="https://example.com/image.jpg" />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Cuisine</label>

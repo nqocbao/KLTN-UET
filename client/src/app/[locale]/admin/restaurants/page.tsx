@@ -53,6 +53,7 @@ export default function RestaurantsPage() {
       await restaurantsApi.delete(deletingId);
       fetchRestaurants();
       setDeletingId(null);
+      setDeleteDialogOpen(false);
     } catch (err) {
       console.error("Error deleting restaurant:", err);
       alert("Failed to delete restaurant. Please try again.");

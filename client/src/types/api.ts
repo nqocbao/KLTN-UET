@@ -73,6 +73,7 @@ export interface Destination {
 export interface Hotel {
   _id: string;
   name: string;
+  image_url?: string;
   location: string;
   rating: number;
   rooms: number;
@@ -87,6 +88,7 @@ export interface Hotel {
 export interface Restaurant {
   _id: string;
   name: string;
+  image_url?: string;
   cuisine: string;
   rating: number;
   priceLevel: number;

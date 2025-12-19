@@ -14,14 +14,14 @@ interface HotelDialogProps {
 }
 
 export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogProps) {
-  const [formData, setFormData] = useState({ name: "", location: "", rating: 0, rooms: 0, priceRange: "", description: "" });
+  const [formData, setFormData] = useState({ name: "", image_url: "", location: "", rating: 0, rooms: 0, priceRange: "", description: "" });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (hotel) {
-      setFormData({ name: hotel.name || "", location: hotel.location || "", rating: hotel.rating || 0, rooms: hotel.rooms || 0, priceRange: hotel.priceRange || "", description: hotel.description || "" });
+      setFormData({ name: hotel.name || "", image_url: hotel.image_url || "", location: hotel.location || "", rating: hotel.rating || 0, rooms: hotel.rooms || 0, priceRange: hotel.priceRange || "", description: hotel.description || "" });
     } else {
-      setFormData({ name: "", location: "", rating: 0, rooms: 0, priceRange: "", description: "" });
+      setFormData({ name: "", image_url: "", location: "", rating: 0, rooms: 0, priceRange: "", description: "" });
     }
   }, [hotel, open]);
 
@@ -46,6 +46,10 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
           <div className="space-y-2">
             <label className="text-sm font-medium">Name</label>
             <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Image URL</label>
+            <Input value={formData.image_url} onChange={(e) => setFormData({ ...formData, image_url: e.target.value })} placeholder="https://example.com/image.jpg" />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Location</label>
