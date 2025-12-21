@@ -79,7 +79,10 @@ export interface Hotel {
   address_id?: any; // Populated Address or string ID
   rating: number;
   rooms: number;
+  availableRooms: number;
   priceRange: string;
+  priceTwoSingleBed?: number;
+  priceOneSingleOneDoubleBed?: number;
   description?: string;
   images?: string[];
   createdAt: string;

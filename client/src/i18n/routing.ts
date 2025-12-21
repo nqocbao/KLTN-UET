@@ -13,6 +13,8 @@ export const routing = defineRouting({
   // middleware can automatically generate the internal path.
   pathnames: {
     "/": "/",
+    "/hotels": "/hotels",
+    "/flights": "/flights",
     "/admin": "/admin",
     "/admin/tours": "/admin/tours",
     "/admin/users": "/admin/users",

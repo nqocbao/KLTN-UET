@@ -75,4 +75,13 @@ body {
   .scrollbar-thumb-gray-700::-webkit-scrollbar-thumb {
     @apply bg-gray-700;
   }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
 }

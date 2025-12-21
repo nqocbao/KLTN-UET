@@ -183,6 +183,13 @@ export default function HotelsPage() {
                   </div>
                 </div>
 
+                <div className="grid grid-cols-2 gap-2 text-xs text-gray-500 dark:text-gray-400 mb-3 bg-gray-50 dark:bg-gray-700/50 p-2 rounded-lg">
+                   <div>Available: <span className="font-medium text-green-600 dark:text-green-400">{hotel.availableRooms} rooms</span></div>
+                   <div>Total: <span className="font-medium text-gray-900 dark:text-gray-300">{hotel.rooms} rooms</span></div>
+                   <div>2 Single: <span className="font-medium text-gray-900 dark:text-gray-300">{hotel.priceTwoSingleBed?.toLocaleString()}₫</span></div>
+                   <div>1S+1D: <span className="font-medium text-gray-900 dark:text-gray-300">{hotel.priceOneSingleOneDoubleBed?.toLocaleString()}₫</span></div>
+                </div>
+
                 {hotel.description && (
                   <p className="text-sm text-gray-500 dark:text-gray-400 mb-3 line-clamp-2">
                     {hotel.description}

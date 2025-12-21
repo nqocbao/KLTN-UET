@@ -14,7 +14,7 @@ const destinations = [
   {
     id: 3,
     name: "Vũng Tàu",
-    image: "https://images.unsplash.com/photo-1623596727738-9c221b2a8930?q=80&w=800&auto=format&fit=crop",
+    image: "https://i.pinimg.com/1200x/4b/3f/b9/4b3fb9fc016382fe6efd1b9632e1d8b2.jpg",
   },
   {
     id: 4,
@@ -24,7 +24,7 @@ const destinations = [
   {
     id: 5,
     name: "Đà Lạt",
-    image: "https://images.unsplash.com/photo-1626015096842-1e92d27b9c5f?q=80&w=800&auto=format&fit=crop",
+    image: "https://i.pinimg.com/736x/7e/92/a3/7e92a3a332bb71af1ce2c9ded6cdfd1b.jpg",
   },
 ];
 

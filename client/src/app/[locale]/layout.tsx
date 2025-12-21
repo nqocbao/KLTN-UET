@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { ChatBot } from "@/components/common/ChatBot";
 import "../globals.css";
 
 const geistSans = Geist({
@@ -51,6 +52,7 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             {children}
+            <ChatBot />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

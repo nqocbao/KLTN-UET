@@ -7,7 +7,10 @@ const hotelSchema = new mongoose.Schema({
   description: { type: String },
   rating: { type: Number, min: 0, max: 5 },
   rooms: { type: Number },
+  availableRooms: { type: Number, default: 0 },
   priceRange: { type: String },
+  priceTwoSingleBed: { type: Number },
+  priceOneSingleOneDoubleBed: { type: Number },
   partner_id: { type: mongoose.Schema.Types.ObjectId, ref: "Partner" },
   address_id: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
   images: { type: mongoose.Schema.Types.Mixed }, // JSON

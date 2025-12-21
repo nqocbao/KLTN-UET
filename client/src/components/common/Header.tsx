@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { Button } from "@/components/ui/button";
 import { Menu, ChevronDown, User, HelpCircle, Briefcase, Tag, Globe } from "lucide-react";
 import {
@@ -14,7 +14,11 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { AuthModal } from "@/components/auth/AuthModal";
 
-export function Header() {
+interface HeaderProps {
+  variant?: "transparent" | "opaque" | "blue";
+}
+
+export function Header({ variant = "transparent" }: HeaderProps) {
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"login" | "register">("login");
   const [isScrolled, setIsScrolled] = useState(false);
@@ -32,10 +36,16 @@ export function Header() {
     setAuthOpen(true);
   };
 
+  const getHeaderBackground = () => {
+    if (variant === "blue") return "bg-[#1ba0e2]";
+    if (variant === "opaque") return "bg-white shadow-md";
+    return isScrolled ? "bg-[#1ba0e2] shadow-md" : "bg-transparent";
+  };
+
+  const textColorClass = variant === "opaque" && !isScrolled ? "text-gray-900" : "text-white";
+
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-      isScrolled ? "bg-[#1ba0e2] shadow-md" : "bg-transparent"
-    }`}>
+    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${getHeaderBackground()} ${textColorClass}`}>
       <div className="container mx-auto px-4">
         {/* Top Row: Logo & Utilities */}
         <div className="flex items-center justify-between h-14 border-b border-white/10">
@@ -53,17 +63,11 @@ export function Header() {
               <ChevronDown className="w-3 h-3" />
             </div>
             
-            <Link href="#" className="flex items-center gap-1 hover:text-white/80">
-              <Tag className="w-4 h-4" /> Khuyến mãi
-            </Link>
-            <Link href="#" className="flex items-center gap-1 hover:text-white/80">
+            <Link href="/" className="flex items-center gap-1 hover:text-white/80">
               <HelpCircle className="w-4 h-4" /> Hỗ trợ
             </Link>
-            <Link href="#" className="flex items-center gap-1 hover:text-white/80">
+            <Link href="/" className="flex items-center gap-1 hover:text-white/80">
               <Briefcase className="w-4 h-4" /> Hợp tác với chúng tôi
-            </Link>
-            <Link href="#" className="flex items-center gap-1 hover:text-white/80">
-              <User className="w-4 h-4" /> Đặt chỗ của tôi
             </Link>
 
             <div className="flex items-center gap-2 ml-2">
@@ -93,13 +97,13 @@ export function Header() {
 
         {/* Bottom Row: Navigation (Desktop) */}
         <div className="hidden lg:flex items-center h-12 text-sm font-medium text-white gap-8">
-          <Link href="#" className="hover:text-white/80">Khách sạn</Link>
-          <Link href="#" className="hover:text-white/80">Vé máy bay</Link>
-          <Link href="#" className="hover:text-white/80">Vé xe khách</Link>
-          <Link href="#" className="hover:text-white/80">Đưa đón sân bay</Link>
-          <Link href="#" className="hover:text-white/80">Cho thuê xe</Link>
-          <Link href="#" className="hover:text-white/80">Hoạt động & Vui chơi</Link>
-          <Link href="#" className="flex items-center gap-1 hover:text-white/80">
+          <Link href="/hotels" className="hover:text-white/80">Khách sạn</Link>
+          <Link href="/flights" className="hover:text-white/80">Vé máy bay</Link>
+          <Link href="/" className="hover:text-white/80">Vé xe khách</Link>
+          <Link href="/" className="hover:text-white/80">Đưa đón sân bay</Link>
+          <Link href="/" className="hover:text-white/80">Cho thuê xe</Link>
+          <Link href="/" className="hover:text-white/80">Hoạt động & Vui chơi</Link>
+          <Link href="/" className="flex items-center gap-1 hover:text-white/80">
             More <ChevronDown className="w-3 h-3" />
           </Link>
         </div>

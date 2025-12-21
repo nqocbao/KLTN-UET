@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, Phone } from "lucide-react";
+import { Mail, Phone, Loader2 } from "lucide-react";
 
 // Inline SVGs for brand icons
 const GoogleIcon = () => (
@@ -37,8 +38,46 @@ interface AuthModalProps {
 }
 
 export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModalProps) {
-  // const t = useTranslations("auth"); // Assuming you'll add translations later
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleLogin = async () => {
+    setError("");
+    setIsLoading(true);
+
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Check for admin credentials
+    if (email === "admin" && password === "admin") {
+      // Store auth info in localStorage
+      localStorage.setItem("token", "admin-token");
+      localStorage.setItem("user", JSON.stringify({
+        _id: "admin",
+        name: "Administrator",
+        email: "admin@vivutravel.com",
+        role: "admin"
+      }));
+      
+      // Close modal and redirect to dashboard
+      onOpenChange(false);
+      router.push("/vi/admin");
+    } else {
+      setError("Tên đăng nhập hoặc mật khẩu không đúng!");
+    }
+
+    setIsLoading(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" && activeTab === "login") {
+      handleLogin();
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -84,10 +123,21 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
               </div>
 
               {/* Email/Phone Input */}
-              <div className="space-y-4">
+              <div className="space-y-4" onKeyDown={handleKeyDown}>
+                {error && (
+                  <div className="p-3 bg-red-50 border border-red-200 rounded-lg text-red-600 text-sm">
+                    {error}
+                  </div>
+                )}
+                
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Email hoặc số điện thoại</label>
-                  <Input placeholder="Email hoặc số điện thoại" className="h-12" />
+                  <label className="text-sm font-medium">Tên đăng nhập hoặc Email</label>
+                  <Input 
+                    placeholder="Nhập tên đăng nhập hoặc email" 
+                    className="h-12"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
                 </div>
                 
                 {activeTab === "register" && (
@@ -99,7 +149,13 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
 
                 <div className="space-y-2">
                    <label className="text-sm font-medium">Mật khẩu</label>
-                   <Input type="password" placeholder="Mật khẩu" className="h-12" />
+                   <Input 
+                     type="password" 
+                     placeholder="Mật khẩu" 
+                     className="h-12"
+                     value={password}
+                     onChange={(e) => setPassword(e.target.value)}
+                   />
                 </div>
 
                 {activeTab === "register" && (
@@ -109,9 +165,26 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
                    </div>
                 )}
 
-                <Button className="w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 text-white">
-                  {activeTab === "login" ? "Đăng nhập" : "Tiếp tục"}
+                <Button 
+                  className="w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 text-white"
+                  onClick={activeTab === "login" ? handleLogin : undefined}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <Loader2 className="w-5 h-5 mr-2 animate-spin" />
+                      Đang xử lý...
+                    </>
+                  ) : (
+                    activeTab === "login" ? "Đăng nhập" : "Tiếp tục"
+                  )}
                 </Button>
+
+                {activeTab === "login" && (
+                  <p className="text-center text-xs text-gray-500">
+                    Gợi ý: Đăng nhập với <span className="font-semibold">admin/admin</span> để vào trang quản trị
+                  </p>
+                )}
               </div>
             </div>
             

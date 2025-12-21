@@ -20,7 +20,10 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
     image_url: "",
     rating: 0,
     rooms: 0,
+    availableRooms: 0,
     priceRange: "",
+    priceTwoSingleBed: 0,
+    priceOneSingleOneDoubleBed: 0,
     description: "",
     address_id: "",
     location: "",
@@ -63,7 +66,10 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
         image_url: (hotel as any).image_url || "",
         rating: hotel.rating || 0,
         rooms: hotel.rooms || 0,
+        availableRooms: hotel.availableRooms || 0,
         priceRange: hotel.priceRange || "",
+        priceTwoSingleBed: hotel.priceTwoSingleBed || 0,
+        priceOneSingleOneDoubleBed: hotel.priceOneSingleOneDoubleBed || 0,
         description: hotel.description || "",
         address_id: addressId,
         location: hotel.location || "",
@@ -89,7 +95,10 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
         image_url: "",
         rating: 0,
         rooms: 0,
+        availableRooms: 0,
         priceRange: "",
+        priceTwoSingleBed: 0,
+        priceOneSingleOneDoubleBed: 0,
         description: "",
         address_id: "",
         location: "",
@@ -237,6 +246,8 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
                 onChange={(e) => setFormData({ ...formData, rating: parseFloat(e.target.value) || 0 })}
               />
             </div>
+          </div>
+          <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
               <label className="text-sm font-medium">Số phòng</label>
               <Input
@@ -246,15 +257,45 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
                 onChange={(e) => setFormData({ ...formData, rooms: parseInt(e.target.value) || 0 })}
               />
             </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Số phòng còn trống</label>
+              <Input
+                type="number"
+                min="0"
+                value={formData.availableRooms}
+                onChange={(e) => setFormData({ ...formData, availableRooms: parseInt(e.target.value) || 0 })}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">
-            <label className="text-sm font-medium">Khoảng giá</label>
+            <label className="text-sm font-medium">Khoảng giá (Hiển thị)</label>
             <Input
               value={formData.priceRange}
               onChange={(e) => setFormData({ ...formData, priceRange: e.target.value })}
               placeholder="VD: 500.000 - 1.000.000 VND"
             />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Giá phòng 2 giường đơn</label>
+              <Input
+                type="number"
+                min="0"
+                value={formData.priceTwoSingleBed}
+                onChange={(e) => setFormData({ ...formData, priceTwoSingleBed: parseFloat(e.target.value) || 0 })}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Giá phòng 1 đơn + 1 đôi</label>
+              <Input
+                type="number"
+                min="0"
+                value={formData.priceOneSingleOneDoubleBed}
+                onChange={(e) => setFormData({ ...formData, priceOneSingleOneDoubleBed: parseFloat(e.target.value) || 0 })}
+              />
+            </div>
           </div>
 
           <div className="space-y-2">

@@ -1,7 +1,8 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "tsx index.ts"
+    "dev": "tsx index.ts",
+    "seed": "tsx seeders/seed.ts"
   },
   "dependencies": {
     "cors": "^2.8.5",
