@@ -4,8 +4,10 @@ import cors from "cors";
 import mongoose from "mongoose";
 import morgan from "morgan";
 import helmet from "helmet";
+import swaggerUi from "swagger-ui-express";
 import { connectDatabase } from "./config/database.js";
 import adminRoutes from "./routes/admin/index.js";
+import swaggerSpec from "./config/swagger.js";
 
 dotenv.config();
 
@@ -20,6 +22,9 @@ connectDatabase();
 app.get("/", (_, res) => {
   res.send("Backend is running 🚀");
 });
+
+// Swagger documentation
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // Mount admin routes
 app.use("/api/admin", adminRoutes);

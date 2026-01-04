@@ -3,10 +3,43 @@
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Star } from "lucide-react";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState, useCallback, useRef } from "react";
 
-export function HotelSearchSidebar() {
-  const [priceRange, setPriceRange] = useState([0, 24000000]);
+interface HotelSearchSidebarProps {
+  rooms: number;
+  nights: number;
+}
+
+export function HotelSearchSidebar({ rooms, nights }: HotelSearchSidebarProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  const initialMin = parseInt(searchParams.get("minPrice") || "0");
+  const initialMax = parseInt(searchParams.get("maxPrice") || "24000000");
+  const [priceRange, setPriceRange] = useState([initialMin, initialMax]);
+
+  // Sync with URL if it changes from outside
+  useEffect(() => {
+    const min = parseInt(searchParams.get("minPrice") || "0");
+    const max = parseInt(searchParams.get("maxPrice") || "24000000");
+    setPriceRange([min, max]);
+  }, [searchParams]);
+
+  // Simple debounce
+  const timerRef = useRef<NodeJS.Timeout>(null);
+  const handlePriceChange = (value: number[]) => {
+    setPriceRange(value);
+    
+    if (timerRef.current) clearTimeout(timerRef.current);
+    
+    timerRef.current = setTimeout(() => {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("minPrice", value[0].toString());
+      params.set("maxPrice", value[1].toString());
+      router.push(`?${params.toString()}`);
+    }, 500);
+  };
 
   return (
     <div className="space-y-6">
@@ -21,21 +54,27 @@ export function HotelSearchSidebar() {
       {/* Price Range */}
       <div className="space-y-4 border-b border-gray-200 pb-6">
         <h3 className="font-bold text-gray-900">Khoảng giá</h3>
-        <p className="text-sm text-gray-500">1 phòng, 1 đêm</p>
+        <p className="text-sm text-gray-500">{rooms} phòng, {nights} đêm</p>
         
         <Slider
           defaultValue={[0, 24000000]}
           max={24000000}
           step={100000}
           value={priceRange}
-          onValueChange={setPriceRange}
+          onValueChange={handlePriceChange}
           className="mt-6"
         />
         
         <div className="flex items-center justify-between text-sm font-medium text-gray-700">
-           <span className="border p-2 rounded w-24 text-center">{priceRange[0].toLocaleString()}0</span>
+           <div className="flex flex-col gap-1">
+             <span className="text-[10px] text-gray-400">Từ</span>
+             <span className="border p-2 rounded w-24 text-center">{priceRange[0].toLocaleString()}</span>
+           </div>
            <span>-</span>
-           <span className="border p-2 rounded w-24 text-center">{priceRange[1] >= 24000000 ? "24tr+" : priceRange[1].toLocaleString()}</span>
+           <div className="flex flex-col gap-1">
+             <span className="text-[10px] text-gray-400">Đến</span>
+             <span className="border p-2 rounded w-24 text-center">{priceRange[1] >= 24000000 ? "24tr+" : priceRange[1].toLocaleString()}</span>
+           </div>
         </div>
       </div>
 

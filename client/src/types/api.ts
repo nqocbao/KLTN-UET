@@ -16,6 +16,13 @@ export interface PaginationParams {
   limit?: number;
   sort?: string;
   order?: "asc" | "desc";
+  location?: string;
+  name?: string;
+  sortBy?: string;
+  minPrice?: number;
+  maxPrice?: number;
+  from?: string;
+  to?: string;
 }
 
 export interface PaginatedResponse<T> {

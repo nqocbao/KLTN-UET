@@ -25,12 +25,26 @@ export default async function LocalePage({ params }: { params: Promise<{ locale:
           <HeroSection />
           <HomeDynamicSection />
           <TopDestinations />
-          <div className="container mx-auto px-4 py-12 text-center">
-             <div className="p-8 bg-white rounded-xl shadow-sm border border-gray-100">
-                <h3 className="text-xl font-semibold text-gray-800 mb-2">Khám phá thêm</h3>
-                <p className="text-gray-500">Nhiều ưu đãi hấp dẫn đang chờ đón bạn.</p>
+          {/* Why Book with us */}
+        <section className="bg-white border-t border-gray-100 py-16 mb-10 shadow-2xl">
+          <div className="container mx-auto px-4">
+             <h2 className="text-2xl font-bold text-center mb-12">Tại sao nên đặt chỗ với VivuTravel?</h2>
+             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+                {[
+                  { title: "Giá rẻ mỗi ngày với ưu đãi đặc biệt dành riêng cho ứng dụng", desc: "Đặt phòng qua ứng dụng để nhận giá tốt nhất với các khuyến mãi tuyệt vời!", icon: "🏷️" },
+                  { title: "Phương thức thanh toán an toàn và linh hoạt", desc: "Giao dịch trực tuyến an toàn với nhiều lựa chọn như thanh toán tại cửa hàng tiện lợi, chuyển khoản ngân hàng...", icon: "💳" },
+                  { title: "Hỗ trợ khách hàng 24/7", desc: "Đội ngũ nhân viên hỗ trợ khách hàng luôn sẵn sàng giúp đỡ bạn trong từng bước của quá trình đặt vé.", icon: "☎️" },
+                  { title: "Khách thực, đánh giá thực", desc: "Hơn 10.000.000 đánh giá bởi du khách sẽ giúp bạn đưa ra lựa chọn đúng đắn.", icon: "⭐" },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex flex-col items-center text-center space-y-4">
+                    <div className="w-16 h-16 bg-blue-50 rounded-full flex items-center justify-center text-3xl">{item.icon}</div>
+                    <h4 className="font-bold text-sm text-gray-900 leading-snug">{item.title}</h4>
+                    <p className="text-xs text-gray-500 leading-relaxed">{item.desc}</p>
+                  </div>
+                ))}
              </div>
           </div>
+        </section>
         </main>
         <Footer />
       </div>

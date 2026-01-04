@@ -199,5 +199,9 @@
     "theme": "Giao diện",
     "lightMode": "Sáng",
     "darkMode": "Tối"
+  },
+  "locations": {
+    "title": "Quản lý Địa điểm",
+    "description": "Quản lý quốc gia, tỉnh thành, quận huyện, phường xã và địa chỉ"
   }
 }

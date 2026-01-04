@@ -6,12 +6,16 @@ import type { Hotel } from "@/types/api";
 
 interface HotelSearchCardProps {
   hotel: Hotel;
+  nights?: number;
 }
 
-export function HotelSearchCard({ hotel }: HotelSearchCardProps) {
+export function HotelSearchCard({ hotel, nights = 1 }: HotelSearchCardProps) {
   // Mock discount logic for display purposes
-  const originalPrice = (hotel.priceTwoSingleBed || 0) * 1.2;
-  const currentPrice = hotel.priceTwoSingleBed || 0;
+  const perNightPrice = hotel.priceTwoSingleBed || 0;
+  const originalPerNightPrice = perNightPrice * 1.2;
+  
+  const totalPrice = perNightPrice * nights;
+  const originalTotalPrice = originalPerNightPrice * nights;
 
 
   console.log("hotel.images =>>>>>>", hotel.images)
@@ -20,21 +24,22 @@ export function HotelSearchCard({ hotel }: HotelSearchCardProps) {
     <div className="flex flex-col md:flex-row bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow md:h-[240px]">
       {/* Image Section */}
       <div className="w-full md:w-[320px] h-[200px] md:h-full shrink-0 relative flex gap-0.5">
-          <div className="w-3/4 h-full relative">
+           <div className="w-3/4 h-full relative">
              <img 
-               src={(hotel as any).image_url || hotel.images?.[0] || "/placeholder-hotel.jpg"} 
+               src={(hotel as any).image_url || hotel.images?.[0] || "https://placehold.co/600x400/png?text=Hotel+Image"} 
                alt={hotel.name}
                className="w-full h-full object-cover"
+               onError={(e) => (e.currentTarget.src = "https://placehold.co/600x400/png?text=Hotel+Image")}
              />
           </div>
           <div className="w-1/4 h-full flex flex-col gap-0.5">
             {[1, 2, 3].map((i) => (
                <div key={i} className="flex-1 relative">
                  <img 
-                   src={hotel.images?.[i] || `/placeholder-room-${i}.jpg`}
+                   src={hotel.images?.[i] || `https://placehold.co/300x200/png?text=Room+${i}`}
                    alt="Room view" 
                    className="w-full h-full object-cover"
-                   onError={(e) => (e.currentTarget.src = "/placeholder-hotel.jpg")} 
+                   onError={(e) => (e.currentTarget.src = `https://placehold.co/300x200/png?text=Room+Fallback`)} 
                  />
                  {i === 3 && (hotel.images?.length || 0) > 4 && (
                    <div className="absolute bottom-1 right-1 bg-black/60 text-white text-[10px] font-bold px-2 py-1 rounded cursor-pointer hover:bg-black/70 backdrop-blur-sm">
@@ -66,8 +71,13 @@ export function HotelSearchCard({ hotel }: HotelSearchCardProps) {
            </div>
 
            <div className="flex items-center text-gray-500 text-sm mb-3">
-             <MapPin className="w-4 h-4 mr-1 text-gray-400" />
-             <span className="truncate max-w-[300px]">{hotel.location}</span>
+             <MapPin className="w-4 h-4 mr-1 text-gray-400 flex-shrink-0" />
+             <span className="truncate max-w-[300px]">
+                {(hotel as any).address_id?.address_detail && `${(hotel as any).address_id.address_detail}, `}
+                {(hotel as any).address_id?.ward_id?.name && `${(hotel as any).address_id.ward_id.name}, `}
+                {(hotel as any).address_id?.district_id?.name && `${(hotel as any).address_id.district_id.name}, `}
+                {(hotel as any).address_id?.province_id?.name || hotel.location}
+             </span>
            </div>
 
            <div className="flex gap-4 text-gray-500">
@@ -95,15 +105,15 @@ export function HotelSearchCard({ hotel }: HotelSearchCardProps) {
          </div>
          
          <div className="text-gray-400 text-xs line-through">
-           {originalPrice.toLocaleString()} VND
+           {originalTotalPrice.toLocaleString()} VND
          </div>
          
          <div className="text-[#ff5e1f] text-xl font-bold">
-           {currentPrice.toLocaleString()} VND
+           {totalPrice.toLocaleString()} VND
          </div>
          
          <div className="text-xs text-gray-500 mb-3">
-           / phòng / đêm
+           {nights > 1 ? `Tổng cho ${nights} đêm` : "/ phòng / đêm"}
          </div>
          <div className="text-xs text-gray-500 mb-3">
            Chưa bao gồm thuế và phí

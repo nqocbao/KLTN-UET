@@ -136,18 +136,18 @@ export default function HotelsPage() {
           >
             <div className="flex">
               {/* Image Section */}
-              <div className="w-48 h-48 bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-6xl flex-shrink-0 overflow-hidden">
+              <div className="w-64 min-h-[200px] bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-6xl flex-shrink-0 overflow-hidden">
                 {(hotel as any).image_url ? (
                   <img 
                     src={(hotel as any).image_url} 
                     alt={hotel.name} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                   />
                 ) : hotel.images && hotel.images.length > 0 ? (
                   <img 
                     src={hotel.images[0]} 
                     alt={hotel.name} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover object-center"
                   />
                 ) : (
                   "🏨"

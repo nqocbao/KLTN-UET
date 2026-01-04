@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DateRangePicker, type DateRange } from "@/components/ui/date-range-picker";
 import { GuestRoomPicker, type GuestRoomValue } from "@/components/ui/guest-room-picker";
+import { LocationAutocomplete } from "@/components/ui/location-autocomplete";
 import { Search, Calendar, User, Hotel, Plane, Bus, Car, MapPin, Grid, Home, Building, ChevronDown, ArrowLeftRight, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -20,6 +21,7 @@ function formatDateShort(date: Date | null | undefined): string {
 
 export function HeroSection() {
   const router = useRouter();
+  const [location, setLocation] = useState("");
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
@@ -113,12 +115,15 @@ export function HeroSection() {
                   {/* Destination */}
                   <div className="col-span-12 md:col-span-4 relative group">
                     <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Thành phố, địa điểm hoặc tên khách sạn:</div>
-                    <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
-                      <Input 
-                        placeholder="Thành phố, khách sạn, điểm đến" 
-                        className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
-                      />
+                    <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3 flex-shrink-0" />
+                      <div className="pl-12 w-full pt-6 pb-2">
+                        <LocationAutocomplete 
+                          value={location}
+                          onChange={setLocation}
+                          placeholder="Thành phố, khách sạn, điểm đến"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -166,6 +171,7 @@ export function HeroSection() {
                       className="h-14 w-16 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0"
                       onClick={() => {
                         const params = new URLSearchParams();
+                        if (location) params.set("location", location);
                         params.set("rooms", guestRoom.rooms.toString());
                         params.set("adults", guestRoom.adults.toString());
                         params.set("children", guestRoom.children.toString());

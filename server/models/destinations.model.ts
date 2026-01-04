@@ -5,7 +5,7 @@ const destinationSchema = new mongoose.Schema({
   description: { type: String },
   category: {
     type: String,
-    enum: ["museum", "park", "historic", "beach", "mountain", "other"],
+    enum: ["museum", "park", "historic", "beach", "mountain", "nature", "shopping", "other"],
   },
   country_id: { type: mongoose.Schema.Types.ObjectId, ref: "Country" },
   address_id: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },

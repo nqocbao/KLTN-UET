@@ -17,23 +17,39 @@ export default function LanguageSwitcher() {
     <div className="flex items-center gap-2 bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
       <button
         onClick={() => handleLanguageChange("vi")}
-        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-2 ${
           currentLocale === "vi"
             ? "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm"
             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
         }`}
       >
-        🇻🇳 Tiếng Việt
+        <img 
+          src="https://flagcdn.com/w20/vn.png" 
+          srcSet="https://flagcdn.com/w40/vn.png 2x" 
+          width="20" 
+          height="15"
+          alt="VN" 
+          className="rounded-[2px] object-cover"
+        />
+        Tiếng Việt
       </button>
       <button
         onClick={() => handleLanguageChange("en")}
-        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+        className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors flex items-center gap-2 ${
           currentLocale === "en"
             ? "bg-white dark:bg-gray-700 text-blue-600 dark:text-blue-400 shadow-sm"
             : "text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-gray-200"
         }`}
       >
-        🇬🇧 English
+        <img 
+          src="https://flagcdn.com/w20/gb.png" 
+          srcSet="https://flagcdn.com/w40/gb.png 2x" 
+          width="20" 
+          height="15"
+          alt="UK" 
+          className="rounded-[2px] object-cover"
+        />
+        English
       </button>
     </div>
   );

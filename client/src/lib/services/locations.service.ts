@@ -116,3 +116,16 @@ export const wardsApi = {
     return apiClient.delete<ApiResponse<void>>(`/admin/wards/${id}`);
   },
 };
+
+/**
+ * Locations Search API Service
+ * Search across all location types (provinces, districts, wards)
+ */
+export const locationsApi = {
+  search: (query: string, limit?: number) => {
+    return apiClient.get<ApiResponse<any[]>>("/admin/locations/search", {
+      params: { query, limit },
+    });
+  },
+};
+

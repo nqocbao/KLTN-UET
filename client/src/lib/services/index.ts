@@ -14,6 +14,7 @@ export {
   provincesApi,
   districtsApi,
   wardsApi,
+  locationsApi,
 } from "./locations.service";
 export {
   airlinesApi,

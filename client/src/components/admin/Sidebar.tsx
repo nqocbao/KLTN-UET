@@ -65,18 +65,18 @@ export default function Sidebar() {
       }`}
     >
       {/* Logo */}
-      <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200 dark:border-gray-800">
+      <div className="flex items-center justify-between h-16 px-4 border-b border-gray-200 dark:border-gray-800">
         {!isCollapsed && (
-          <Link href="/admin" className="flex items-center space-x-2">
-            <span className="text-2xl font-bold text-blue-600">Travel</span>
-            <span className="text-2xl font-bold text-gray-900 dark:text-white">
-              Admin
+          <Link href="/admin" className="flex items-center space-x-2 min-w-0">
+            <img src="/images/logo.png" alt="VivuTravel Logo" className="h-8 w-auto flex-shrink-0" />
+            <span className="text-lg font-bold text-gray-900 dark:text-white whitespace-nowrap overflow-hidden text-ellipsis">
+              <span className="text-blue-600">VivuTravel</span> Admin
             </span>
           </Link>
         )}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+          className="p-1.5 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 flex-shrink-0"
         >
           <svg
             className="w-5 h-5"

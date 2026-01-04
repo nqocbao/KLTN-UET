@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Search, Calendar, User, MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { GuestRoomPicker, type GuestRoomValue } from "@/components/ui/guest-room-picker";
 import { DateRangePicker, type DateRange } from "@/components/ui/date-range-picker";
+import { LocationAutocomplete } from "@/components/ui/location-autocomplete";
 import { useRouter, useSearchParams } from "next/navigation";
 
 // Helper function to format date for display
@@ -21,6 +22,8 @@ export function HotelSearchHeader() {
   const searchParams = useSearchParams();
   
   // Parse URL params
+  const [location, setLocation] = useState(searchParams.get("location") || "");
+  
   const [guestRoom, setGuestRoom] = useState<GuestRoomValue>({
     rooms: parseInt(searchParams.get("rooms") || "1"),
     adults: parseInt(searchParams.get("adults") || "2"),
@@ -34,13 +37,46 @@ export function HotelSearchHeader() {
   
   const [datePickerOpen, setDatePickerOpen] = useState(false);
   
+  // Sync state with URL if it changes (e.g. back/forward or navigation)
+  useEffect(() => {
+    const loc = searchParams.get("location");
+    if (loc) setLocation(loc);
+    
+    const r = searchParams.get("rooms");
+    const a = searchParams.get("adults");
+    const c = searchParams.get("children");
+    if (r || a || c) {
+      setGuestRoom({
+        rooms: parseInt(r || "1"),
+        adults: parseInt(a || "2"),
+        children: parseInt(c || "0"),
+      });
+    }
+
+    const f = searchParams.get("from");
+    const t = searchParams.get("to");
+    if (f && t) {
+      setDateRange({
+        from: new Date(f),
+        to: new Date(t),
+      });
+    }
+  }, [searchParams]);
+
   const handleSearch = () => {
     const params = new URLSearchParams();
+    if (location) params.set("location", location);
     params.set("rooms", guestRoom.rooms.toString());
     params.set("adults", guestRoom.adults.toString());
     params.set("children", guestRoom.children.toString());
     if (dateRange?.from) params.set("from", dateRange.from.toISOString());
     if (dateRange?.to) params.set("to", dateRange.to.toISOString());
+    const sortBy = searchParams.get("sortBy");
+    if (sortBy) params.set("sortBy", sortBy);
+    const minP = searchParams.get("minPrice");
+    const maxP = searchParams.get("maxPrice");
+    if (minP) params.set("minPrice", minP);
+    if (maxP) params.set("maxPrice", maxP);
     
     router.push(`/vi/hotels/search?${params.toString()}`);
     router.refresh();
@@ -54,9 +90,13 @@ export function HotelSearchHeader() {
           {/* Location */}
           <div className="flex-1 min-w-[150px] relative px-4 py-2 border-r border-gray-300">
             <div className="text-xs text-gray-500 mb-0.5">Thành phố, địa điểm hoặc tên khách sạn:</div>
-            <div className="flex items-center gap-2 font-medium text-gray-900 truncate">
-               <MapPin className="w-4 h-4 text-blue-500" />
-               Nha Trang
+            <div className="flex items-center gap-2">
+               <MapPin className="w-4 h-4 text-blue-500 flex-shrink-0" />
+               <LocationAutocomplete
+                 value={location}
+                 onChange={setLocation}
+                 placeholder="Nhập địa điểm..."
+               />
             </div>
           </div>
 
