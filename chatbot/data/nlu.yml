@@ -1,0 +1,249 @@
+version: "3.1"
+
+nlu:
+  # Chào hỏi
+  - intent: greet
+    examples: |
+      - xin chào
+      - chào bạn
+      - hello
+      - hi
+      - chào
+      - hế nhô
+      - chào buổi sáng
+      - chào buổi chiều
+      - chào buổi tối
+      - alo
+      - hey
+
+  # Tạm biệt
+  - intent: goodbye
+    examples: |
+      - tạm biệt
+      - bye
+      - goodbye
+      - hẹn gặp lại
+      - chào tạm biệt
+      - see you
+      - cảm ơn và tạm biệt
+      - thôi tạm biệt nhé
+
+  # Đồng ý
+  - intent: affirm
+    examples: |
+      - đúng rồi
+      - vâng
+      - ok
+      - được
+      - oke
+      - có
+      - đúng
+      - chính xác
+      - đồng ý
+      - yes
+      - yeah
+
+  # Từ chối
+  - intent: deny
+    examples: |
+      - không
+      - không phải
+      - ko
+      - khong
+      - no
+      - sai rồi
+      - không đúng
+      - từ chối
+
+  # Cảm ơn
+  - intent: thank_you
+    examples: |
+      - cảm ơn
+      - cảm ơn bạn
+      - cảm ơn nhiều
+      - thanks
+      - thank you
+      - cám ơn nhé
+      - cảm ơn bot
+
+  # Tìm kiếm khách sạn
+  - intent: search_hotel
+    examples: |
+      - tìm khách sạn
+      - tìm hotel
+      - tôi muốn tìm khách sạn
+      - tìm cho tôi khách sạn ở [Hà Nội](location)
+      - tìm khách sạn ở [Đà Nẵng](location)
+      - có khách sạn nào ở [Sài Gòn](location) không
+      - tìm phòng khách sạn
+      - tôi cần đặt phòng khách sạn
+      - cho tôi xem khách sạn ở [Nha Trang](location)
+      - tìm khách sạn giá rẻ
+      - khách sạn 5 sao ở [Phú Quốc](location)
+      - tìm khách sạn từ [1 triệu](price_range) đến [2 triệu](price_range)
+      - hotel ở [Hội An](location)
+      - tìm resort nghỉ dưỡng
+      - có khách sạn nào view đẹp không
+
+  # Hỏi về giá khách sạn
+  - intent: ask_hotel_price
+    examples: |
+      - giá phòng bao nhiêu
+      - khách sạn này giá bao nhiêu
+      - giá [Hilton Hanoi Opera](hotel_name) là bao nhiêu
+      - chi phí thuê phòng
+      - giá phòng một đêm
+      - bao nhiêu tiền một đêm
+      - giá cả như thế nào
+      - mức giá của khách sạn này
+      - phòng đôi giá bao nhiêu
+
+  # Hỏi về tiện ích khách sạn
+  - intent: ask_hotel_amenities
+    examples: |
+      - khách sạn có bể bơi không
+      - có wifi miễn phí không
+      - có phòng gym không
+      - tiện ích gì
+      - có bãi đỗ xe không
+      - có nhà hàng không
+      - có spa không
+      - khách sạn có gì
+      - dịch vụ của khách sạn
+      - có phục vụ bữa sáng không
+
+  # Đặt khách sạn
+  - intent: book_hotel
+    examples: |
+      - đặt phòng
+      - tôi muốn đặt khách sạn này
+      - book phòng
+      - đặt [Hilton Hanoi Opera](hotel_name)
+      - tôi muốn đặt phòng từ [ngày 20/1](check_in_date) đến [ngày 25/1](check_out_date)
+      - đặt cho [2 người](number_of_guests)
+      - đặt [phòng đôi](room_type)
+      - tôi muốn đặt phòng này
+      - làm sao để đặt phòng
+      - book ngay
+
+  # Tìm kiếm chuyến bay
+  - intent: search_flight
+    examples: |
+      - tìm chuyến bay
+      - tìm vé máy bay
+      - tôi muốn bay từ [Hà Nội](flight_from) đến [Đà Nẵng](flight_to)
+      - vé máy bay đi [TP.HCM](flight_to)
+      - có chuyến bay nào ngày [1/2](flight_date)
+      - tìm vé máy bay giá rẻ
+      - chuyến bay từ [SGN](flight_from) đến [HAN](flight_to)
+      - vé máy bay khứ hồi
+      - bay ngày [mai](flight_date)
+      - tìm vé bay
+
+  # Đặt chuyến bay
+  - intent: book_flight
+    examples: |
+      - đặt vé máy bay
+      - đặt chuyến bay này
+      - tôi muốn book vé
+      - đặt vé bay
+      - book flight
+      - đặt ngay
+
+  # Tìm kiếm tour
+  - intent: search_tour
+    examples: |
+      - tìm tour
+      - có tour nào hay không
+      - tìm tour đi [Đà Lạt](destination)
+      - tour du lịch [Sapa](destination)
+      - tour [3 ngày 2 đêm](duration)
+      - tìm tour giá rẻ
+      - tour trong nước
+      - tour nước ngoài
+      - có tour [miền Tây](destination) không
+      - tour ngắn ngày
+
+  # Đặt tour
+  - intent: book_tour
+    examples: |
+      - đặt tour
+      - tôi muốn đặt tour này
+      - book tour
+      - đăng ký tour
+      - tham gia tour
+
+  # Tìm kiếm điểm đến
+  - intent: search_destination
+    examples: |
+      - gợi ý điểm đến
+      - nên đi đâu
+      - địa điểm du lịch nào đẹp
+      - điểm đến hot
+      - nơi nào đáng đi
+      - tư vấn điểm đến
+      - có địa điểm nào hay không
+      - giới thiệu nơi du lịch
+
+  # Hỏi về địa điểm
+  - intent: ask_location
+    examples: |
+      - [Hà Nội](location) ở đâu
+      - khách sạn này ở đâu
+      - địa chỉ
+      - vị trí khách sạn
+      - cách trung tâm bao xa
+      - gần sân bay không
+      - đường đi như thế nào
+
+  # Xin gợi ý
+  - intent: ask_recommendation
+    examples: |
+      - gợi ý cho tôi
+      - recommend
+      - có gợi ý nào không
+      - tư vấn giúp tôi
+      - nên chọn nơi nào
+      - cho tôi ý kiến
+      - khách sạn nào tốt
+      - địa điểm nào đẹp
+
+  # Hỏi về thời tiết
+  - intent: ask_weather
+    examples: |
+      - thời tiết thế nào
+      - thời tiết [Đà Nẵng](location)
+      - mưa không
+      - nắng không
+      - có lạnh không
+      - khí hậu ra sao
+
+  # Hỏi giờ mở cửa
+  - intent: ask_opening_hours
+    examples: |
+      - mở cửa mấy giờ
+      - giờ hoạt động
+      - mở cửa lúc nào
+      - đóng cửa khi nào
+      - thời gian làm việc
+
+  # Trợ giúp
+  - intent: help
+    examples: |
+      - giúp tôi
+      - help
+      - bạn có thể làm gì
+      - hướng dẫn
+      - trợ giúp
+      - tôi cần giúp đỡ
+      - không biết làm sao
+
+  # Bot challenge
+  - intent: bot_challenge
+    examples: |
+      - bạn là ai
+      - bạn là bot à
+      - bạn là người hay máy
+      - bạn là chatbot à
+      - are you a bot
+      - bạn là con người à

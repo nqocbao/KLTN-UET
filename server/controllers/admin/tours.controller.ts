@@ -17,6 +17,8 @@ export const getAllTours = async (req: Request, res: Response) => {
     const tours = await Tour.find(filter)
       .populate("country_id")
       .populate("guide_id")
+      .populate("departure_location_id")
+      .populate("included_services")
       .skip(skip)
       .limit(limit);
 
@@ -42,7 +44,9 @@ export const getTourById = async (req: Request, res: Response) => {
   try {
     const tour = await Tour.findById(req.params.id)
       .populate("country_id")
-      .populate("guide_id");
+      .populate("guide_id")
+      .populate("departure_location_id")
+      .populate("included_services");
 
     if (!tour) {
       return res.status(404).json({

@@ -33,9 +33,39 @@ export function HeroSection() {
     children: 0,
   });
 
+  // Bus search states
+  const [busFrom, setBusFrom] = useState("");
+  const [busTo, setBusTo] = useState("");
+  const [busDate, setBusDate] = useState(new Date());
+  const [busPassengers, setBusPassengers] = useState(1);
+
+  // Airport transfer states
+  const [transferPickup, setTransferPickup] = useState("");
+  const [transferDropoff, setTransferDropoff] = useState("");
+  const [transferDate, setTransferDate] = useState(new Date());
+  const [transferTime, setTransferTime] = useState("09:00");
+
+  const handleBusSearch = () => {
+    const params = new URLSearchParams();
+    if (busFrom) params.set("from", busFrom);
+    if (busTo) params.set("to", busTo);
+    params.set("date", busDate.toISOString());
+    params.set("passengers", busPassengers.toString());
+    router.push(`/vi/buses/search?${params.toString()}`);
+  };
+
+  const handleTransferSearch = () => {
+    const params = new URLSearchParams();
+    if (transferPickup) params.set("pickup", transferPickup);
+    if (transferDropoff) params.set("dropoff", transferDropoff);
+    params.set("date", transferDate.toISOString());
+    params.set("time", transferTime);
+    router.push(`/vi/airport-transfer/search?${params.toString()}`);
+  };
+
 
   return (
-    <div className="relative h-[600px] w-full bg-[#1ba0e2] overflow-hidden">
+    <div className="relative h-[600px] w-full bg-[#469ae3] overflow-hidden">
       {/* Background Image */}
       <div 
         className="absolute inset-0 bg-cover bg-center"
@@ -51,9 +81,15 @@ export function HeroSection() {
         </h1>
 
         <div className="w-full max-w-6xl">
-          <Tabs defaultValue="hotels" className="w-full">
+          <Tabs defaultValue="tours" className="w-full">
             {/* Main Category Tabs */}
             <TabsList className="flex justify-center gap-2 bg-transparent h-auto p-0 mb-6 flex-wrap">
+              <TabsTrigger 
+                value="tours" 
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:rounded-full bg-transparent text-white/90 hover:bg-white/10 rounded-full px-4 md:px-6 py-2 gap-2 text-sm md:text-base font-medium transition-all"
+              >
+                <Calendar className="w-5 h-5" /> Tour trọn gói
+              </TabsTrigger>
               <TabsTrigger 
                 value="hotels" 
                 className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:rounded-full bg-transparent text-white/90 hover:bg-white/10 rounded-full px-4 md:px-6 py-2 gap-2 text-sm md:text-base font-medium transition-all"
@@ -79,12 +115,6 @@ export function HeroSection() {
                 <Car className="w-5 h-5" /> Đưa đón sân bay
               </TabsTrigger>
               <TabsTrigger 
-                value="car" 
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:rounded-full bg-transparent text-white/90 hover:bg-white/10 rounded-full px-4 md:px-6 py-2 gap-2 text-sm md:text-base font-medium transition-all"
-              >
-                <Car className="w-5 h-5" /> Cho thuê xe
-              </TabsTrigger>
-              <TabsTrigger 
                 value="more" 
                 className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:rounded-full bg-transparent text-white/90 hover:bg-white/10 rounded-full px-4 md:px-6 py-2 gap-2 text-sm md:text-base font-medium transition-all"
               >
@@ -93,6 +123,82 @@ export function HeroSection() {
             </TabsList>
 
             {/* Content Area */}
+            {/* Tours Tab */}
+            <TabsContent value="tours" className="mt-0">
+               {/* Search Bar Container for Tours */}
+               <div className="bg-white rounded-lg p-2 shadow-xl grid grid-cols-12 gap-0.5 relative z-10">
+                  {/* Destination */}
+                  <div className="col-span-12 md:col-span-4 relative group">
+                    <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Điểm đến:</div>
+                    <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3 flex-shrink-0" />
+                      <div className="pl-12 w-full pt-6 pb-2">
+                        <LocationAutocomplete 
+                          value={location}
+                          onChange={setLocation}
+                          placeholder="Chọn điểm đến tour"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Dates */}
+                  <div className="col-span-12 md:col-span-4 relative group">
+                    <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Ngày khởi hành</div>
+                    <DateRangePicker
+                      value={dateRange}
+                      onChange={setDateRange}
+                      open={datePickerOpen}
+                      onOpenChange={setDatePickerOpen}
+                    >
+                      <div 
+                        className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center cursor-pointer"
+                      >
+                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
+                        <div className="pl-12 pt-5 text-base text-gray-700 font-medium truncate">
+                          {dateRange?.from
+                            ? `${formatDateShort(dateRange.from)}`
+                            : "Chọn ngày"
+                          }
+                        </div>
+                      </div>
+                    </DateRangePicker>
+                  </div>
+
+                  {/* Guests & Search Button */}
+                  <div className="col-span-12 md:col-span-4 flex">
+                    <GuestRoomPicker
+                      value={guestRoom}
+                      onChange={setGuestRoom}
+                    >
+                      <div className="relative flex-1 h-14 bg-white hover:bg-gray-50 transition-colors cursor-pointer group rounded-l-none">
+                        <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Số khách</div>
+                        <div className="relative h-full flex items-center">
+                            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
+                            <div className="pl-12 pt-5 text-base text-gray-700 font-medium truncate">
+                              {`${guestRoom.adults + guestRoom.children} khách`}
+                            </div>
+                        </div>
+                      </div>
+                    </GuestRoomPicker>
+                    
+                    <Button 
+                      className="h-14 w-16 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0"
+                      onClick={() => {
+                        const params = new URLSearchParams();
+                        if (location) params.set("location", location);
+                        params.set("guests", (guestRoom.adults + guestRoom.children).toString());
+                        if (dateRange?.from) params.set("from", dateRange.from.toISOString());
+                        
+                        router.push(`/vi/tours/search?${params.toString()}`);
+                      }}
+                    >
+                      <Search className="w-6 h-6 text-white" />
+                    </Button>
+                  </div>
+               </div>
+            </TabsContent>
+
             <TabsContent value="hotels" className="mt-0">
                {/* Sub-options */}
                {/* <div className="flex justify-center gap-3 mb-4 flex-wrap">
@@ -111,7 +217,7 @@ export function HeroSection() {
                </div> */}
 
                {/* Search Bar Container */}
-               <div className="bg-white rounded-lg p-2 shadow-xl grid grid-cols-12 gap-0.5">
+               <div className="bg-white rounded-lg p-2 shadow-xl grid grid-cols-12 gap-0.5 relative z-10">
                   {/* Destination */}
                   <div className="col-span-12 md:col-span-4 relative group">
                     <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Thành phố, địa điểm hoặc tên khách sạn:</div>
@@ -314,6 +420,8 @@ export function HeroSection() {
                     <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
                       <Input 
+                        value={busFrom}
+                        onChange={(e) => setBusFrom(e.target.value)}
                         placeholder="Hà Nội" 
                         className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
                       />
@@ -322,7 +430,14 @@ export function HeroSection() {
 
                   {/* Swap Icon */}
                   <div className="hidden md:flex col-span-0 md:col-span-1 justify-center items-center">
-                    <div className="w-10 h-10 bg-white border-2 border-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-50 transition-colors shadow-sm -mx-5 z-10">
+                    <div 
+                      onClick={() => {
+                        const temp = busFrom;
+                        setBusFrom(busTo);
+                        setBusTo(temp);
+                      }}
+                      className="w-10 h-10 bg-white border-2 border-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-50 transition-colors shadow-sm -mx-5 z-10"
+                    >
                       <ArrowLeftRight className="w-5 h-5 text-blue-500" />
                     </div>
                   </div>
@@ -333,6 +448,8 @@ export function HeroSection() {
                     <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
                       <Input 
+                        value={busTo}
+                        onChange={(e) => setBusTo(e.target.value)}
                         placeholder="Sài Gòn" 
                         className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
                       />
@@ -363,7 +480,10 @@ export function HeroSection() {
 
                   {/* Search Button */}
                   <div className="col-span-12 md:col-span-1 flex justify-end">
-                    <Button className="h-14 w-14 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0">
+                    <Button 
+                      onClick={handleBusSearch}
+                      className="h-14 w-14 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0"
+                    >
                       <Search className="w-6 h-6 text-white" />
                     </Button>
                   </div>
@@ -392,6 +512,8 @@ export function HeroSection() {
                     <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200">
                       <Plane className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
                       <Input 
+                        value={transferPickup}
+                        onChange={(e) => setTransferPickup(e.target.value)}
                         placeholder="Nội Bài (HAN)" 
                         className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
                       />
@@ -404,6 +526,8 @@ export function HeroSection() {
                     <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200">
                       <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
                       <Input 
+                        value={transferDropoff}
+                        onChange={(e) => setTransferDropoff(e.target.value)}
                         placeholder="Khách sạn, địa điểm..." 
                         className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
                       />
@@ -434,7 +558,10 @@ export function HeroSection() {
 
                   {/* Search Button */}
                   <div className="col-span-12 md:col-span-2 flex justify-end">
-                    <Button className="h-14 w-full md:w-14 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0">
+                    <Button 
+                      onClick={handleTransferSearch}
+                      className="h-14 w-full md:w-14 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0"
+                    >
                       <Search className="w-6 h-6 text-white" />
                     </Button>
                   </div>
@@ -442,7 +569,7 @@ export function HeroSection() {
               </div>
             </TabsContent>
 
-            {/* Car Rental Tab */}
+            {/* More Options Tab */}
             <TabsContent value="car" className="mt-0">
               {/* Sub-options */}
               <div className="flex gap-2 mb-4">
@@ -515,7 +642,10 @@ export function HeroSection() {
 
                   {/* Search Button */}
                   <div className="col-span-12 md:col-span-2 flex justify-end">
-                    <Button className="h-14 w-full md:w-14 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0">
+                    <Button 
+                      onClick={handleTransferSearch}
+                      className="h-14 w-full md:w-14 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0"
+                    >
                       <Search className="w-6 h-6 text-white" />
                     </Button>
                   </div>

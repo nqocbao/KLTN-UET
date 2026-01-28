@@ -1,0 +1,170 @@
+version: "3.1"
+
+# Intents - Ý định người dùng
+intents:
+  - greet
+  - goodbye
+  - affirm
+  - deny
+  - thank_you
+  - search_hotel
+  - search_flight
+  - search_tour
+  - search_destination
+  - book_hotel
+  - book_flight
+  - book_tour
+  - ask_hotel_price
+  - ask_hotel_amenities
+  - ask_location
+  - ask_recommendation
+  - ask_weather
+  - ask_opening_hours
+  - help
+  - bot_challenge
+
+# Entities - Thực thể cần trích xuất
+entities:
+  - hotel_name
+  - location
+  - destination
+  - check_in_date
+  - check_out_date
+  - number_of_guests
+  - room_type
+  - price_range
+  - amenity
+  - flight_from
+  - flight_to
+  - flight_date
+  - tour_type
+  - duration
+
+# Slots - Lưu trữ thông tin trong conversation
+slots:
+  hotel_name:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: hotel_name
+  
+  location:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: location
+  
+  destination:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: destination
+  
+  check_in_date:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: check_in_date
+  
+  check_out_date:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: check_out_date
+  
+  number_of_guests:
+    type: float
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: number_of_guests
+  
+  room_type:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: room_type
+  
+  price_range:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: price_range
+  
+  conversation_id:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: custom
+
+# Responses - Câu trả lời của bot
+responses:
+  utter_greet:
+    - text: "Xin chào! Tôi là trợ lý du lịch của KLTN Travel. Tôi có thể giúp gì cho bạn?"
+    - text: "Chào bạn! Rất vui được hỗ trợ bạn tìm kiếm thông tin du lịch hôm nay."
+  
+  utter_goodbye:
+    - text: "Tạm biệt! Chúc bạn có chuyến đi vui vẻ!"
+    - text: "Hẹn gặp lại! Đừng ngần ngại liên hệ nếu bạn cần thêm thông tin."
+  
+  utter_thank_you:
+    - text: "Rất vui được giúp đỡ bạn! 😊"
+    - text: "Không có gì! Hãy cho tôi biết nếu bạn cần gì thêm."
+  
+  utter_iamabot:
+    - text: "Tôi là chatbot được phát triển để hỗ trợ bạn tìm kiếm và đặt dịch vụ du lịch."
+  
+  utter_help:
+    - text: |
+        Tôi có thể giúp bạn:
+        🏨 Tìm kiếm và đặt khách sạn
+        ✈️ Tìm kiếm chuyến bay
+        🗺️ Tư vấn điểm đến du lịch
+        🎫 Đặt tour du lịch
+        
+        Bạn cần tôi giúp gì?
+  
+  utter_ask_rephrase:
+    - text: "Xin lỗi, tôi không hiểu ý bạn. Bạn có thể nói rõ hơn được không?"
+    - text: "Tôi chưa hiểu câu hỏi của bạn. Bạn có thể diễn đạt lại không?"
+  
+  utter_default:
+    - text: "Xin lỗi, tôi chưa được huấn luyện để trả lời câu hỏi này. Vui lòng liên hệ bộ phận hỗ trợ khách hàng."
+
+  utter_search_hotel:
+    - text: "Bạn muốn tìm khách sạn ở đâu? Hãy cho tôi biết địa điểm, ngày nhận phòng và số lượng khách nhé!"
+    - text: "Tôi có thể giúp bạn tìm khách sạn. Bạn muốn đặt phòng ở thành phố nào?"
+
+  utter_search_destination:
+    - text: "Chúng tôi có nhiều điểm đến hấp dẫn! Bạn thích du lịch biển, núi hay thành phố?"
+    - text: "Tôi có thể gợi ý một số điểm đến phổ biến: Hà Nội, Đà Nẵng, Nha Trang, Phú Quốc, Sapa... Bạn quan tâm đến đâu?"
+
+  utter_search_tour:
+    - text: "Bạn muốn tìm tour du lịch đi đâu? Tôi có thể tìm các tour trong nước và nước ngoài cho bạn."
+    - text: "Chúng tôi có nhiều loại tour: tour biển, tour núi, tour văn hóa... Bạn thích loại nào?"
+
+  utter_recommendation:
+    - text: "Dựa trên sở thích của bạn, tôi gợi ý: Đà Nẵng (biển đẹp), Sapa (núi non hùng vĩ), Hà Nội (văn hóa lịch sử). Bạn muốn biết thêm về điểm đến nào?"
+    - text: "Tôi có thể gợi ý điểm đến phù hợp. Bạn muốn đi du lịch trong bao lâu? Ngân sách của bạn là bao nhiêu?"
+
+# Actions - Các hành động custom
+actions:
+  - action_search_hotels
+  - action_search_flights
+  - action_search_tours
+  - action_get_hotel_details
+  - action_get_destination_info
+  - action_save_conversation
+  - action_get_recommendations
+
+# Session configuration
+session_config:
+  session_expiration_time: 60
+  carry_over_slots_to_new_session: true

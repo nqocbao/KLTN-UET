@@ -54,13 +54,23 @@ export interface Tour {
   _id: string;
   name: string;
   description: string;
-  price: number;
-  duration: number;
-  capacity: number;
-  destination: string;
-  status: "active" | "inactive";
-  featured: boolean;
+  departure_location_id?: Destination | string;
+  adult_price: number;
+  child_price: number;
+  duration_days: number;
+  rating?: number;
+  country_id?: any;
+  guide_id?: any;
+  departure_dates?: string[]; // Các ngày khởi hành
+  included_services?: Service[] | string[]; // Dịch vụ bao gồm
+  capacity?: number;
+  destination?: string;
+  status?: "active" | "inactive";
+  featured?: boolean;
+  is_featured?: boolean;
+  max_participants?: number;
   images?: string[];
+  banner_url?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -73,6 +83,18 @@ export interface Destination {
   description: string;
   image?: string;
   popularity: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Service Types
+export interface Service {
+  _id: string;
+  name: string;
+  description?: string;
+  category: "meal" | "transport" | "entertainment" | "amenity" | "insurance" | "other";
+  icon?: string;
+  is_active: boolean;
   createdAt: string;
   updatedAt: string;
 }

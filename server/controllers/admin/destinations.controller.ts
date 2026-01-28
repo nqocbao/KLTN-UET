@@ -8,11 +8,12 @@ export const getAllDestinations = async (req: Request, res: Response) => {
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
     
-    const { category, country_id } = req.query;
+    const { category, country_id, type } = req.query;
     const filter: any = {};
 
     if (category) filter.category = category;
     if (country_id) filter.country_id = country_id;
+    if (type) filter.type = type;
 
     const destinations = await Destination.find(filter)
       .populate("country_id")

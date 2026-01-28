@@ -105,9 +105,13 @@ export default function HotelSearchPage() {
           to: to || undefined
         });
         
-        if (res.success && res.data.length > 0) {
+        console.log('[HotelSearchPage] API Response:', res);
+        
+        if (res.success && res.data && res.data.length > 0) {
+          console.log(`[HotelSearchPage] Found ${res.data.length} hotels from API`);
           setHotels(res.data);
         } else {
+          console.log('[HotelSearchPage] No hotels from API, using mock data');
           // If no results from API, show mock data and sort/filter locally
           let filteredMock = !location ? [...MOCK_HOTELS] : MOCK_HOTELS.filter(h => 
             h.location.toLowerCase().includes(location.toLowerCase()) ||
@@ -137,13 +141,14 @@ export default function HotelSearchPage() {
         }
       } catch (error) {
         console.error("Failed to fetch hotels", error);
-        setHotels([]);
+        // On error, show mock data
+        setHotels(MOCK_HOTELS);
       } finally {
         setLoading(false);
       }
     };
     fetchHotels();
-  }, [location, rooms, adults, children, sortBy, from, to, minPrice, maxPrice]);
+  }, [location, rooms, adults, children, sortBy, from, to, minPrice, maxPrice, nights]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -207,7 +212,7 @@ export default function HotelSearchPage() {
           {/* Main List */}
           <div className="flex-1 space-y-4">
               {/* Promo Banner */}
-              {/* <div className="bg-[#1ba0e2] text-white p-4 rounded-xl flex justify-between items-center shadow-md mb-6">
+              {/* <div className="bg-[#469ae3] text-white p-4 rounded-xl flex justify-between items-center shadow-md mb-6">
                  <div>
                    <h3 className="font-bold text-lg">Mã giảm đến 500K chỉ dành cho App. Mở App đặt ngay!</h3>
                  </div>

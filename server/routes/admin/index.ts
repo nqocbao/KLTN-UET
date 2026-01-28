@@ -28,6 +28,7 @@ import messagesRoutes from "./messages.routes.js";
 import intentsRoutes from "./intents.routes.js";
 import entitiesRoutes from "./entities.routes.js";
 import locationsRoutes from "./locations.routes.js";
+import servicesRoutes from "./services.routes.js";
 
 const router = express.Router();
 
@@ -59,5 +60,6 @@ router.use("/messages", messagesRoutes);
 router.use("/intents", intentsRoutes);
 router.use("/entities", entitiesRoutes);
 router.use("/locations", locationsRoutes);
+router.use("/services", servicesRoutes);
 
 export default router;

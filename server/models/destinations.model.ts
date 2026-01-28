@@ -7,6 +7,14 @@ const destinationSchema = new mongoose.Schema({
     type: String,
     enum: ["museum", "park", "historic", "beach", "mountain", "nature", "shopping", "other"],
   },
+  type: {
+    type: String,
+    enum: ["airport", "tourist", "other"],
+  },
+  code: { type: String }, // Airport code (SGN, HAN, etc.)
+  city: { type: String }, // City name for airports
+  country: { type: String }, // Country name for airports
+  image_url: { type: String }, // Single image URL for airports
   country_id: { type: mongoose.Schema.Types.ObjectId, ref: "Country" },
   address_id: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
   rating: { type: Number, min: 0, max: 5 },

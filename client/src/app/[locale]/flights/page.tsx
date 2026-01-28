@@ -61,7 +61,7 @@ export default function FlightsLandingPage() {
                     key={tab.id}
                     onClick={() => setActiveTab(tab.id)}
                     className={`px-6 py-2 rounded-full text-xs font-bold transition-all ${
-                      activeTab === tab.id ? "bg-[#1ba0e2] text-white shadow-md" : "text-gray-500 hover:text-gray-700"
+                      activeTab === tab.id ? "bg-[#469ae3] text-white shadow-md" : "text-gray-500 hover:text-gray-700"
                     }`}
                   >
                     {tab.label}
@@ -71,16 +71,16 @@ export default function FlightsLandingPage() {
 
               <div className="flex flex-wrap items-center gap-6">
                 <div className="flex items-center gap-2">
-                   <Checkbox id="direct-flight" className="border-gray-300 data-[state=checked]:bg-[#1ba0e2] data-[state=checked]:border-[#1ba0e2]" />
+                   <Checkbox id="direct-flight" className="border-gray-300 data-[state=checked]:bg-[#469ae3] data-[state=checked]:border-[#469ae3]" />
                    <label htmlFor="direct-flight" className="text-sm font-medium text-gray-600 cursor-pointer">Bay thẳng</label>
                 </div>
                 <div className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer group">
-                   <Users className="w-4 h-4 text-gray-400 group-hover:text-[#1ba0e2]" />
+                   <Users className="w-4 h-4 text-gray-400 group-hover:text-[#469ae3]" />
                    <span>1 Người lớn, 0 Trẻ em, 0 Em bé</span>
                    <ChevronDown className="w-4 h-4 text-gray-400" />
                 </div>
                 <div className="flex items-center gap-2 text-sm font-bold text-gray-700 cursor-pointer group">
-                   <Plane className="w-4 h-4 text-gray-400 group-hover:text-[#1ba0e2]" />
+                   <Plane className="w-4 h-4 text-gray-400 group-hover:text-[#469ae3]" />
                    <span>Phổ thông</span>
                    <ChevronDown className="w-4 h-4 text-gray-400" />
                 </div>
@@ -91,7 +91,7 @@ export default function FlightsLandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
               <div className="md:col-span-3">
                 <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Từ</div>
-                <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#1ba0e2] focus-within:border-[#1ba0e2] transition-all">
+                <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#469ae3] focus-within:border-[#469ae3] transition-all">
                   <Plane className="w-5 h-5 text-gray-400 rotate-45 mr-3" />
                   <Input placeholder="TP HCM (SGN)" className="border-none focus-visible:ring-0 p-0 font-bold" />
                 </div>
@@ -99,13 +99,13 @@ export default function FlightsLandingPage() {
 
               <div className="md:col-span-1 flex justify-center pb-2">
                  <button className="w-10 h-10 bg-gray-50 rounded-full border border-gray-100 flex items-center justify-center hover:bg-gray-100 transition-all">
-                    <ArrowRightLeft className="w-4 h-4 text-[#1ba0e2]" />
+                    <ArrowRightLeft className="w-4 h-4 text-[#469ae3]" />
                  </button>
               </div>
 
               <div className="md:col-span-3">
                 <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Đến</div>
-                <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#1ba0e2] focus-within:border-[#1ba0e2] transition-all">
+                <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#469ae3] focus-within:border-[#469ae3] transition-all">
                   <Plane className="w-5 h-5 text-gray-400 -rotate-45 mr-3" />
                   <Input placeholder="Bangkok (BKK)" className="border-none focus-visible:ring-0 p-0 font-bold" />
                 </div>
@@ -113,7 +113,7 @@ export default function FlightsLandingPage() {
 
               <div className="md:col-span-2">
                 <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Ngày khởi hành</div>
-                <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#1ba0e2] cursor-pointer">
+                <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#469ae3] cursor-pointer">
                   <Calendar className="w-5 h-5 text-gray-400 mr-3" />
                   <span className="text-sm font-bold">22 thg 12, 2025</span>
                 </div>
@@ -129,7 +129,7 @@ export default function FlightsLandingPage() {
               </div>
             </div>
 
-            <div className="mt-4 flex items-center gap-2 text-xs font-bold text-[#1ba0e2]">
+            <div className="mt-4 flex items-center gap-2 text-xs font-bold text-[#469ae3]">
                 <MapPin className="w-3.5 h-3.5" />
                 <span>Tìm ý tưởng chuyến bay thú vị ở đây</span>
             </div>
@@ -202,7 +202,7 @@ export default function FlightsLandingPage() {
         {/* Domestic Flight Deals */}
         <section className="container mx-auto px-4 py-16">
            <div className="flex items-center gap-3 mb-6">
-              <div className="bg-[#1ba0e2] p-1.5 rounded-full">
+              <div className="bg-[#469ae3] p-1.5 rounded-full">
                 <Plane className="w-4 h-4 text-white" />
               </div>
               <h2 className="text-2xl font-bold text-gray-900 tracking-tight">Vé máy bay nội địa giá tốt nhất!</h2>

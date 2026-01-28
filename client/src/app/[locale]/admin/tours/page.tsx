@@ -168,7 +168,10 @@ export default function ToursPage() {
                   {t("destination")}
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
-                  {t("price")}
+                  Adult Price
+                </th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Child Price
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
                   {t("duration")}
@@ -185,7 +188,7 @@ export default function ToursPage() {
               {filteredTours.length === 0 ? (
                 <tr>
                   <td
-                    colSpan={6}
+                    colSpan={7}
                     className="px-6 py-8 text-center text-gray-500 dark:text-gray-400"
                   >
                     No tours found
@@ -215,10 +218,13 @@ export default function ToursPage() {
                       {tour.destination}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900 dark:text-white">
-                      ${tour.price}
+                      {(tour.adult_price || 0).toLocaleString()} VND
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-green-600 dark:text-green-400">
+                      {(tour.child_price || 0).toLocaleString()} VND
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 dark:text-gray-400">
-                      {tour.duration} {t("days")}
+                      {tour.duration_days} {t("days")}
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <span className={`px-2 py-1 text-xs font-semibold rounded-full ${

@@ -50,7 +50,7 @@ export default function FlightSearchPage() {
       <Header variant="blue" />
       
       {/* Spacer for fixed main header */}
-      <div className="pt-[102px]">
+      <div className="pt-[104px]">
          <FlightSearchHeader />
       </div>
 

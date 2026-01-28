@@ -57,7 +57,7 @@ export default function HotelsLandingPage() {
           style={{ backgroundImage: 'url("https://i.pinimg.com/originals/23/eb/b5/23ebb5331484fbb9f582eecfd1fb8919.jpg")' }}
         >
           {/* Overlay to ensure text readability if needed */}
-          <div className="absolute inset-0 bg-[#1ba0e2]/10 mix-blend-multiply" />
+          <div className="absolute inset-0 bg-[#469ae3]/10 mix-blend-multiply" />
           
           <div className="container mx-auto px-4 relative z-10">
             <div className="flex flex-col lg:flex-row gap-8 items-center">

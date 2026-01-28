@@ -1,0 +1,41 @@
+version: "3.1"
+
+stories:
+  # Story 1: Tìm kiếm khách sạn - Flow cơ bản
+  - story: Search hotel basic flow
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: search_hotel
+      - action: utter_search_hotel
+      - intent: thank_you
+      - action: utter_thank_you
+
+  # Story 2: Tìm tour du lịch
+  - story: Search tour flow
+    steps:
+      - intent: search_tour
+      - action: utter_search_tour
+      - intent: affirm
+      - intent: thank_you
+      - action: utter_thank_you
+
+  # Story 3: Xin gợi ý điểm đến
+  - story: Ask for recommendations
+    steps:
+      - intent: search_destination
+      - action: utter_search_destination
+      - intent: ask_recommendation
+      - action: utter_recommendation
+      - intent: thank_you
+      - action: utter_thank_you
+
+  # Story 4: Hỏi trợ giúp và tìm kiếm
+  - story: Ask help then search
+    steps:
+      - intent: help
+      - action: utter_help
+      - intent: search_hotel
+      - action: utter_search_hotel
+      - intent: thank_you
+      - action: utter_thank_you

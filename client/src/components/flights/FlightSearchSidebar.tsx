@@ -12,7 +12,7 @@ export function FlightSearchSidebar() {
        {/* Promo Sidebar Item */}
        <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 mb-6">
           <div className="flex items-center gap-3 mb-2">
-            <div className="bg-[#1ba0e2] p-2 rounded-full">
+            <div className="bg-[#469ae3] p-2 rounded-full">
                <Plane className="w-5 h-5 text-white" />
             </div>
             <div className="text-xs font-bold text-gray-800">Giảm đến 600K bay nhóm</div>

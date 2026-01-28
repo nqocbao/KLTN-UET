@@ -81,7 +81,7 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden bg-white dark:bg-gray-900">
+      <DialogContent className="sm:max-w-[480px] p-5 overflow-hidden bg-white dark:bg-gray-900">
         <div className="p-6">
           <DialogHeader className="mb-4">
             <DialogTitle className="text-xl font-bold text-center">

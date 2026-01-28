@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import { MapPin, Search, TrendingUp, Globe } from "lucide-react";
 import { locationsApi, provincesApi, destinationsApi } from "@/lib/services";
 import type { Province, Destination } from "@/types/api";
@@ -40,9 +41,52 @@ export function LocationAutocomplete({
   const [selectedIndex, setSelectedIndex] = useState(-1);
   const inputRef = useRef<HTMLInputElement>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [dropdownPosition, setDropdownPosition] = useState({ top: 0, left: 0, width: 0 });
+  const [mounted, setMounted] = useState(false);
 
   // Popular destinations for when input is empty
   const [popularLocations, setPopularLocations] = useState<LocationSuggestion[]>([]);
+
+  // Set mounted state for portal
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Update dropdown position when input position changes
+  useEffect(() => {
+    if (isOpen && inputRef.current) {
+      const rect = inputRef.current.getBoundingClientRect();
+      setDropdownPosition({
+        top: rect.bottom + window.scrollY,
+        left: rect.left + window.scrollX,
+        width: rect.width,
+      });
+    }
+  }, [isOpen, value]);
+
+  // Update position on scroll
+  useEffect(() => {
+    if (!isOpen) return;
+    
+    const updatePosition = () => {
+      if (inputRef.current) {
+        const rect = inputRef.current.getBoundingClientRect();
+        setDropdownPosition({
+          top: rect.bottom + window.scrollY,
+          left: rect.left + window.scrollX,
+          width: rect.width,
+        });
+      }
+    };
+
+    window.addEventListener('scroll', updatePosition, true);
+    window.addEventListener('resize', updatePosition);
+    
+    return () => {
+      window.removeEventListener('scroll', updatePosition, true);
+      window.removeEventListener('resize', updatePosition);
+    };
+  }, [isOpen]);
 
   // Fetch popular locations on mount
   useEffect(() => {
@@ -198,6 +242,90 @@ export function LocationAutocomplete({
     }
   };
 
+  const dropdownContent = isOpen && mounted && (
+    <div
+      ref={dropdownRef}
+      className="absolute bg-white rounded-lg shadow-xl border border-gray-200 max-h-[400px] overflow-y-auto z-[9999]"
+      style={{
+        top: `${dropdownPosition.top}px`,
+        left: `${dropdownPosition.left}px`,
+        width: `${dropdownPosition.width}px`,
+      }}
+    >
+      {loading ? (
+        <div className="p-4 text-center text-gray-500">
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mx-auto"></div>
+        </div>
+      ) : suggestions.length > 0 ? (
+        <div className="py-2">
+          {!value && (
+            <div className="px-4 py-2 text-xs font-semibold text-gray-500 flex items-center gap-2">
+              <TrendingUp className="w-3 h-3" />
+              Địa điểm phổ biến
+            </div>
+          )}
+          {suggestions.map((suggestion, index) => (
+            <button
+              key={suggestion.id}
+              onClick={() => handleSelect(suggestion)}
+              className={cn(
+                "w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3",
+                selectedIndex === index && "bg-blue-50"
+              )}
+            >
+              <div className="flex-shrink-0">
+                {suggestion.type === "country" ? (
+                  <Globe className="w-5 h-5 text-indigo-500" />
+                ) : (
+                  <MapPin
+                    className={cn(
+                      "w-5 h-5",
+                      suggestion.type === "destination"
+                        ? "text-orange-500"
+                        : suggestion.type === "district"
+                        ? "text-green-500"
+                        : suggestion.type === "ward"
+                        ? "text-purple-500"
+                        : "text-blue-500"
+                    )}
+                  />
+                )}
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="font-medium text-gray-900 truncate">
+                  {suggestion.fullName || suggestion.name}
+                </div>
+                {(suggestion.country || suggestion.province || suggestion.district) && (
+                  <div className="text-xs text-gray-500">
+                    {suggestion.country || suggestion.province || suggestion.district}
+                  </div>
+                )}
+              </div>
+              <div className="flex-shrink-0">
+                <span className="text-xs text-gray-400 capitalize">
+                  {suggestion.type === "country"
+                    ? "Quốc gia"
+                    : suggestion.type === "province" 
+                    ? "Tỉnh/TP" 
+                    : suggestion.type === "district"
+                    ? "Quận/Huyện"
+                    : suggestion.type === "ward"
+                    ? "Phường/Xã"
+                    : "Điểm đến"}
+                </span>
+              </div>
+            </button>
+          ))}
+        </div>
+      ) : (
+        <div className="p-8 text-center text-gray-500">
+          <MapPin className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+          <p className="text-sm">Không tìm thấy địa điểm</p>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <div className={cn("relative", className)}>
       <div className="relative">
@@ -218,84 +346,7 @@ export function LocationAutocomplete({
         <Search className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
       </div>
 
-      {isOpen && (
-        <div
-          ref={dropdownRef}
-          className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-200 max-h-[400px] overflow-y-auto z-50"
-        >
-          {loading ? (
-            <div className="p-4 text-center text-gray-500">
-              <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500 mx-auto"></div>
-            </div>
-          ) : suggestions.length > 0 ? (
-            <div className="py-2">
-              {!value && (
-                <div className="px-4 py-2 text-xs font-semibold text-gray-500 flex items-center gap-2">
-                  <TrendingUp className="w-3 h-3" />
-                  Địa điểm phổ biến
-                </div>
-              )}
-              {suggestions.map((suggestion, index) => (
-                <button
-                  key={suggestion.id}
-                  onClick={() => handleSelect(suggestion)}
-                  className={cn(
-                    "w-full px-4 py-3 text-left hover:bg-gray-50 transition-colors flex items-center gap-3",
-                    selectedIndex === index && "bg-blue-50"
-                  )}
-                >
-                  <div className="flex-shrink-0">
-                    {suggestion.type === "country" ? (
-                      <Globe className="w-5 h-5 text-indigo-500" />
-                    ) : (
-                      <MapPin
-                        className={cn(
-                          "w-5 h-5",
-                          suggestion.type === "destination"
-                            ? "text-orange-500"
-                            : suggestion.type === "district"
-                            ? "text-green-500"
-                            : suggestion.type === "ward"
-                            ? "text-purple-500"
-                            : "text-blue-500"
-                        )}
-                      />
-                    )}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="font-medium text-gray-900 truncate">
-                      {suggestion.fullName || suggestion.name}
-                    </div>
-                    {(suggestion.country || suggestion.province || suggestion.district) && (
-                      <div className="text-xs text-gray-500">
-                        {suggestion.country || suggestion.province || suggestion.district}
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex-shrink-0">
-                    <span className="text-xs text-gray-400 capitalize">
-                      {suggestion.type === "country"
-                        ? "Quốc gia"
-                        : suggestion.type === "province" 
-                        ? "Tỉnh/TP" 
-                        : suggestion.type === "district"
-                        ? "Quận/Huyện"
-                        : suggestion.type === "ward"
-                        ? "Phường/Xã"
-                        : "Điểm đến"}
-                    </span>
-                  </div>
-                </button>
-              ))}
-            </div>
-          ) : (
-            <div className="p-8 text-center text-gray-500">
-              <MapPin className="w-8 h-8 mx-auto mb-2 text-gray-300" />
-              <p className="text-sm">Không tìm thấy địa điểm</p>
-            </div>
-          )}
-        </div>
-      )}
+      {typeof window !== 'undefined' && createPortal(dropdownContent, document.body)}
     </div>
   );
 }

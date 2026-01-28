@@ -1,0 +1,45 @@
+# ===================================
+# RASA CHATBOT DEPENDENCIES
+# ===================================
+# Project: KLTN Travel Assistant
+# Python: 3.8 - 3.10 recommended
+# Updated: 2026-02-02
+# ===================================
+
+# === RASA CORE ===
+rasa==3.6.13
+rasa-sdk==3.6.2
+
+# === NLU & ML ===
+# Sentence Transformers for Vietnamese embeddings
+sentence-transformers==2.2.2
+
+# Vector Database
+chromadb==0.4.22
+
+# === TEXT PROCESSING ===
+# Vietnamese NLP
+pyvi==0.1.1  # Vietnamese tokenizer (optional)
+
+# String similarity
+python-Levenshtein==0.21.1
+
+# === LLM APIs ===
+# Google Gemini
+google-generativeai>=0.3.0
+
+# OpenAI (alternative)
+openai>=1.0.0
+
+# === UTILITIES ===
+python-dotenv==1.0.0
+pyyaml==6.0
+requests==2.31.0
+
+# === DATA & ML ===
+numpy==1.24.3
+scikit-learn==1.3.2
+
+# === OPTIONAL: Advanced Vietnamese NLP ===
+# transformers==4.35.0  # For PhoBERT, ViT5
+# torch==2.1.0  # If using transformers

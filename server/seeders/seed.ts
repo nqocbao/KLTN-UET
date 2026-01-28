@@ -7,6 +7,12 @@ import Country from "../models/countries.model.js";
 import Province from "../models/provinces.model.js";
 import District from "../models/districts.model.js";
 import Ward from "../models/wards.model.js";
+import Tour from "../models/tours.model.js";
+import Guide from "../models/guides.model.js";
+import User from "../models/users.model.js";
+import Service from "../models/services.model.js";
+import { seedTransports } from "./transports.seed.js";
+import { seedAirportsAndFlights } from "./flights.seed.js";
 
 dotenv.config();
 
@@ -540,6 +546,324 @@ const seedDatabase = async () => {
         }
         
         console.log(`✅ Seeding destinations check complete!`);
+
+        // === SEED SERVICES (Dịch vụ chung cho Tour, Hotel, Flight) ===
+        console.log("🛎️ Seeding services...");
+        const servicesData = [
+            // Meal Services
+            { name: "Bữa sáng buffet", description: "Bữa sáng buffet phong phú", category: "meal", icon: "🍳", is_active: true },
+            { name: "Bữa trưa trọn gói", description: "Bữa trưa theo thực đơn", category: "meal", icon: "🍱", is_active: true },
+            { name: "Bữa tối đặc sản", description: "Bữa tối với đặc sản địa phương", category: "meal", icon: "🍽️", is_active: true },
+            { name: "Đồ ăn nhẹ trên xe", description: "Snacks và nước uống", category: "meal", icon: "🥤", is_active: true },
+            
+            // Transport Services
+            { name: "Đưa đón sân bay", description: "Đưa đón từ/đến sân bay", category: "transport", icon: "✈️", is_active: true },
+            { name: "Xe bus đời mới", description: "Xe bus điều hòa đời mới", category: "transport", icon: "🚌", is_active: true },
+            { name: "Xe limousine", description: "Xe limousine cao cấp", category: "transport", icon: "🚐", is_active: true },
+            
+            // Entertainment
+            { name: "Hướng dẫn viên tiếng Việt", description: "HDV chuyên nghiệp tiếng Việt", category: "entertainment", icon: "🎤", is_active: true },
+            { name: "Vé tham quan điểm du lịch", description: "Vé vào cửa các điểm tham quan", category: "entertainment", icon: "🎫", is_active: true },
+            { name: "Hoạt động team building", description: "Các hoạt động vui chơi tập thể", category: "entertainment", icon: "🎯", is_active: true },
+            
+            // Amenities
+            { name: "WiFi miễn phí", description: "Kết nối WiFi tốc độ cao", category: "amenity", icon: "📶", is_active: true },
+            { name: "Điều hòa", description: "Hệ thống điều hòa nhiệt độ", category: "amenity", icon: "❄️", is_active: true },
+            { name: "Nước uống miễn phí", description: "Nước suối miễn phí", category: "amenity", icon: "💧", is_active: true },
+            { name: "Khăn tắm & dép", description: "Khăn tắm và dép đi trong phòng", category: "amenity", icon: "🧴", is_active: true },
+            
+            // Insurance
+            { name: "Bảo hiểm du lịch", description: "Bảo hiểm tai nạn trong chuyến đi", category: "insurance", icon: "🛡️", is_active: true },
+            { name: "Bảo hiểm y tế", description: "Bảo hiểm y tế cơ bản", category: "insurance", icon: "⚕️", is_active: true },
+        ];
+
+        const createdServices: any = {};
+        for (const svc of servicesData) {
+            let existing = await Service.findOne({ name: svc.name });
+            if (!existing) {
+                existing = await Service.create(svc);
+                console.log(`🛎️ Created service: ${svc.name}`);
+            }
+            createdServices[svc.name] = existing;
+        }
+
+        console.log(`✅ Services seeded successfully!`);
+
+        // === SEED DEPARTURE LOCATIONS (for Tours) ===
+        console.log("🗺️ Seeding departure locations...");
+        const departureLocations = [
+            {
+                name: "Hà Nội",
+                description: "Thủ đô Việt Nam - Điểm khởi hành cho các tour miền Bắc",
+                category: "other",
+                type: "tourist",
+                country_id: vietnam._id,
+                rating: 4.8,
+                image_url: "https://images.unsplash.com/photo-1509023464722-18d996393ca8?w=800&q=80"
+            },
+            {
+                name: "TP. Hồ Chí Minh",
+                description: "Thành phố lớn nhất Việt Nam - Điểm khởi hành cho các tour miền Nam",
+                category: "other",
+                type: "tourist",
+                country_id: vietnam._id,
+                rating: 4.7,
+                image_url: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=800&q=80"
+            },
+            {
+                name: "Đà Nẵng",
+                description: "Thành phố đáng sống - Điểm khởi hành cho các tour miền Trung",
+                category: "other",
+                type: "tourist",
+                country_id: vietnam._id,
+                rating: 4.9,
+                image_url: "https://images.unsplash.com/photo-1559592413-7cec4d0cae2b?w=800&q=80"
+            }
+        ];
+
+        const createdDepartureLocations: any = {};
+        for (const loc of departureLocations) {
+            let existing = await Destination.findOne({ name: loc.name, type: "tourist" });
+            if (!existing) {
+                existing = await Destination.create(loc);
+                console.log(`🗺️ Created departure location: ${loc.name}`);
+            }
+            createdDepartureLocations[loc.name] = existing;
+        }
+
+        // === SEED TOURS ===
+        console.log("🎫 Seeding tours...");
+        
+        // Helper: Tạo ngày khởi hành trong vòng 3 tháng tới
+        const generateDepartureDates = (count: number = 8) => {
+            const dates = [];
+            const today = new Date();
+            for (let i = 0; i < count; i++) {
+                const futureDate = new Date(today);
+                futureDate.setDate(today.getDate() + (i * 7) + Math.floor(Math.random() * 3)); // Mỗi tuần + random 0-2 ngày
+                dates.push(futureDate);
+            }
+            return dates;
+        };
+
+        const toursData = [
+            {
+                name: "Tour Hạ Long - Ninh Bình 3N2Đ",
+                description: "Khám phá vịnh Hạ Long kỳ vĩ và Tràng An thơ mộng với hành trình 3 ngày 2 đêm đầy trải nghiệm",
+                country_id: vietnam._id,
+                departure_location_id: createdDepartureLocations["Hà Nội"]._id,
+                adult_price: 4500000,
+                child_price: 3200000,
+                duration_days: 3,
+                rating: 4.8,
+                departure_dates: generateDepartureDates(10),
+                included_services: [
+                    createdServices["Bữa sáng buffet"]._id,
+                    createdServices["Bữa trưa trọn gói"]._id,
+                    createdServices["Xe bus đời mới"]._id,
+                    createdServices["Hướng dẫn viên tiếng Việt"]._id,
+                    createdServices["Vé tham quan điểm du lịch"]._id,
+                    createdServices["Bảo hiểm du lịch"]._id,
+                ],
+                images: [
+                    "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200&q=80",
+                    "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1200&q=80"
+                ],
+                banner_url: "https://images.unsplash.com/photo-1528127269322-539801943592?w=1600&q=80"
+            },
+            {
+                name: "Tour Sapa - Fansipan 4N3Đ",
+                description: "Chinh phục nóc nhà Đông Dương, ngắm ruộng bậc thang mùa lúa chín và trải nghiệm văn hóa dân tộc",
+                country_id: vietnam._id,
+                departure_location_id: createdDepartureLocations["Hà Nội"]._id,
+                adult_price: 6800000,
+                child_price: 4800000,
+                duration_days: 4,
+                rating: 4.9,
+                departure_dates: generateDepartureDates(8),
+                included_services: [
+                    createdServices["Bữa sáng buffet"]._id,
+                    createdServices["Bữa trưa trọn gói"]._id,
+                    createdServices["Bữa tối đặc sản"]._id,
+                    createdServices["Xe limousine"]._id,
+                    createdServices["Hướng dẫn viên tiếng Việt"]._id,
+                    createdServices["Bảo hiểm du lịch"]._id,
+                ],
+                images: [
+                    "https://images.unsplash.com/photo-1583339793403-3d9b001b6008?w=1200&q=80",
+                    "https://images.unsplash.com/photo-1570365790857-c2c8885992e1?w=1200&q=80"
+                ],
+                banner_url: "https://images.unsplash.com/photo-1583339793403-3d9b001b6008?w=1600&q=80"
+            },
+            {
+                name: "Tour Phú Quốc - Nam Đảo 4N3Đ",
+                description: "Tận hưởng thiên đường biển đảo với bãi Sao tuyệt đẹp, lặn ngắm san hô và khám phá rừng nguyên sinh",
+                country_id: vietnam._id,
+                departure_location_id: createdDepartureLocations["TP. Hồ Chí Minh"]._id,
+                adult_price: 7200000,
+                child_price: 5000000,
+                duration_days: 4,
+                rating: 4.7,
+                departure_dates: generateDepartureDates(12),
+                included_services: [
+                    createdServices["Bữa sáng buffet"]._id,
+                    createdServices["Bữa trưa trọn gói"]._id,
+                    createdServices["Đưa đón sân bay"]._id,
+                    createdServices["Hướng dẫn viên tiếng Việt"]._id,
+                    createdServices["Vé tham quan điểm du lịch"]._id,
+                    createdServices["Hoạt động team building"]._id,
+                    createdServices["Bảo hiểm du lịch"]._id,
+                ],
+                images: [
+                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80",
+                    "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?w=1200&q=80"
+                ],
+                banner_url: "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1600&q=80"
+            },
+            {
+                name: "Tour Đà Lạt Lãng Mạn 3N2Đ",
+                description: "Khám phá thành phố ngàn hoa với thác Datanla, đồi chè Cầu Đất và những quán cafe view đẹp",
+                country_id: vietnam._id,
+                departure_location_id: createdDepartureLocations["TP. Hồ Chí Minh"]._id,
+                adult_price: 3800000,
+                child_price: 2700000,
+                duration_days: 3,
+                rating: 4.6,
+                departure_dates: generateDepartureDates(15),
+                included_services: [
+                    createdServices["Bữa sáng buffet"]._id,
+                    createdServices["Xe limousine"]._id,
+                    createdServices["Hướng dẫn viên tiếng Việt"]._id,
+                    createdServices["Vé tham quan điểm du lịch"]._id,
+                    createdServices["Bảo hiểm du lịch"]._id,
+                ],
+                images: [
+                    "https://images.unsplash.com/photo-1583522216-3fc542566d5f?w=1200&q=80",
+                    "https://images.unsplash.com/photo-1605649487212-47bdab064df7?w=1200&q=80"
+                ],
+                banner_url: "https://images.unsplash.com/photo-1583522216-3fc542566d5f?w=1600&q=80"
+            },
+            {
+                name: "Tour Hội An - Huế - Động Phong Nha 5N4Đ",
+                description: "Hành trình di sản miền Trung: Phố cổ Hội An, Cố đô Huế và hang động kỳ vĩ Phong Nha",
+                country_id: vietnam._id,
+                departure_location_id: createdDepartureLocations["Đà Nẵng"]._id,
+                adult_price: 8500000,
+                child_price: 6000000,
+                duration_days: 5,
+                rating: 4.9,
+                departure_dates: generateDepartureDates(10),
+                included_services: [
+                    createdServices["Bữa sáng buffet"]._id,
+                    createdServices["Bữa trưa trọn gói"]._id,
+                    createdServices["Bữa tối đặc sản"]._id,
+                    createdServices["Xe bus đời mới"]._id,
+                    createdServices["Hướng dẫn viên tiếng Việt"]._id,
+                    createdServices["Vé tham quan điểm du lịch"]._id,
+                    createdServices["Bảo hiểm du lịch"]._id,
+                ],
+                images: [
+                    "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80",
+                    "https://images.unsplash.com/photo-1580837119756-563d608dd119?w=1200&q=80"
+                ],
+                banner_url: "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1600&q=80"
+            },
+            {
+                name: "Tour Mũi Né - Phan Thiết 2N1Đ",
+                description: "Trải nghiệm đồi cát bay, Bàu Trắng thơ mộng và thưởng thức hải sản tươi sống",
+                country_id: vietnam._id,
+                departure_location_id: createdDepartureLocations["TP. Hồ Chí Minh"]._id,
+                adult_price: 2800000,
+                child_price: 2000000,
+                duration_days: 2,
+                rating: 4.5,
+                departure_dates: generateDepartureDates(20),
+                included_services: [
+                    createdServices["Bữa sáng buffet"]._id,
+                    createdServices["Xe bus đời mới"]._id,
+                    createdServices["Hướng dẫn viên tiếng Việt"]._id,
+                    createdServices["Vé tham quan điểm du lịch"]._id,
+                    createdServices["Bảo hiểm du lịch"]._id,
+                ],
+                images: [
+                    "https://images.unsplash.com/photo-1562602833-0f4ab2fc46e3?w=1200&q=80",
+                    "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=80"
+                ],
+                banner_url: "https://images.unsplash.com/photo-1562602833-0f4ab2fc46e3?w=1600&q=80"
+            },
+            {
+                name: "Tour Nha Trang Trọn Gói 4N3Đ",
+                description: "Tắm biển, tham quan đảo Hòn Mun, Vinpearl Land và check-in những địa điểm sống ảo",
+                country_id: vietnam._id,
+                departure_location_id: createdDepartureLocations["TP. Hồ Chí Minh"]._id,
+                adult_price: 5500000,
+                child_price: 3900000,
+                duration_days: 4,
+                rating: 4.7,
+                departure_dates: generateDepartureDates(12),
+                included_services: [
+                    createdServices["Bữa sáng buffet"]._id,
+                    createdServices["Bữa trưa trọn gói"]._id,
+                    createdServices["Xe limousine"]._id,
+                    createdServices["Hướng dẫn viên tiếng Việt"]._id,
+                    createdServices["Vé tham quan điểm du lịch"]._id,
+                    createdServices["Hoạt động team building"]._id,
+                    createdServices["Bảo hiểm du lịch"]._id,
+                ],
+                images: [
+                    "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=1200&q=80",
+                    "https://images.unsplash.com/photo-1559827260-dc66d52bef19?w=1200&q=80"
+                ],
+                banner_url: "https://images.unsplash.com/photo-1551244072-5d12893278ab?w=1600&q=80"
+            },
+            {
+                name: "Tour Tây Bắc - Mù Cang Chải 5N4Đ",
+                description: "Khám phá ruộng bậc thang đẹp nhất Việt Nam, trải nghiệm homestay và văn hóa người Thái",
+                country_id: vietnam._id,
+                departure_location_id: createdDepartureLocations["Hà Nội"]._id,
+                adult_price: 7500000,
+                child_price: 5300000,
+                duration_days: 5,
+                rating: 4.8,
+                departure_dates: generateDepartureDates(8),
+                included_services: [
+                    createdServices["Bữa sáng buffet"]._id,
+                    createdServices["Bữa trưa trọn gói"]._id,
+                    createdServices["Bữa tối đặc sản"]._id,
+                    createdServices["Xe bus đời mới"]._id,
+                    createdServices["Hướng dẫn viên tiếng Việt"]._id,
+                    createdServices["Vé tham quan điểm du lịch"]._id,
+                    createdServices["Bảo hiểm du lịch"]._id,
+                ],
+                images: [
+                    "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1200&q=80",
+                    "https://images.unsplash.com/photo-1528127269322-539801943592?w=1200&q=80"
+                ],
+                banner_url: "https://images.unsplash.com/photo-1583417319070-4a69db38a482?w=1600&q=80"
+            }
+        ];
+
+        for (const tourData of toursData) {
+            let existing = await Tour.findOne({ name: tourData.name });
+            if (!existing) {
+                await Tour.create(tourData);
+                console.log(`🎫 Created tour: ${tourData.name}`);
+            } else {
+                await Tour.findByIdAndUpdate(existing._id, { $set: tourData });
+                console.log(`🔄 Updated tour: ${tourData.name}`);
+            }
+        }
+
+        console.log(`✅ Tours seeded successfully!`);
+        
+        // Seed transports (buses and airport transfers)
+        console.log("🚌 Seeding transports...");
+        await seedTransports();
+        
+        // Seed airports and flights
+        console.log("✈️ Seeding airports and flights...");
+        await seedAirportsAndFlights();
+        
         process.exit(0);
     } catch (error) {
         console.error("❌ Seed failed:", error);

@@ -148,7 +148,7 @@ export function GuestRoomPicker({
           </div>
 
           <Button 
-            className="w-full bg-[#1ba0e2] hover:bg-[#158abe] text-white font-medium h-10 rounded-lg mt-4"
+            className="w-full bg-[#469ae3] hover:bg-[#158abe] text-white font-medium h-10 rounded-lg mt-4"
             onClick={handleApply}
           >
             Done

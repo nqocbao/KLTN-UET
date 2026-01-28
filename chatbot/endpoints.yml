@@ -1,0 +1,3 @@
+# Action endpoint configuration (disabled - using simple responses only)
+# action_endpoint:
+#   url: "http://localhost:5055/webhook"

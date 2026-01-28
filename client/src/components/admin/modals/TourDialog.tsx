@@ -15,14 +15,14 @@ interface TourDialogProps {
 }
 
 export function TourDialog({ open, onOpenChange, onSave, tour }: TourDialogProps) {
-  const [formData, setFormData] = useState({ name: "", description: "", price: 0, duration: 0, capacity: 0, destination: "", status: "active" });
+  const [formData, setFormData] = useState({ name: "", description: "", adult_price: 0, child_price: 0, duration_days: 0, capacity: 0, destination: "", status: "active" });
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (tour) {
-      setFormData({ name: tour.name || "", description: tour.description || "", price: tour.price || 0, duration: tour.duration || 0, capacity: tour.capacity || 0, destination: tour.destination || "", status: tour.status || "active" });
+      setFormData({ name: tour.name || "", description: tour.description || "", adult_price: tour.adult_price || 0, child_price: tour.child_price || 0, duration_days: tour.duration_days || 0, capacity: tour.capacity || 0, destination: tour.destination || "", status: tour.status || "active" });
     } else {
-      setFormData({ name: "", description: "", price: 0, duration: 0, capacity: 0, destination: "", status: "active" });
+      setFormData({ name: "", description: "", adult_price: 0, child_price: 0, duration_days: 0, capacity: 0, destination: "", status: "active" });
     }
   }, [tour, open]);
 
@@ -54,17 +54,21 @@ export function TourDialog({ open, onOpenChange, onSave, tour }: TourDialogProps
           </div>
           <div className="grid grid-cols-3 gap-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium">Price ($)</label>
-              <Input type="number" min="0" value={formData.price} onChange={(e) => setFormData({ ...formData, price: parseFloat(e.target.value) })} required />
+              <label className="text-sm font-medium">Adult Price (VND)</label>
+              <Input type="number" min="0" value={formData.adult_price} onChange={(e) => setFormData({ ...formData, adult_price: parseFloat(e.target.value) })} required />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Child Price (VND)</label>
+              <Input type="number" min="0" value={formData.child_price} onChange={(e) => setFormData({ ...formData, child_price: parseFloat(e.target.value) })} required />
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Duration (days)</label>
-              <Input type="number" min="1" value={formData.duration} onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })} required />
+              <Input type="number" min="1" value={formData.duration_days} onChange={(e) => setFormData({ ...formData, duration_days: parseInt(e.target.value) })} required />
             </div>
-            <div className="space-y-2">
-              <label className="text-sm font-medium">Capacity</label>
-              <Input type="number" min="1" value={formData.capacity} onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) })} required />
-            </div>
+          </div>
+          <div className="space-y-2">
+            <label className="text-sm font-medium">Capacity</label>
+            <Input type="number" min="1" value={formData.capacity} onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) })} />
           </div>
           <div className="space-y-2">
             <label className="text-sm font-medium">Status</label>

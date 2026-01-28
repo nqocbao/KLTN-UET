@@ -37,9 +37,9 @@ export function Header({ variant = "transparent" }: HeaderProps) {
   };
 
   const getHeaderBackground = () => {
-    if (variant === "blue") return "bg-[#1ba0e2]";
+    if (variant === "blue") return "bg-gradient-to-r from-[#469ae3] to-[#9cc2e4]";
     if (variant === "opaque") return "bg-white shadow-md";
-    return isScrolled ? "bg-[#1ba0e2] shadow-md" : "bg-transparent";
+    return isScrolled ? "bg-gradient-to-r from-[#469ae3] to-[#9cc2e4] shadow-md" : "bg-transparent";
   };
 
   const textColorClass = variant === "opaque" && !isScrolled ? "text-gray-900" : "text-white";

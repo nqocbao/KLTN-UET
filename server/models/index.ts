@@ -18,8 +18,11 @@ export { default as Address } from "./addresses.model.js";
 export { default as Partner } from "./partners.model.js";
 export { default as Hotel } from "./hotels.model.js";
 export { default as Restaurant } from "./restaurants.model.js";
-export { default as Transport } from "./transports.model.js";
+export { Transport } from "./transports.model.js";
 export { default as Airline } from "./airlines.model.js";
+
+// ================== SERVICES ==================
+export { default as Service } from "./services.model.js";
 
 // ================== DESTINATIONS ==================
 export { default as Destination } from "./destinations.model.js";

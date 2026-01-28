@@ -13,6 +13,7 @@ const hotelSchema = new mongoose.Schema({
   priceOneSingleOneDoubleBed: { type: Number },
   partner_id: { type: mongoose.Schema.Types.ObjectId, ref: "Partner" },
   address_id: { type: mongoose.Schema.Types.ObjectId, ref: "Address" },
+  included_services: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }],
   images: { type: mongoose.Schema.Types.Mixed }, // JSON
   logo_url: { type: String },
   banner_url: { type: String },

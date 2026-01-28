@@ -6,9 +6,13 @@ const tourSchema = new mongoose.Schema(
     description: { type: String },
     country_id: { type: mongoose.Schema.Types.ObjectId, ref: "Country" },
     guide_id: { type: mongoose.Schema.Types.ObjectId, ref: "Guide" },
-    price: { type: Number },
+    departure_location_id: { type: mongoose.Schema.Types.ObjectId, ref: "Destination" },
+    adult_price: { type: Number },
+    child_price: { type: Number },
     duration_days: { type: Number },
     rating: { type: Number, min: 0, max: 5 },
+    departure_dates: [{ type: Date }], // Các ngày khởi hành có sẵn
+    included_services: [{ type: mongoose.Schema.Types.ObjectId, ref: "Service" }], // Dịch vụ đi kèm
     images: { type: mongoose.Schema.Types.Mixed }, // JSON
     banner_url: { type: String },
   },
