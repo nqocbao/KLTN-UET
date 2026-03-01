@@ -220,8 +220,8 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
                     step="0.1"
                     min="0"
                     max="5"
-                    value={formData.rating}
-                    onChange={(e) => setFormData({ ...formData, rating: parseFloat(e.target.value) || 0 })}
+                    value={formData.rating === 0 ? "" : formData.rating}
+                    onChange={(e) => setFormData({ ...formData, rating: e.target.value === "" ? 0 : parseFloat(e.target.value) })}
                   />
                 </div>
                  <div className="space-y-2">
@@ -290,8 +290,8 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
               <Input
                 type="number"
                 min="0"
-                value={formData.rooms}
-                onChange={(e) => setFormData({ ...formData, rooms: parseInt(e.target.value) || 0 })}
+                value={formData.rooms === 0 ? "" : formData.rooms}
+                onChange={(e) => setFormData({ ...formData, rooms: e.target.value === "" ? 0 : parseInt(e.target.value) })}
               />
             </div>
             <div className="space-y-2">
@@ -299,8 +299,8 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
               <Input
                 type="number"
                 min="0"
-                value={formData.availableRooms}
-                onChange={(e) => setFormData({ ...formData, availableRooms: parseInt(e.target.value) || 0 })}
+                value={formData.availableRooms === 0 ? "" : formData.availableRooms}
+                onChange={(e) => setFormData({ ...formData, availableRooms: e.target.value === "" ? 0 : parseInt(e.target.value) })}
               />
             </div>
              <div className="space-y-2">
@@ -308,8 +308,8 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
               <Input
                 type="number"
                 min="0"
-                value={formData.priceTwoSingleBed}
-                onChange={(e) => setFormData({ ...formData, priceTwoSingleBed: parseFloat(e.target.value) || 0 })}
+                value={formData.priceTwoSingleBed === 0 ? "" : formData.priceTwoSingleBed}
+                onChange={(e) => setFormData({ ...formData, priceTwoSingleBed: e.target.value === "" ? 0 : parseFloat(e.target.value) })}
               />
             </div>
              <div className="space-y-2">
@@ -317,8 +317,8 @@ export function HotelDialog({ open, onOpenChange, onSave, hotel }: HotelDialogPr
               <Input
                 type="number"
                 min="0"
-                value={formData.priceOneSingleOneDoubleBed}
-                onChange={(e) => setFormData({ ...formData, priceOneSingleOneDoubleBed: parseFloat(e.target.value) || 0 })}
+                value={formData.priceOneSingleOneDoubleBed === 0 ? "" : formData.priceOneSingleOneDoubleBed}
+                onChange={(e) => setFormData({ ...formData, priceOneSingleOneDoubleBed: e.target.value === "" ? 0 : parseFloat(e.target.value) })}
               />
             </div>
           </div>

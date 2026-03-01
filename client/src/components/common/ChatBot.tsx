@@ -11,8 +11,20 @@ interface Message {
   timestamp: Date;
 }
 
+// Generate a persistent sender ID for RASA conversation tracking
+function getSenderId(): string {
+  if (typeof window === "undefined") return "user_default";
+  let id = localStorage.getItem("chatbot_sender_id");
+  if (!id) {
+    id = "user_" + Date.now() + "_" + Math.random().toString(36).slice(2, 8);
+    localStorage.setItem("chatbot_sender_id", id);
+  }
+  return id;
+}
+
 export function ChatBot() {
   const [isOpen, setIsOpen] = useState(false);
+  const [senderId] = useState<string>(getSenderId);
   const [messages, setMessages] = useState<Message[]>([
     {
       text: "Xin chào! 👋 Tôi là trợ lý ảo của VivuTravel. Tôi có thể giúp gì cho bạn hôm nay?",
@@ -64,7 +76,7 @@ export function ChatBot() {
           },
           body: JSON.stringify({
             message: textToSend,
-            sender: "user_" + Date.now(),
+            sender: senderId,
           }),
         }
       );

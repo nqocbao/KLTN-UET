@@ -66,9 +66,15 @@ export default function TourSearchPage() {
   
   // Get search params
   const location = searchParams.get("location") || "";
+  const destination_id = searchParams.get("destination_id") || "";
+  const location_id = searchParams.get("location_id") || "";
+  const location_type = searchParams.get("location_type") || "";
+  const departure_province_id = searchParams.get("departure_province_id") || "";
+  const departure = searchParams.get("departure") || "";
   const guests = parseInt(searchParams.get("guests") || "2");
   const sortBy = searchParams.get("sortBy") || "popularity";
   const from = searchParams.get("from");
+  const to = searchParams.get("to");
   const minPrice = searchParams.get("minPrice") ? parseInt(searchParams.get("minPrice")!) : undefined;
   const maxPrice = searchParams.get("maxPrice") ? parseInt(searchParams.get("maxPrice")!) : undefined;
 
@@ -80,62 +86,54 @@ export default function TourSearchPage() {
 
   useEffect(() => {
     const fetchTours = async () => {
-      console.log(`[TourSearchPage] Fetching with: location="${location}", sortBy="${sortBy}", price=[${minPrice}, ${maxPrice}]`);
+      console.log(`[TourSearchPage] Fetching with:`, {
+        location,
+        destination_id,
+        location_id,
+        location_type,
+        departure_province_id,
+        departure,
+        sortBy,
+        minPrice,
+        maxPrice,
+        from,
+        to
+      });
       setLoading(true);
       try {
         const res = await toursApi.getAll({ 
           limit: 20,
           location: location || undefined,
+          destination_id: destination_id || undefined,
+          location_id: location_id || undefined,
+          location_type: location_type || undefined,
+          departure_province_id: departure_province_id || undefined,
+          departure: departure || undefined,
           sortBy: sortBy,
           minPrice: minPrice,
           maxPrice: maxPrice,
           from: from || undefined,
+          to: to || undefined,
         });
         
         console.log('[TourSearchPage] API Response:', res);
         
-        if (res.success && res.data && res.data.length > 0) {
+        if (res.success && res.data) {
           console.log(`[TourSearchPage] Found ${res.data.length} tours from API`);
           setTours(res.data);
         } else {
-          console.log('[TourSearchPage] No tours from API, using mock data');
-          // If no results from API, show mock data and sort/filter locally
-          let filteredMock = !location ? [...MOCK_TOURS] : MOCK_TOURS.filter(t => 
-            t.name.toLowerCase().includes(location.toLowerCase()) ||
-            (t.description && t.description.toLowerCase().includes(location.toLowerCase()))
-          );
-
-          // Apply price filter locally
-          if (minPrice !== undefined) {
-            filteredMock = filteredMock.filter(t => (t.price || 0) >= minPrice);
-          }
-          if (maxPrice !== undefined) {
-            filteredMock = filteredMock.filter(t => (t.price || 0) <= maxPrice);
-          }
-
-          if (sortBy === "price_asc") {
-            filteredMock.sort((a, b) => (a.price || 0) - (b.price || 0));
-          } else if (sortBy === "price_desc") {
-            filteredMock.sort((a, b) => (b.price || 0) - (a.price || 0));
-          } else if (sortBy === "alphabet") {
-            filteredMock.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
-          } else {
-            // popularity as default
-            filteredMock.sort((a, b) => (b.rating || 0) - (a.rating || 0));
-          }
-          
-          setTours(filteredMock);
+          console.log('[TourSearchPage] No tours found from API');
+          setTours([]);
         }
       } catch (error) {
         console.error("Failed to fetch tours", error);
-        // On error, show mock data
-        setTours(MOCK_TOURS);
+        setTours([]);
       } finally {
         setLoading(false);
       }
     };
     fetchTours();
-  }, [location, guests, sortBy, from, minPrice, maxPrice]);
+  }, [location, destination_id, location_id, location_type, departure_province_id, departure, guests, sortBy, from, to, minPrice, maxPrice]);
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
@@ -150,7 +148,10 @@ export default function TourSearchPage() {
         {/* Dynamic Header Info */}
         <div className="flex justify-between items-end mb-6">
            <div>
-             <h1 className="text-2xl font-bold text-gray-900">{location || "Tất cả điểm đến"}</h1>
+             <h1 className="text-2xl font-bold text-gray-900">
+               {location || "Tất cả điểm đến"}
+               {departure && ` - Khởi hành từ ${departure}`}
+             </h1>
              <p className="text-gray-500">{tours.length} tour được tìm thấy</p>
            </div>
            

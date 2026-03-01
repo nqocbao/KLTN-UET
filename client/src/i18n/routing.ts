@@ -15,6 +15,7 @@ export const routing = defineRouting({
     "/": "/",
     "/hotels": "/hotels",
     "/flights": "/flights",
+    "/tours": "/tours",
     "/admin": "/admin",
     "/admin/tours": "/admin/tours",
     "/admin/users": "/admin/users",
@@ -34,6 +35,12 @@ export const routing = defineRouting({
     "/admin/provinces": "/admin/provinces",
     "/admin/districts": "/admin/districts",
     "/admin/wards": "/admin/wards",
+    "/account/profile": "/account/profile",
+    "/account/orders": "/account/orders",
+    "/account/points": "/account/points",
+    "/account/reviews": "/account/reviews",
+    "/account/vouchers": "/account/vouchers",
+    "/account/vacations": "/account/vacations",
   },
 });
 

@@ -7,35 +7,145 @@ stories:
       - intent: greet
       - action: utter_greet
       - intent: search_hotel
-      - action: utter_search_hotel
+      - action: action_search_hotels
       - intent: thank_you
       - action: utter_thank_you
 
-  # Story 2: Tìm tour du lịch
+  # Story 2: Tìm khách sạn với địa điểm cụ thể
+  - story: Search hotel with location
+    steps:
+      - intent: search_hotel
+        entities:
+          - location: "Hà Nội"
+      - action: action_search_hotels
+      - intent: affirm
+      - action: utter_affirm
+
+  # Story 3: Hỏi chi tiết khách sạn
+  - story: Ask hotel details
+    steps:
+      - intent: search_hotel
+      - action: action_search_hotels
+      - intent: ask_hotel_price
+      - action: utter_ask_hotel_price
+      - intent: ask_hotel_amenities
+      - action: utter_ask_hotel_amenities
+      - intent: book_hotel
+      - action: utter_book_hotel
+
+  # Story 4: Tìm tour du lịch
   - story: Search tour flow
     steps:
       - intent: search_tour
-      - action: utter_search_tour
-      - intent: affirm
+      - action: action_search_tours
       - intent: thank_you
       - action: utter_thank_you
 
-  # Story 3: Xin gợi ý điểm đến
-  - story: Ask for recommendations
+  # Story 5: Tìm tour với điểm đến cụ thể
+  - story: Search tour with destination
+    steps:
+      - intent: search_tour
+        entities:
+          - destination: "Đà Nẵng"
+      - action: action_search_tours
+      - intent: book_tour
+      - action: utter_book_tour
+
+  # Story 6: Xin gợi ý điểm đến
+  - story: Ask destination info
     steps:
       - intent: search_destination
-      - action: utter_search_destination
-      - intent: ask_recommendation
-      - action: utter_recommendation
+      - action: action_get_destination_info
       - intent: thank_you
       - action: utter_thank_you
 
-  # Story 4: Hỏi trợ giúp và tìm kiếm
-  - story: Ask help then search
+  # Story 7: Gợi ý tổng hợp
+  - story: Ask for recommendations
+    steps:
+      - intent: ask_recommendation
+      - action: action_get_recommendations
+      - intent: search_tour
+      - action: action_search_tours
+      - intent: thank_you
+      - action: utter_thank_you
+
+  # Story 8: Tìm kiếm chuyến bay
+  - story: Search flight flow
+    steps:
+      - intent: search_flight
+      - action: action_search_flights
+      - intent: book_flight
+      - action: utter_book_flight
+
+  # Story 9: Tìm chuyến bay với thông tin đầy đủ
+  - story: Search flight with details
+    steps:
+      - intent: search_flight
+        entities:
+          - flight_from: "Hà Nội"
+          - flight_to: "Đà Nẵng"
+      - action: action_search_flights
+      - intent: thank_you
+      - action: utter_thank_you
+
+  # Story 10: Hỏi trợ giúp rồi tìm kiếm
+  - story: Ask help then search hotel
     steps:
       - intent: help
       - action: utter_help
       - intent: search_hotel
-      - action: utter_search_hotel
+      - action: action_search_hotels
       - intent: thank_you
       - action: utter_thank_you
+
+  # Story 11: Hỏi trợ giúp rồi tìm tour
+  - story: Ask help then search tour
+    steps:
+      - intent: help
+      - action: utter_help
+      - intent: search_tour
+      - action: action_search_tours
+
+  # Story 12: Greeting rồi tìm tour
+  - story: Greet then search tour
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: search_tour
+      - action: action_search_tours
+      - intent: thank_you
+      - action: utter_thank_you
+
+  # Story 13: Greeting rồi hỏi thời tiết
+  - story: Greet then ask weather
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_weather
+      - action: utter_ask_weather
+
+  # Story 14: Hành trình đầy đủ - Greet, tìm điểm đến, đặt tour
+  - story: Full travel planning flow
+    steps:
+      - intent: greet
+      - action: utter_greet
+      - intent: ask_recommendation
+      - action: action_get_recommendations
+      - intent: search_destination
+      - action: action_get_destination_info
+      - intent: search_tour
+      - action: action_search_tours
+      - intent: book_tour
+      - action: utter_book_tour
+      - intent: goodbye
+      - action: utter_goodbye
+
+  # Story 15: Phủ nhận và kết thúc
+  - story: Deny and goodbye
+    steps:
+      - intent: search_hotel
+      - action: action_search_hotels
+      - intent: deny
+      - action: utter_deny
+      - intent: goodbye
+      - action: utter_goodbye

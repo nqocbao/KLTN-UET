@@ -43,10 +43,14 @@ class ApiClient {
         if (error.response) {
           switch (error.response.status) {
             case 401:
-              // Unauthorized - clear token and redirect to login
+              // Unauthorized - clear token and redirect to home (login via modal)
               if (typeof window !== "undefined") {
                 localStorage.removeItem("token");
-                window.location.href = "/login";
+                localStorage.removeItem("user");
+                // Preserve current locale prefix (/vi or /en)
+                const localeMatch = window.location.pathname.match(/^\/(vi|en)/);
+                const locale = localeMatch ? localeMatch[1] : "vi";
+                window.location.href = `/${locale}`;
               }
               break;
             case 403:

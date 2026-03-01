@@ -12,14 +12,14 @@ import type {
 export const hotelsApi = {
   // Get all hotels with pagination
   getAll: (params?: PaginationParams) => {
-    return apiClient.get<PaginatedResponse<Hotel>>("/admin/hotels", {
+    return apiClient.get<PaginatedResponse<Hotel>>("/client/hotels", {
       params,
     });
   },
 
   // Get hotel by ID
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<Hotel>>(`/admin/hotels/${id}`);
+    return apiClient.get<ApiResponse<Hotel>>(`/client/hotels/${id}`);
   },
 
   // Create new hotel

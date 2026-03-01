@@ -244,8 +244,8 @@ export function RestaurantDialog({ open, onOpenChange, onSave, restaurant }: Res
                 step="0.1"
                 min="0"
                 max="5"
-                value={formData.rating}
-                onChange={(e) => setFormData({ ...formData, rating: parseFloat(e.target.value) || 0 })}
+                value={formData.rating === 0 ? "" : formData.rating}
+                onChange={(e) => setFormData({ ...formData, rating: e.target.value === "" ? 0 : parseFloat(e.target.value) })}
               />
             </div>
             <div className="space-y-2">

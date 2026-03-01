@@ -53,7 +53,7 @@ export function AirportAutocomplete({
         const response = await apiClient.get<{ success: boolean; data: Airport[] }>(
           "/admin/destinations?type=airport&limit=100"
         );
-        setAirports(response.data.data);
+        setAirports(response.data);
       } catch (error) {
         console.error("Error fetching airports:", error);
       } finally {

@@ -1,8 +1,3 @@
-/**
- * Generic Admin Page Template
- * Use this template to create API-connected admin pages
- */
-
 "use client";
 
 import { useState, useEffect, useCallback } from "react";

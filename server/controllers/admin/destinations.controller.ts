@@ -113,3 +113,38 @@ export const deleteDestination = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Get destination suggestions for search autocomplete
+export const getDestinationSuggestions = async (req: Request, res: Response) => {
+  try {
+    const { q, type, limit } = req.query;
+    const searchLimit = parseInt(limit as string) || 10;
+    
+    const filter: any = {};
+    
+    // Only search in tourist destinations (not airports)
+    if (type) {
+      filter.type = type;
+    } else {
+      filter.type = "tourist"; // Default to tourist destinations
+    }
+    
+    // Search by name
+    if (q && q !== '') {
+      filter.name = { $regex: q, $options: 'i' };
+    }
+
+    const suggestions = await Destination.find(filter)
+      .select('_id name description type city country country_id image_url')
+      .populate('country_id', 'name')
+      .limit(searchLimit)
+      .sort({ rating: -1 }); // Sort by rating
+
+    res.status(200).json({
+      success: true,
+      data: suggestions,
+    });
+  } catch (error: any) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

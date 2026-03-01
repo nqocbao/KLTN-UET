@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import User from "../../models/users.model.js";
+import bcrypt from "bcrypt";
 
 // Get all users
 export const getAllUsers = async (req: Request, res: Response) => {
@@ -68,8 +69,21 @@ export const getUserById = async (req: Request, res: Response) => {
 // Create user
 export const createUser = async (req: Request, res: Response) => {
   try {
-    const user = await User.create(req.body);
-    res.status(201).json({ success: true, data: user });
+    const { password, ...rest } = req.body;
+
+    // Hash password if provided
+    if (password) {
+      const salt = await bcrypt.genSalt(10);
+      rest.password = await bcrypt.hash(password, salt);
+    }
+
+    const user = await User.create(rest);
+
+    // Remove password from response
+    const userResponse = user.toObject();
+    delete userResponse.password;
+
+    res.status(201).json({ success: true, data: userResponse });
   } catch (error: any) {
     res.status(400).json({ success: false, message: error.message });
   }

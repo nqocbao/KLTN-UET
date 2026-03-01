@@ -13,7 +13,7 @@ export const destinationsApi = {
   // Get all destinations with pagination
   getAll: (params?: PaginationParams) => {
     return apiClient.get<PaginatedResponse<Destination>>(
-      "/admin/destinations",
+      "/client/destinations",
       {
         params,
       }
@@ -23,7 +23,7 @@ export const destinationsApi = {
   // Get destination by ID
   getById: (id: string) => {
     return apiClient.get<ApiResponse<Destination>>(
-      `/admin/destinations/${id}`
+      `/client/destinations/${id}`
     );
   },
 
@@ -46,5 +46,13 @@ export const destinationsApi = {
   // Delete destination
   delete: (id: string) => {
     return apiClient.delete<ApiResponse<void>>(`/admin/destinations/${id}`);
+  },
+
+  // Get destination suggestions for autocomplete
+  getSuggestions: (params?: { q?: string; type?: string; limit?: number }) => {
+    return apiClient.get<ApiResponse<Destination[]>>(
+      "/client/destinations/suggestions",
+      { params }
+    );
   },
 };

@@ -1,61 +1,114 @@
 version: "3.1"
 
 rules:
-  # Luôn chào lại khi người dùng chào
+  # === Basic conversation rules ===
+  
   - rule: Say hello when user greets
     steps:
       - intent: greet
       - action: utter_greet
 
-  # Luôn tạm biệt khi người dùng nói goodbye
   - rule: Say goodbye when user says goodbye
     steps:
       - intent: goodbye
       - action: utter_goodbye
 
-  # Trả lời khi được hỏi là bot
   - rule: Answer bot challenge
     steps:
       - intent: bot_challenge
       - action: utter_iamabot
 
-  # Cảm ơn người dùng
   - rule: Thank the user
     steps:
       - intent: thank_you
       - action: utter_thank_you
 
-  # Giúp đỡ người dùng
   - rule: Help user
     steps:
       - intent: help
       - action: utter_help
 
-  # Respond to hotel search
-  - rule: Respond to hotel search
+  - rule: Affirm
+    steps:
+      - intent: affirm
+      - action: utter_affirm
+
+  - rule: Deny
+    steps:
+      - intent: deny
+      - action: utter_deny
+
+  # === Search rules - using custom actions ===
+
+  - rule: Search hotels via API
     steps:
       - intent: search_hotel
-      - action: utter_search_hotel
+      - action: action_search_hotels
 
-  # Respond to tour search
-  - rule: Respond to tour search
+  - rule: Search tours via API
     steps:
       - intent: search_tour
-      - action: utter_search_tour
+      - action: action_search_tours
 
-  # Respond to destination search
-  - rule: Respond to destination search
+  - rule: Search flights via API
+    steps:
+      - intent: search_flight
+      - action: action_search_flights
+
+  - rule: Search destinations via API
     steps:
       - intent: search_destination
-      - action: utter_search_destination
+      - action: action_get_destination_info
 
-  # Respond to recommendation request
-  - rule: Respond to recommendation request
+  - rule: Get recommendations via API
     steps:
       - intent: ask_recommendation
-      - action: utter_recommendation
+      - action: action_get_recommendations
 
-  # Fallback when low confidence
+  # === Informational rules ===
+
+  - rule: Answer hotel price question
+    steps:
+      - intent: ask_hotel_price
+      - action: utter_ask_hotel_price
+
+  - rule: Answer hotel amenities question
+    steps:
+      - intent: ask_hotel_amenities
+      - action: utter_ask_hotel_amenities
+
+  - rule: Handle hotel booking request
+    steps:
+      - intent: book_hotel
+      - action: utter_book_hotel
+
+  - rule: Handle flight booking request
+    steps:
+      - intent: book_flight
+      - action: utter_book_flight
+
+  - rule: Handle tour booking request
+    steps:
+      - intent: book_tour
+      - action: utter_book_tour
+
+  - rule: Answer location question
+    steps:
+      - intent: ask_location
+      - action: utter_ask_location
+
+  - rule: Answer weather question
+    steps:
+      - intent: ask_weather
+      - action: utter_ask_weather
+
+  - rule: Answer opening hours question
+    steps:
+      - intent: ask_opening_hours
+      - action: utter_ask_opening_hours
+
+  # === Fallback ===
+
   - rule: Ask for rephrase on low NLU confidence
     steps:
       - intent: nlu_fallback

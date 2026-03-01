@@ -54,7 +54,7 @@ class FlightService {
         `/client/flights?${queryParams.toString()}`
       );
 
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.error('Error searching flights:', error);
       throw error;
@@ -66,7 +66,7 @@ class FlightService {
       const response = await apiClient.get<{ success: boolean; data: Flight }>(
         `/client/flights/${id}`
       );
-      return response.data.data;
+      return response.data;
     } catch (error) {
       console.error('Error getting flight:', error);
       throw error;

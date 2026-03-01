@@ -98,6 +98,41 @@ slots:
       - type: from_entity
         entity: price_range
   
+  flight_from:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: flight_from
+
+  flight_to:
+    type: text
+    influence_conversation: true
+    mappings:
+      - type: from_entity
+        entity: flight_to
+
+  flight_date:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: flight_date
+
+  tour_type:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: tour_type
+
+  duration:
+    type: text
+    influence_conversation: false
+    mappings:
+      - type: from_entity
+        entity: duration
+
   conversation_id:
     type: text
     influence_conversation: false
@@ -153,6 +188,50 @@ responses:
   utter_recommendation:
     - text: "Dựa trên sở thích của bạn, tôi gợi ý: Đà Nẵng (biển đẹp), Sapa (núi non hùng vĩ), Hà Nội (văn hóa lịch sử). Bạn muốn biết thêm về điểm đến nào?"
     - text: "Tôi có thể gợi ý điểm đến phù hợp. Bạn muốn đi du lịch trong bao lâu? Ngân sách của bạn là bao nhiêu?"
+
+  utter_search_flight:
+    - text: "Bạn muốn bay từ đâu đến đâu? Hãy cho tôi biết điểm đi, điểm đến và ngày bay nhé!"
+    - text: "Tôi có thể giúp bạn tìm vé máy bay. Bạn muốn bay từ thành phố nào?"
+
+  utter_ask_hotel_price:
+    - text: "Giá phòng khách sạn thường từ 500K - 5 triệu/đêm tùy hạng sao và vị trí. Bạn muốn tôi tìm khách sạn trong khoảng giá nào?"
+    - text: "Giá khách sạn phụ thuộc vào vị trí, hạng sao và loại phòng. Cho tôi biết ngân sách của bạn, tôi sẽ tìm phòng phù hợp!"
+
+  utter_ask_hotel_amenities:
+    - text: "Các khách sạn thường có tiện nghi: WiFi, bể bơi, gym, nhà hàng, spa, chỗ đậu xe... Bạn cần tiện nghi gì đặc biệt?"
+    - text: "Tiện nghi phổ biến gồm: WiFi miễn phí, điều hòa, minibar, phòng tắm riêng, bữa sáng. Bạn muốn tìm khách sạn có tiện nghi cụ thể nào?"
+
+  utter_book_hotel:
+    - text: "Để đặt phòng, bạn hãy truy cập trang chi tiết khách sạn trên website và chọn ngày nhận/trả phòng. Tôi có thể giúp bạn tìm khách sạn phù hợp trước!"
+    - text: "Bạn có thể đặt phòng trực tiếp trên website. Cho tôi biết bạn muốn đặt ở đâu, ngày nào, tôi sẽ tìm phòng tốt nhất cho bạn!"
+
+  utter_book_flight:
+    - text: "Để đặt vé máy bay, bạn hãy truy cập mục Chuyến bay trên website. Tôi có thể giúp bạn tìm chuyến bay phù hợp trước nhé!"
+    - text: "Bạn có thể đặt vé bay trên website. Cho tôi biết điểm đi, điểm đến và ngày bay, tôi sẽ tìm chuyến bay tốt nhất!"
+
+  utter_book_tour:
+    - text: "Để đặt tour, bạn hãy chọn tour phù hợp trên website và đặt lịch. Tôi có thể giúp bạn tìm tour trước nhé!"
+    - text: "Bạn có thể đặt tour trực tiếp trên website. Cho tôi biết bạn muốn đi đâu, bao lâu, tôi sẽ gợi ý tour tốt nhất!"
+
+  utter_ask_location:
+    - text: "Bạn muốn biết thông tin về địa điểm nào? Tôi có thể giới thiệu các điểm đến du lịch nổi tiếng tại Việt Nam và quốc tế."
+    - text: "Hãy cho tôi biết địa điểm bạn quan tâm, tôi sẽ cung cấp thông tin chi tiết về đó!"
+
+  utter_ask_weather:
+    - text: "Thời tiết Việt Nam thay đổi theo vùng miền. Bạn muốn biết thời tiết ở đâu? Tôi sẽ gợi ý thời điểm du lịch tốt nhất."
+    - text: "Miền Bắc có 4 mùa, miền Trung nắng nóng, miền Nam 2 mùa mưa nắng. Bạn định đi đâu? Tôi sẽ tư vấn thời điểm phù hợp."
+
+  utter_ask_opening_hours:
+    - text: "Giờ mở cửa các điểm tham quan thường từ 8:00 - 17:00. Bạn muốn biết giờ mở cửa ở đâu?"
+    - text: "Mỗi điểm tham quan có giờ mở cửa khác nhau. Cho tôi biết địa điểm cụ thể, tôi sẽ tra cứu giúp bạn."
+
+  utter_affirm:
+    - text: "Tuyệt vời! Tôi có thể giúp gì thêm cho bạn?"
+    - text: "Được rồi! Bạn cần gì nữa không?"
+
+  utter_deny:
+    - text: "Không sao! Bạn cứ hỏi tôi bất cứ khi nào cần nhé."
+    - text: "Ok! Nếu cần gì, cứ nhắn cho tôi."
 
 # Actions - Các hành động custom
 actions:
