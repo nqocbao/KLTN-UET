@@ -2,15 +2,15 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { MapPin, Search, TrendingUp, Globe } from "lucide-react";
-import { locationsApi, provincesApi, destinationsApi } from "@/lib/services";
-import type { Province, Destination } from "@/types/api";
+import { MapPin, Search, TrendingUp, Globe, Ticket } from "lucide-react";
+import { locationsApi, provincesApi, destinationsApi, toursApi } from "@/lib/services";
+import type { Province, Destination, Tour } from "@/types/api";
 import { cn } from "@/lib/utils";
 
 export interface LocationSuggestion {
   id: string;
   name: string;
-  type: "country" | "province" | "destination" | "district" | "ward";
+  type: "country" | "province" | "destination" | "district" | "ward" | "tour";
   country?: string;
   country_id?: string;
   province?: string;
@@ -26,6 +26,7 @@ interface LocationAutocompleteProps {
   onSelectLocation?: (suggestion: LocationSuggestion) => void;
   placeholder?: string;
   className?: string;
+  mode?: "all" | "destinations-only" | "provinces-only"; // New prop to control what to show
 }
 
 export function LocationAutocomplete({
@@ -34,6 +35,7 @@ export function LocationAutocomplete({
   onSelectLocation,
   placeholder = "Thành phố, địa điểm hoặc tên khách sạn",
   className,
+  mode = "all",
 }: LocationAutocompleteProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [suggestions, setSuggestions] = useState<LocationSuggestion[]>([]);
@@ -92,50 +94,84 @@ export function LocationAutocomplete({
   useEffect(() => {
     const fetchPopular = async () => {
       try {
-        const [provincesRes, destinationsRes] = await Promise.all([
-          provincesApi.getAll({ limit: 5 }),
-          destinationsApi.getAll({ limit: 5 }),
-        ]);
-
-        const popular: LocationSuggestion[] = [];
-
-        if (provincesRes.success && provincesRes.data) {
-          provincesRes.data.forEach((province: Province) => {
-            popular.push({
-              id: province._id,
-              name: province.name,
-              type: "province",
+        if (mode === "destinations-only") {
+          // For tour search: only show tourist destinations
+          const destinationsRes = await destinationsApi.getSuggestions({ type: "tourist", limit: 10 });
+          
+          const popular: LocationSuggestion[] = [];
+          if (destinationsRes.success && destinationsRes.data) {
+            destinationsRes.data.forEach((destination: Destination) => {
+              popular.push({
+                id: destination._id,
+                name: destination.name,
+                type: "destination",
+                country: destination.country,
+              });
             });
-          });
-        }
-
-        if (destinationsRes.success && destinationsRes.data) {
-          destinationsRes.data.forEach((destination: Destination) => {
-            popular.push({
-              id: destination._id,
-              name: destination.name,
-              type: "destination",
-              country: destination.country,
+          }
+          setPopularLocations(popular);
+        } else if (mode === "provinces-only") {
+          // For departure location: only show provinces
+          const provincesRes = await provincesApi.getAll({ limit: 10 });
+          
+          const popular: LocationSuggestion[] = [];
+          if (provincesRes.success && provincesRes.data) {
+            provincesRes.data.forEach((province: Province) => {
+              popular.push({
+                id: province._id,
+                name: province.name,
+                type: "province",
+              });
             });
-          });
-        }
+          }
+          setPopularLocations(popular);
+        } else {
+          // For hotel/general search: show both provinces and destinations
+          const [provincesRes, destinationsRes] = await Promise.all([
+            provincesApi.getAll({ limit: 5 }),
+            destinationsApi.getAll({ limit: 5 }),
+          ]);
 
-        setPopularLocations(popular);
+          const popular: LocationSuggestion[] = [];
+
+          if (provincesRes.success && provincesRes.data) {
+            provincesRes.data.forEach((province: Province) => {
+              popular.push({
+                id: province._id,
+                name: province.name,
+                type: "province",
+              });
+            });
+          }
+
+          if (destinationsRes.success && destinationsRes.data) {
+            destinationsRes.data.forEach((destination: Destination) => {
+              popular.push({
+                id: destination._id,
+                name: destination.name,
+                type: "destination",
+                country: destination.country,
+              });
+            });
+          }
+
+          setPopularLocations(popular);
+        }
       } catch (error) {
         console.error("Failed to fetch popular locations:", error);
         // Set fallback popular locations
         setPopularLocations([
-          { id: "1", name: "Hà Nội", type: "province" },
-          { id: "2", name: "Hồ Chí Minh", type: "province" },
-          { id: "3", name: "Đà Nẵng", type: "province" },
-          { id: "4", name: "Nha Trang", type: "province" },
+          { id: "1", name: "Hà Nội", type: mode === "destinations-only" ? "destination" : "province" },
+          { id: "2", name: "Hồ Chí Minh", type: mode === "destinations-only" ? "destination" : "province" },
+          { id: "3", name: "Đà Nẵng", type: mode === "destinations-only" ? "destination" : "province" },
+          { id: "4", name: "Nha Trang", type: "destination" },
           { id: "5", name: "Phú Quốc", type: "destination" },
         ]);
       }
     };
 
     fetchPopular();
-  }, []);
+  }, [mode]);
 
   // Debounced search
   useEffect(() => {
@@ -147,29 +183,85 @@ export function LocationAutocomplete({
     const timer = setTimeout(async () => {
       setLoading(true);
       try {
-        // Use the new unified search API
-        const searchRes = await locationsApi.search(value, 20);
-
-        const results: LocationSuggestion[] = [];
-
-        if (searchRes.success && searchRes.data) {
-          searchRes.data.forEach((location: any) => {
-            results.push({
-              id: location._id,
-              name: location.name,
-              type: location.type,
-              country: location.country,
-              country_id: location.country_id,
-              province: location.province,
-              province_id: location.province_id,
-              district: location.district,
-              district_id: location.district_id,
-              fullName: location.fullName || location.name,
-            });
+        if (mode === "destinations-only") {
+          // For tour search: only search in tourist destinations
+          const destinationsRes = await destinationsApi.getSuggestions({ 
+            q: value, 
+            type: "tourist", 
+            limit: 20 
           });
-        }
 
-        setSuggestions(results);
+          const results: LocationSuggestion[] = [];
+          if (destinationsRes.success && destinationsRes.data) {
+            destinationsRes.data.forEach((destination: Destination) => {
+              results.push({
+                id: destination._id,
+                name: destination.name,
+                type: "destination",
+                country: destination.country,
+                fullName: destination.description || destination.name,
+              });
+            });
+          }
+          setSuggestions(results);
+        } else if (mode === "provinces-only") {
+          // For departure location: only search provinces
+          const provincesRes = await provincesApi.getAll({ 
+            search: value, 
+            limit: 20 
+          });
+
+          const results: LocationSuggestion[] = [];
+          if (provincesRes.success && provincesRes.data) {
+            provincesRes.data.forEach((province: Province) => {
+              results.push({
+                id: province._id,
+                name: province.name,
+                type: "province",
+              });
+            });
+          }
+          setSuggestions(results);
+        } else {
+          // For hotel/general search: search locations + tours
+          const [searchRes, toursRes] = await Promise.all([
+            locationsApi.search(value, 15),
+            toursApi.getAll({ location: value, limit: 8 })
+          ]);
+
+          const results: LocationSuggestion[] = [];
+
+          // Add tours first
+          if (toursRes.success && toursRes.data) {
+            toursRes.data.forEach((tour: Tour) => {
+              results.push({
+                id: tour._id,
+                name: tour.name,
+                type: "tour",
+              });
+            });
+          }
+
+          // Add locations
+          if (searchRes.success && searchRes.data) {
+            searchRes.data.forEach((location: any) => {
+              results.push({
+                id: location._id,
+                name: location.name,
+                type: location.type,
+                country: location.country,
+                country_id: location.country_id,
+                province: location.province,
+                province_id: location.province_id,
+                district: location.district,
+                district_id: location.district_id,
+                fullName: location.fullName || location.name,
+              });
+            });
+          }
+
+          setSuggestions(results);
+        }
       } catch (error) {
         console.error("Failed to fetch suggestions:", error);
         setSuggestions([]);
@@ -179,7 +271,7 @@ export function LocationAutocomplete({
     }, 300);
 
     return () => clearTimeout(timer);
-  }, [value, popularLocations]);
+  }, [value, popularLocations, mode]);
 
   // Handle click outside
   useEffect(() => {
@@ -276,6 +368,8 @@ export function LocationAutocomplete({
               <div className="flex-shrink-0">
                 {suggestion.type === "country" ? (
                   <Globe className="w-5 h-5 text-indigo-500" />
+                ) : suggestion.type === "tour" ? (
+                  <Ticket className="w-5 h-5 text-orange-600" />
                 ) : (
                   <MapPin
                     className={cn(
@@ -311,6 +405,8 @@ export function LocationAutocomplete({
                     ? "Quận/Huyện"
                     : suggestion.type === "ward"
                     ? "Phường/Xã"
+                    : suggestion.type === "tour"
+                    ? "Tour"
                     : "Điểm đến"}
                 </span>
               </div>

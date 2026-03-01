@@ -14,13 +14,13 @@ import type {
  */
 export const countriesApi = {
   getAll: (params?: PaginationParams) => {
-    return apiClient.get<PaginatedResponse<Country>>("/admin/countries", {
+    return apiClient.get<PaginatedResponse<Country>>("/client/countries", {
       params,
     });
   },
 
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<Country>>(`/admin/countries/${id}`);
+    return apiClient.get<ApiResponse<Country>>(`/client/countries/${id}`);
   },
 
   create: (data: Partial<Country>) => {
@@ -41,13 +41,13 @@ export const countriesApi = {
  */
 export const provincesApi = {
   getAll: (params?: PaginationParams & { countryId?: string }) => {
-    return apiClient.get<PaginatedResponse<Province>>("/admin/provinces", {
+    return apiClient.get<PaginatedResponse<Province>>("/client/provinces", {
       params,
     });
   },
 
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<Province>>(`/admin/provinces/${id}`);
+    return apiClient.get<ApiResponse<Province>>(`/client/provinces/${id}`);
   },
 
   create: (data: Partial<Province>) => {
@@ -68,13 +68,13 @@ export const provincesApi = {
  */
 export const districtsApi = {
   getAll: (params?: PaginationParams & { provinceId?: string }) => {
-    return apiClient.get<PaginatedResponse<District>>("/admin/districts", {
+    return apiClient.get<PaginatedResponse<District>>("/client/districts", {
       params,
     });
   },
 
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<District>>(`/admin/districts/${id}`);
+    return apiClient.get<ApiResponse<District>>(`/client/districts/${id}`);
   },
 
   create: (data: Partial<District>) => {
@@ -95,13 +95,13 @@ export const districtsApi = {
  */
 export const wardsApi = {
   getAll: (params?: PaginationParams & { districtId?: string }) => {
-    return apiClient.get<PaginatedResponse<Ward>>("/admin/wards", {
+    return apiClient.get<PaginatedResponse<Ward>>("/client/wards", {
       params,
     });
   },
 
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<Ward>>(`/admin/wards/${id}`);
+    return apiClient.get<ApiResponse<Ward>>(`/client/wards/${id}`);
   },
 
   create: (data: Partial<Ward>) => {
@@ -123,7 +123,7 @@ export const wardsApi = {
  */
 export const locationsApi = {
   search: (query: string, limit?: number) => {
-    return apiClient.get<ApiResponse<any[]>>("/admin/locations/search", {
+    return apiClient.get<ApiResponse<any[]>>("/client/locations/search", {
       params: { query, limit },
     });
   },

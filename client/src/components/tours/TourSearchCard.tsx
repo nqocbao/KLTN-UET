@@ -37,26 +37,27 @@ export function TourSearchCard({ tour }: TourSearchCardProps) {
       : tour.included_services[0]
     : null;
 
+  const handleCardClick = () => {
+    router.push(`/vi/tours/${tour._id}`);
+  };
+
   return (
-    <Card className="p-0 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-gray-200">
-      <div className="flex flex-col md:flex-row h-full">
+    <Card 
+      className="p-0 overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group border-gray-200"
+      onClick={handleCardClick}
+    >
+      <div className="flex flex-col md:flex-row h-[250px]">
         {/* Tour Image */}
-        <div className="relative w-full md:w-[260px] h-[180px] overflow-hidden shrink-0">
+        <div className="relative w-full h-[200px] md:h-auto md:w-[260px] overflow-hidden shrink-0 md:self-stretch">
           <img
             src={image}
             alt={tour.name}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
           />
-          {/* Promotional Banner */}
-          {promotionalMessage && (
-            <div className="absolute top-0 left-0 bg-gradient-to-r from-red-600 to-red-500 text-white px-3 py-1.5 text-xs font-semibold shadow-lg">
-              {promotionalMessage}
-            </div>
-          )}
         </div>
 
         {/* Tour Details */}
-        <div className="flex-1 p-5 flex flex-col justify-between">
+        <div className="flex-1 p-5 flex flex-col">
           {/* Top Section */}
           <div>
             {/* Tour Name */}
@@ -120,7 +121,10 @@ export function TourSearchCard({ tour }: TourSearchCardProps) {
             
             <Button 
               className="bg-orange-500 hover:bg-orange-600 text-white font-semibold px-6 shadow-md hover:shadow-lg transition-all duration-200"
-              onClick={() => router.push(`/vi/tours/${tour._id}`)}
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(`/vi/tours/${tour._id}`);
+              }}
             >
               Xem Tour
               <ChevronRight className="w-4 h-4 ml-1" />

@@ -72,6 +72,7 @@ nlu:
       - tìm khách sạn
       - tìm hotel
       - tôi muốn tìm khách sạn
+      - t muốn tìm khách sạn
       - tìm cho tôi khách sạn ở [Hà Nội](location)
       - tìm khách sạn ở [Đà Nẵng](location)
       - có khách sạn nào ở [Sài Gòn](location) không
@@ -84,6 +85,29 @@ nlu:
       - hotel ở [Hội An](location)
       - tìm resort nghỉ dưỡng
       - có khách sạn nào view đẹp không
+      - t muốn tìm khách sạn ở [hà nội](location)
+      - tôi muốn tìm khách sạn ở [hà nội](location)
+      - tôi muốn tìm khách sạn ở [đà nẵng](location)
+      - tìm khách sạn ở [hồ chí minh](location)
+      - tìm khách sạn ở [nha trang](location)
+      - tìm khách sạn ở [phú quốc](location)
+      - tìm khách sạn ở [hội an](location)
+      - tìm khách sạn ở [sapa](location)
+      - tìm khách sạn ở [đà lạt](location)
+      - tìm khách sạn ở [huế](location)
+      - t muốn tìm khách sạn ở [đà nẵng](location)
+      - t muốn tìm khách sạn ở [hồ chí minh](location)
+      - t muốn tìm khách sạn ở [nha trang](location)
+      - t muốn tìm khách sạn ở [phú quốc](location)
+      - cho tôi khách sạn tại [hà nội](location)
+      - khách sạn tại [đà nẵng](location)
+      - khách sạn tại [hồ chí minh](location)
+      - tìm giúp tôi khách sạn ở [Hà Nội](location)
+      - tìm giúp mình khách sạn ở [Đà Nẵng](location)
+      - mình muốn tìm khách sạn ở [Nha Trang](location)
+      - có khách sạn nào ở [Đà Lạt](location) không
+      - có khách sạn tốt ở [Sapa](location) không
+      - khách sạn đẹp ở [Huế](location)
 
   # Hỏi về giá khách sạn
   - intent: ask_hotel_price
@@ -163,6 +187,16 @@ nlu:
       - tour nước ngoài
       - có tour [miền Tây](destination) không
       - tour ngắn ngày
+      - t muốn tìm tour
+      - tôi muốn tìm tour du lịch
+      - tìm tour ở [hà nội](location)
+      - tìm tour đi [đà nẵng](destination)
+      - t muốn tìm tour đi [đà lạt](destination)
+      - tôi muốn đi tour [sapa](destination)
+      - tour du lịch ở [hội an](destination)
+      - có tour nào đi [phú quốc](destination) không
+      - tìm tour [3 ngày](duration) ở [đà nẵng](destination)
+      - tour tham quan [hà nội](destination)
 
   # Đặt tour
   - intent: book_tour

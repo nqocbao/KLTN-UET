@@ -13,6 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { UserDropdown } from "@/components/common/UserDropdown";
 
 interface HeaderProps {
   variant?: "transparent" | "opaque" | "blue";
@@ -22,6 +23,7 @@ export function Header({ variant = "transparent" }: HeaderProps) {
   const [authOpen, setAuthOpen] = useState(false);
   const [authTab, setAuthTab] = useState<"login" | "register">("login");
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,6 +31,21 @@ export function Header({ variant = "transparent" }: HeaderProps) {
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  useEffect(() => {
+    // Check if user is logged in
+    const checkAuth = () => {
+      const token = localStorage.getItem("token");
+      const user = localStorage.getItem("user");
+      setIsLoggedIn(!!(token && user));
+    };
+    
+    checkAuth();
+    
+    // Listen for storage changes (logout from another tab)
+    window.addEventListener("storage", checkAuth);
+    return () => window.removeEventListener("storage", checkAuth);
   }, []);
 
   const openAuth = (tab: "login" | "register") => {
@@ -71,19 +88,25 @@ export function Header({ variant = "transparent" }: HeaderProps) {
             </Link>
 
             <div className="flex items-center gap-2 ml-2">
-              <Button 
-                variant="outline" 
-                className="h-9 px-4 border-white text-white hover:bg-white/10 hover:text-white bg-transparent font-semibold"
-                onClick={() => openAuth("login")}
-              >
-                <User className="w-4 h-4 mr-2" /> Đăng Nhập
-              </Button>
-              <Button 
-                className="h-9 px-4 bg-[#007ce8] hover:bg-[#006bb3] text-white border-none font-semibold"
-                onClick={() => openAuth("register")}
-              >
-                Đăng ký
-              </Button>
+              {isLoggedIn ? (
+                <UserDropdown variant="white" />
+              ) : (
+                <>
+                  <Button 
+                    variant="outline" 
+                    className="h-9 px-4 border-white text-white hover:bg-white/10 hover:text-white bg-transparent font-semibold"
+                    onClick={() => openAuth("login")}
+                  >
+                    <User className="w-4 h-4 mr-2" /> Đăng Nhập
+                  </Button>
+                  <Button 
+                    className="h-9 px-4 bg-[#007ce8] hover:bg-[#006bb3] text-white border-none font-semibold"
+                    onClick={() => openAuth("register")}
+                  >
+                    Đăng ký
+                  </Button>
+                </>
+              )}
             </div>
           </div>
 
@@ -97,12 +120,11 @@ export function Header({ variant = "transparent" }: HeaderProps) {
 
         {/* Bottom Row: Navigation (Desktop) */}
         <div className="hidden lg:flex items-center h-12 text-sm font-medium text-white gap-8">
+          <Link href="/tours" className="hover:text-white/80">Tours trọn gói</Link>
           <Link href="/hotels" className="hover:text-white/80">Khách sạn</Link>
           <Link href="/flights" className="hover:text-white/80">Vé máy bay</Link>
           <Link href="/" className="hover:text-white/80">Vé xe khách</Link>
           <Link href="/" className="hover:text-white/80">Đưa đón sân bay</Link>
-          <Link href="/" className="hover:text-white/80">Cho thuê xe</Link>
-          <Link href="/" className="hover:text-white/80">Hoạt động & Vui chơi</Link>
           <Link href="/" className="flex items-center gap-1 hover:text-white/80">
             More <ChevronDown className="w-3 h-3" />
           </Link>

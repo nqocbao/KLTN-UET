@@ -42,6 +42,8 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
   const [activeTab, setActiveTab] = useState<string>(defaultTab);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -49,28 +51,87 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
     setError("");
     setIsLoading(true);
 
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 500));
+    try {
+      // Call API for all users (admin and regular)
+      const response = await fetch("http://localhost:5000/api/client/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    // Check for admin credentials
-    if (email === "admin" && password === "admin") {
-      // Store auth info in localStorage
-      localStorage.setItem("token", "admin-token");
-      localStorage.setItem("user", JSON.stringify({
-        _id: "admin",
-        name: "Administrator",
-        email: "admin@vivutravel.com",
-        role: "admin"
-      }));
-      
-      // Close modal and redirect to dashboard
-      onOpenChange(false);
-      router.push("/vi/admin");
-    } else {
-      setError("Tên đăng nhập hoặc mật khẩu không đúng!");
+      const data = await response.json();
+
+      if (data.success && data.token) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.data));
+        
+        onOpenChange(false);
+        
+        // Redirect based on user role
+        if (data.data.role === "admin") {
+          router.push("/vi/admin");
+        } else {
+          window.location.reload(); // Reload to update UI
+        }
+      } else {
+        setError(data.message || "Đăng nhập thất bại!");
+      }
+    } catch (err) {
+      setError("Không thể kết nối đến server!");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleRegister = async () => {
+    setError("");
+
+    // Validate
+    if (!name || !email || !password || !confirmPassword) {
+      setError("Vui lòng điền đầy đủ thông tin!");
+      return;
     }
 
-    setIsLoading(false);
+    if (password !== confirmPassword) {
+      setError("Mật khẩu xác nhận không khớp!");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Mật khẩu phải có ít nhất 6 ký tự!");
+      return;
+    }
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("http://localhost:5000/api/client/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Use JWT token from server response
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.data));
+        
+        onOpenChange(false);
+        window.location.reload(); // Reload to update UI
+      } else {
+        setError(data.message || "Đăng ký thất bại!");
+      }
+    } catch (err) {
+      setError("Không thể kết nối đến server!");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -81,8 +142,8 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[480px] p-5 overflow-hidden bg-white dark:bg-gray-900">
-        <div className="p-6">
+      <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden bg-white dark:bg-gray-900 max-h-[90vh]">
+        <div className={`p-6 ${activeTab === 'register' ? 'overflow-y-auto max-h-[calc(90vh-2px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]' : ''}`}>
           <DialogHeader className="mb-4">
             <DialogTitle className="text-xl font-bold text-center">
               {activeTab === "login" ? "Đăng nhập" : "Tạo tài khoản"}
@@ -131,9 +192,9 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
                 )}
                 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Tên đăng nhập hoặc Email</label>
+                  <label className="text-sm font-medium">Email</label>
                   <Input 
-                    placeholder="Nhập tên đăng nhập hoặc email" 
+                    placeholder="Nhập email" 
                     className="h-12"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
@@ -143,7 +204,12 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
                 {activeTab === "register" && (
                    <div className="space-y-2">
                     <label className="text-sm font-medium">Họ và tên</label>
-                    <Input placeholder="Họ và tên của bạn" className="h-12" />
+                    <Input 
+                      placeholder="Họ và tên của bạn" 
+                      className="h-12"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                    />
                   </div>
                 )}
 
@@ -161,13 +227,19 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
                 {activeTab === "register" && (
                    <div className="space-y-2">
                      <label className="text-sm font-medium">Xác nhận mật khẩu</label>
-                     <Input type="password" placeholder="Nhập lại mật khẩu" className="h-12" />
+                     <Input 
+                       type="password" 
+                       placeholder="Nhập lại mật khẩu" 
+                       className="h-12"
+                       value={confirmPassword}
+                       onChange={(e) => setConfirmPassword(e.target.value)}
+                     />
                    </div>
                 )}
 
                 <Button 
                   className="w-full h-12 text-lg bg-blue-600 hover:bg-blue-700 text-white"
-                  onClick={activeTab === "login" ? handleLogin : undefined}
+                  onClick={activeTab === "login" ? handleLogin : handleRegister}
                   disabled={isLoading}
                 >
                   {isLoading ? (
@@ -176,13 +248,13 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
                       Đang xử lý...
                     </>
                   ) : (
-                    activeTab === "login" ? "Đăng nhập" : "Tiếp tục"
+                    activeTab === "login" ? "Đăng nhập" : "Đăng ký"
                   )}
                 </Button>
 
                 {activeTab === "login" && (
                   <p className="text-center text-xs text-gray-500">
-                    Gợi ý: Đăng nhập với <span className="font-semibold">admin/admin</span> để vào trang quản trị
+                    Đăng nhập bằng email và mật khẩu đã đăng ký
                   </p>
                 )}
               </div>

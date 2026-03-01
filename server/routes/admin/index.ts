@@ -1,4 +1,5 @@
 import express from "express";
+import { requireAdmin } from "../../middlewares/admin/auth.middlewares.js";
 
 // Import all route modules
 import usersRoutes from "./users.routes.js";
@@ -31,6 +32,9 @@ import locationsRoutes from "./locations.routes.js";
 import servicesRoutes from "./services.routes.js";
 
 const router = express.Router();
+
+// Apply admin authentication to ALL admin routes
+router.use(requireAdmin);
 
 // Mount all routes
 router.use("/users", usersRoutes);

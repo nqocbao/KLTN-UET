@@ -12,14 +12,14 @@ import type {
 export const toursApi = {
   // Get all tours with pagination
   getAll: (params?: PaginationParams) => {
-    return apiClient.get<PaginatedResponse<Tour>>("/admin/tours", {
+    return apiClient.get<PaginatedResponse<Tour>>("/client/tours", {
       params,
     });
   },
 
   // Get tour by ID
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<Tour>>(`/admin/tours/${id}`);
+    return apiClient.get<ApiResponse<Tour>>(`/client/tours/${id}`);
   },
 
   // Create new tour

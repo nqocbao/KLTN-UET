@@ -17,6 +17,11 @@ export interface PaginationParams {
   sort?: string;
   order?: "asc" | "desc";
   location?: string;
+  destination_id?: string;
+  location_id?: string;
+  location_type?: string;
+  departure_province_id?: string;
+  departure?: string;
   name?: string;
   sortBy?: string;
   minPrice?: number;
@@ -50,19 +55,45 @@ export interface User {
 }
 
 // Tour Types
+
+// Lịch trình tour từng ngày
+export interface ItineraryDay {
+  day: number; // 0 = đêm đầu, 1 = ngày 1, ...
+  title: string;
+  description?: string;
+  meals: string[]; // ["Ăn Sáng", "Trưa", "Tối"]
+  image?: string;
+}
+
+// Chi tiết dịch vụ bao gồm
+export interface IncludedServicesDetail {
+  transport?: string; // Vận chuyển
+  accommodation?: string; // Lưu trú
+  meals?: string; // Ăn uống
+  guide?: string; // Hướng dẫn viên
+  extras?: string[]; // Các dịch vụ khác
+}
+
 export interface Tour {
   _id: string;
   name: string;
-  description: string;
-  departure_location_id?: Destination | string;
+  tour_code?: string; // Mã tour
+  description: string; // Điểm nổi bật tour
+  country_id?: any; // Quốc gia đích đến
+  departure_location_id?: Province | string; // Điểm khởi hành (province)
   adult_price: number;
   child_price: number;
   duration_days: number;
   rating?: number;
-  country_id?: any;
   guide_id?: any;
   departure_dates?: string[]; // Các ngày khởi hành
-  included_services?: Service[] | string[]; // Dịch vụ bao gồm
+  included_services?: Service[] | string[]; // Dịch vụ bao gồm (ref)
+  
+  // Các trường chi tiết tour
+  itinerary?: ItineraryDay[]; // Chương trình tour từng ngày
+  included_services_detail?: IncludedServicesDetail; // Giá Tour Bao Gồm
+  excluded_services?: string[]; // Giá Tour Không Bao Gồm
+  
   capacity?: number;
   destination?: string;
   status?: "active" | "inactive";

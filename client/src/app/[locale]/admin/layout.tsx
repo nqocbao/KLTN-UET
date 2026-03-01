@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Sidebar from "@/components/admin/Sidebar";
 import Navbar from "@/components/admin/Navbar";
+import AdminAuthGuard from "@/components/admin/AdminAuthGuard";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard - Travel Management",
@@ -13,12 +14,14 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen bg-background">
-      <Sidebar />
-      <div className="pl-64">
-        <Navbar />
-        <main className="pt-16 p-6">{children}</main>
+    <AdminAuthGuard>
+      <div className="min-h-screen bg-background">
+        <Sidebar />
+        <div className="pl-64">
+          <Navbar />
+          <main className="pt-16 p-6">{children}</main>
+        </div>
       </div>
-    </div>
+    </AdminAuthGuard>
   );
 }

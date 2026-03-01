@@ -173,13 +173,13 @@ export const transportsApi = {
  */
 export const partnersApi = {
   getAll: (params?: PaginationParams) => {
-    return apiClient.get<PaginatedResponse<Partner>>("/admin/partners", {
+    return apiClient.get<PaginatedResponse<Partner>>("/client/partners", {
       params,
     });
   },
 
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<Partner>>(`/admin/partners/${id}`);
+    return apiClient.get<ApiResponse<Partner>>(`/client/partners/${id}`);
   },
 
   create: (data: Partial<Partner>) => {
@@ -200,13 +200,13 @@ export const partnersApi = {
  */
 export const guidesApi = {
   getAll: (params?: PaginationParams) => {
-    return apiClient.get<PaginatedResponse<Guide>>("/admin/guides", {
+    return apiClient.get<PaginatedResponse<Guide>>("/client/guides", {
       params,
     });
   },
 
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<Guide>>(`/admin/guides/${id}`);
+    return apiClient.get<ApiResponse<Guide>>(`/client/guides/${id}`);
   },
 
   create: (data: Partial<Guide>) => {
@@ -254,7 +254,7 @@ export const reviewsApi = {
  */
 export const rolesApi = {
   getAll: (params?: PaginationParams) => {
-    return apiClient.get<PaginatedResponse<Role>>("/admin/roles", {
+    return apiClient.get<PaginatedResponse<Role>>("/admin/roles", { // admin only
       params,
     });
   },

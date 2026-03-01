@@ -63,7 +63,7 @@ export function TransportDialog({ open, onOpenChange, onSave, transport }: Trans
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium">Capacity</label>
-              <Input type="number" min="1" value={formData.capacity} onChange={(e) => setFormData({ ...formData, capacity: parseInt(e.target.value) })} required />
+              <Input type="number" min="1" value={formData.capacity === 0 ? "" : formData.capacity} onChange={(e) => setFormData({ ...formData, capacity: e.target.value === "" ? 0 : parseInt(e.target.value) })} required />
             </div>
           </div>
           <div className="space-y-2">

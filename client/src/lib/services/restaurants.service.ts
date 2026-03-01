@@ -12,14 +12,14 @@ import type {
 export const restaurantsApi = {
   // Get all restaurants with pagination
   getAll: (params?: PaginationParams) => {
-    return apiClient.get<PaginatedResponse<Restaurant>>("/admin/restaurants", {
+    return apiClient.get<PaginatedResponse<Restaurant>>("/client/restaurants", {
       params,
     });
   },
 
   // Get restaurant by ID
   getById: (id: string) => {
-    return apiClient.get<ApiResponse<Restaurant>>(`/admin/restaurants/${id}`);
+    return apiClient.get<ApiResponse<Restaurant>>(`/client/restaurants/${id}`);
   },
 
   // Create new restaurant
