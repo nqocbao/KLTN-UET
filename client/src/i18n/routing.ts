@@ -16,6 +16,7 @@ export const routing = defineRouting({
     "/hotels": "/hotels",
     "/flights": "/flights",
     "/tours": "/tours",
+    "/tours": "/tours",
     "/admin": "/admin",
     "/admin/tours": "/admin/tours",
     "/admin/users": "/admin/users",
