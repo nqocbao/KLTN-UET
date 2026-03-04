@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Star, Users, Clock, MapPin, Wifi, User, Shield, Coffee } from "lucide-react";
+import { Star, Users, Clock, MapPin, Wifi, User, Shield, Coffee, Phone, Heart } from "lucide-react";
+import { ContactDialog } from "@/components/common/ContactDialog";
 
 interface AirportTransferSearchCardProps {
   transfer: {
@@ -29,7 +31,23 @@ const featureIcons: Record<string, React.ComponentType<{ className?: string }>> 
 };
 
 export function AirportTransferSearchCard({ transfer }: AirportTransferSearchCardProps) {
+  const [showContact, setShowContact] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
+    <>
+    <ContactDialog
+      open={showContact}
+      onOpenChange={setShowContact}
+      itemType="airport-transfer"
+      itemName={transfer.service_name}
+    />
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
       <div className="flex flex-col md:flex-row gap-6">
         {/* Vehicle Info */}
@@ -104,11 +122,29 @@ export function AirportTransferSearchCard({ transfer }: AirportTransferSearchCar
             </div>
             <div className="text-xs text-gray-500 mt-1">/ xe</div>
           </div>
-          <Button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700">
-            Đặt ngay
-          </Button>
+          <div className="flex flex-col gap-2 w-full md:w-auto">
+            <Button 
+              className="w-full bg-blue-600 hover:bg-blue-700"
+              onClick={() => setShowContact(true)}
+            >
+              <Phone className="w-4 h-4 mr-2" />
+              Liên hệ tư vấn
+            </Button>
+            {isLoggedIn && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                className={`w-full ${isSaved ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-600'}`}
+                onClick={() => setIsSaved(!isSaved)}
+              >
+                <Heart className={`w-4 h-4 mr-1 ${isSaved ? 'fill-red-500' : ''}`} />
+                {isSaved ? 'Đã lưu' : 'Lưu yêu thích'}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>
+    </>
   );
 }

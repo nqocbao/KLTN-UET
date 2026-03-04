@@ -19,11 +19,9 @@ export default function AccountLayout({ children }: AccountLayoutProps) {
 
   // Map pathnames to labels
   const getPageLabel = (path: string) => {
-    if (path.includes("/orders")) return "Đơn hàng của tôi";
-    if (path.includes("/points")) return "VivuPoint";
-    if (path.includes("/vouchers")) return "Voucher của tôi";
+    if (path.includes("/favourites")) return "Đã lưu yêu thích";
     if (path.includes("/reviews")) return "Nhận xét của tôi";
-    if (path.includes("/vacations")) return "Kỳ nghỉ của tôi";
+    if (path.includes("/recently-viewed")) return "Xem gần đây";
     return "Hồ sơ của tôi"; // Default
   };
 

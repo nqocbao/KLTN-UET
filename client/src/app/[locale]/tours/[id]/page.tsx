@@ -15,6 +15,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toursApi } from "@/lib/services";
+import { ContactDialog } from "@/components/common/ContactDialog";
+import { addRecentlyViewed } from "@/lib/recently-viewed";
 import type { Tour, ItineraryDay } from "@/types/api";
 import { 
   MapPin, 
@@ -32,6 +34,8 @@ import {
   Minus,
   Plus,
   Phone,
+  Heart,
+  Share2,
   Search,
   Filter
 } from "lucide-react";
@@ -123,6 +127,17 @@ export default function TourDetailPage() {
   const [isSticky, setIsSticky] = useState(false);
   const [sidebarTop, setSidebarTop] = useState(0);
 
+  // Contact & Save
+  const [showContactDialog, setShowContactDialog] = useState(false);
+  const [isTourSaved, setIsTourSaved] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [showCopied, setShowCopied] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   useEffect(() => {
     const fetchTour = async () => {
       setLoading(true);
@@ -130,6 +145,17 @@ export default function TourDetailPage() {
         const res = await toursApi.getById(tourId);
         if (res.success && res.data) {
           setTour(res.data);
+          // Track recently viewed
+          addRecentlyViewed({
+            id: res.data._id,
+            type: "tour",
+            name: res.data.name,
+            image: res.data.images?.[0],
+            location: res.data.departure_location,
+            price: res.data.adult_price,
+            rating: res.data.average_rating,
+            url: `/tours/${res.data._id}`,
+          });
         }
       } catch (error) {
         console.error("Failed to fetch tour", error);
@@ -250,6 +276,12 @@ export default function TourDetailPage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      <ContactDialog
+        open={showContactDialog}
+        onOpenChange={setShowContactDialog}
+        itemType="tour"
+        itemName={tour?.name}
+      />
       <Header variant="blue" />
       
       <main className="pt-[100px] px-4 md:px-48">
@@ -723,10 +755,38 @@ export default function TourDetailPage() {
 
 
                   {/* CTA Button */}
-                  <div className="p-4 pt-0">
-                    <Button className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]">
-                      Yêu cầu đặt
+                  <div className="p-4 pt-0 space-y-2">
+                    <Button 
+                      className="w-full h-12 bg-orange-500 hover:bg-orange-600 text-white font-bold text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02]"
+                      onClick={() => setShowContactDialog(true)}
+                    >
+                      <Phone className="w-5 h-5 mr-2" />
+                      Liên hệ tư vấn
                     </Button>
+                    <div className="flex gap-2">
+                      {isLoggedIn && (
+                        <Button 
+                          variant="outline" 
+                          className={`flex-1 ${isTourSaved ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-600'}`}
+                          onClick={() => setIsTourSaved(!isTourSaved)}
+                        >
+                          <Heart className={`w-4 h-4 mr-2 ${isTourSaved ? 'fill-red-500' : ''}`} />
+                          {isTourSaved ? 'Đã lưu' : 'Lưu yêu thích'}
+                        </Button>
+                      )}
+                      <Button 
+                        variant="outline" 
+                        className={`${isLoggedIn ? '' : 'flex-1'} text-gray-600 relative`}
+                        onClick={() => {
+                          navigator.clipboard.writeText(window.location.href);
+                          setShowCopied(true);
+                          setTimeout(() => setShowCopied(false), 2000);
+                        }}
+                      >
+                        <Share2 className="w-4 h-4 mr-2" />
+                        {showCopied ? 'Đã copy link!' : 'Chia sẻ'}
+                      </Button>
+                    </div>
                   </div>
                 </Card>
 

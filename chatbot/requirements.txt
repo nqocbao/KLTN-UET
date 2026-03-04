@@ -37,8 +37,8 @@ pyyaml==6.0
 requests==2.31.0
 
 # === DATA & ML ===
-numpy==1.24.3
-scikit-learn==1.3.2
+numpy==1.23.5
+scikit-learn==1.1.3
 
 # === OPTIONAL: Advanced Vietnamese NLP ===
 # transformers==4.35.0  # For PhoBERT, ViT5

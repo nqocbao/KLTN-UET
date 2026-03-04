@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Plane, Luggage, Briefcase } from "lucide-react";
+import { Plane, Luggage, Briefcase, Phone, Heart } from "lucide-react";
+import { ContactDialog } from "@/components/common/ContactDialog";
 
 export interface Flight {
   id: string;
@@ -25,7 +27,23 @@ interface FlightSearchCardProps {
 }
 
 export function FlightSearchCard({ flight }: FlightSearchCardProps) {
+  const [showContact, setShowContact] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
+    <>
+    <ContactDialog
+      open={showContact}
+      onOpenChange={setShowContact}
+      itemType="flight"
+      itemName={`${flight.airline} - ${flight.flightNumber}`}
+    />
     <div className={`bg-white rounded-xl shadow-sm border ${flight.isBest ? "border-red-200" : "border-gray-200"} overflow-hidden hover:shadow-md transition-shadow`}>
       {/* Best Banner */}
       {flight.isBest && (
@@ -96,9 +114,24 @@ export function FlightSearchCard({ flight }: FlightSearchCardProps) {
               <div className="text-xs text-gray-400">/khách</div>
             </div>
 
-            <Button className="w-full mt-4 bg-[#007ce8] hover:bg-[#006bb3] font-bold">
-               Chọn
+            <Button 
+              className="w-full mt-2 bg-[#007ce8] hover:bg-[#006bb3] font-bold"
+              onClick={() => setShowContact(true)}
+            >
+              <Phone className="w-4 h-4 mr-2" />
+              Liên hệ
             </Button>
+            {isLoggedIn && (
+              <Button 
+                variant="ghost" 
+                size="sm"
+                className={`w-full h-7 text-xs mt-1 ${isSaved ? 'text-red-500' : 'text-gray-500'}`}
+                onClick={() => setIsSaved(!isSaved)}
+              >
+                <Heart className={`w-3 h-3 mr-1 ${isSaved ? 'fill-red-500' : ''}`} />
+                {isSaved ? 'Đã lưu' : 'Lưu yêu thích'}
+              </Button>
+            )}
          </div>
       </div>
       
@@ -111,5 +144,6 @@ export function FlightSearchCard({ flight }: FlightSearchCardProps) {
          <span className="hover:text-blue-600 cursor-pointer">Khuyến mãi</span>
       </div>
     </div>
+    </>
   );
 }

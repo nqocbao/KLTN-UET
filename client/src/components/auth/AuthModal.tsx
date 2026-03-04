@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Mail, Phone, Loader2 } from "lucide-react";
+import { Mail, Phone, Loader2, CheckCircle2 } from "lucide-react";
 
 // Inline SVGs for brand icons
 const GoogleIcon = () => (
@@ -46,6 +46,24 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [redirectTarget, setRedirectTarget] = useState<string | null>(null);
+
+  // Auto redirect after success animation
+  useEffect(() => {
+    if (showSuccess) {
+      const timer = setTimeout(() => {
+        onOpenChange(false);
+        if (redirectTarget) {
+          router.push(redirectTarget);
+        } else {
+          window.location.reload();
+        }
+      }, 2500);
+      return () => clearTimeout(timer);
+    }
+  }, [showSuccess, redirectTarget, onOpenChange, router]);
 
   const handleLogin = async () => {
     setError("");
@@ -67,13 +85,14 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.data));
         
-        onOpenChange(false);
+        // Show success popup before redirect
+        setSuccessMessage("Đăng nhập thành công!");
+        setShowSuccess(true);
         
-        // Redirect based on user role
         if (data.data.role === "admin") {
-          router.push("/vi/admin");
+          setRedirectTarget("/vi/admin");
         } else {
-          window.location.reload(); // Reload to update UI
+          setRedirectTarget(null); // will reload
         }
       } else {
         setError(data.message || "Đăng nhập thất bại!");
@@ -122,8 +141,10 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
         localStorage.setItem("token", data.token);
         localStorage.setItem("user", JSON.stringify(data.data));
         
-        onOpenChange(false);
-        window.location.reload(); // Reload to update UI
+        // Show success popup before redirect
+        setSuccessMessage("Đăng ký thành công!");
+        setShowSuccess(true);
+        setRedirectTarget(null); // will reload
       } else {
         setError(data.message || "Đăng ký thất bại!");
       }
@@ -143,6 +164,62 @@ export function AuthModal({ open, onOpenChange, defaultTab = "login" }: AuthModa
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px] p-0 overflow-hidden bg-white dark:bg-gray-900 max-h-[90vh]">
+        {/* Success Overlay */}
+        {showSuccess && (
+          <div className="absolute inset-0 z-50 flex flex-col items-center justify-center bg-white dark:bg-gray-900 animate-in fade-in duration-300">
+            {/* Animated checkmark circle */}
+            <div className="relative mb-6">
+              <div className="w-24 h-24 rounded-full bg-green-50 flex items-center justify-center animate-in zoom-in duration-500">
+                <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center animate-in zoom-in duration-500 delay-150">
+                  <svg
+                    className="w-12 h-12 text-green-500"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path
+                      d="M5 13l4 4L19 7"
+                      className="animate-draw-check"
+                      style={{
+                        strokeDasharray: 24,
+                        strokeDashoffset: 24,
+                        animation: "drawCheck 0.5s ease-out 0.4s forwards",
+                      }}
+                    />
+                  </svg>
+                </div>
+              </div>
+              {/* Pulse ring */}
+              <div className="absolute inset-0 w-24 h-24 rounded-full bg-green-200 animate-ping opacity-20" />
+            </div>
+
+            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 animate-in slide-in-from-bottom-4 duration-500 delay-300">
+              {successMessage}
+            </h3>
+            <p className="text-sm text-gray-500 animate-in slide-in-from-bottom-4 duration-500 delay-500">
+              Đang chuyển hướng tới trang chủ...
+            </p>
+
+            {/* Loading dots */}
+            <div className="flex gap-1.5 mt-4 animate-in fade-in duration-500 delay-700">
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: "0s" }} />
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: "0.15s" }} />
+              <span className="w-2 h-2 bg-green-400 rounded-full animate-bounce" style={{ animationDelay: "0.3s" }} />
+            </div>
+
+            <style jsx>{`
+              @keyframes drawCheck {
+                to {
+                  stroke-dashoffset: 0;
+                }
+              }
+            `}</style>
+          </div>
+        )}
+
         <div className={`p-6 ${activeTab === 'register' ? 'overflow-y-auto max-h-[calc(90vh-2px)] [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]' : ''}`}>
           <DialogHeader className="mb-4">
             <DialogTitle className="text-xl font-bold text-center">

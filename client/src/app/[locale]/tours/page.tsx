@@ -258,7 +258,7 @@ export default function ToursLandingPage() {
                         value={guests === 0 ? "" : guests}
                         onChange={(e) => setGuests(e.target.value === "" ? 0 : parseInt(e.target.value))}
                         onBlur={(e) => { if (e.target.value === "" || guests < 1) setGuests(1); }}
-                        className="border-none focus-visible:ring-0 text-sm font-bold p-0" 
+                        className="border-none focus-visible:ring-0 focus-visible:ring-offset-0 shadow-none text-sm font-bold p-0" 
                      />
                   </div>
                </div>

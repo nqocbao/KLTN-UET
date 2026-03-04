@@ -1,7 +1,9 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Star, Users, Clock, MapPin, Wifi, Wind, Coffee, Tv } from "lucide-react";
+import { Star, Users, Clock, MapPin, Wifi, Wind, Coffee, Tv, Phone, Heart } from "lucide-react";
+import { ContactDialog } from "@/components/common/ContactDialog";
 
 interface BusSearchCardProps {
   bus: {
@@ -35,7 +37,23 @@ const amenityIcons: Record<string, React.ComponentType<{ className?: string }>> 
 };
 
 export function BusSearchCard({ bus }: BusSearchCardProps) {
+  const [showContact, setShowContact] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
+    <>
+    <ContactDialog
+      open={showContact}
+      onOpenChange={setShowContact}
+      itemType="bus"
+      itemName={bus.company_name || bus.service_name}
+    />
     <div className="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow p-6">
       <div className="flex flex-col md:flex-row gap-6">
         {/* Company Info */}
@@ -112,11 +130,29 @@ export function BusSearchCard({ bus }: BusSearchCardProps) {
             </div>
             <div className="text-xs text-gray-500 mt-1">/ khách</div>
           </div>
-          <Button className="w-full md:w-auto bg-blue-600 hover:bg-blue-700">
-            Chọn chuyến
-          </Button>
+          <div className="flex flex-col gap-2 w-full md:w-auto">
+            <Button 
+              className="w-full bg-blue-600 hover:bg-blue-700"
+              onClick={() => setShowContact(true)}
+            >
+              <Phone className="w-4 h-4 mr-2" />
+              Liên hệ tư vấn
+            </Button>
+            {isLoggedIn && (
+              <Button 
+                variant="outline" 
+                size="sm"
+                className={`w-full ${isSaved ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-600'}`}
+                onClick={() => setIsSaved(!isSaved)}
+              >
+                <Heart className={`w-4 h-4 mr-1 ${isSaved ? 'fill-red-500' : ''}`} />
+                {isSaved ? 'Đã lưu' : 'Lưu yêu thích'}
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>
+    </>
   );
 }

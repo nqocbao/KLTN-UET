@@ -1,7 +1,9 @@
 "use client";
 
-import { Star, MapPin, Wifi, Utensils, Car, CloudCog } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Star, MapPin, Wifi, Utensils, Car, CloudCog, Phone, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ContactDialog } from "@/components/common/ContactDialog";
 import type { Hotel } from "@/types/api";
 
 interface HotelSearchCardProps {
@@ -10,6 +12,15 @@ interface HotelSearchCardProps {
 }
 
 export function HotelSearchCard({ hotel, nights = 1 }: HotelSearchCardProps) {
+  const [showContact, setShowContact] = useState(false);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
+
   // Mock discount logic for display purposes
   const perNightPrice = hotel.priceTwoSingleBed || 0;
   const originalPerNightPrice = perNightPrice * 1.2;
@@ -21,6 +32,13 @@ export function HotelSearchCard({ hotel, nights = 1 }: HotelSearchCardProps) {
   console.log("hotel.images =>>>>>>", hotel.images)
 
   return (
+    <>
+    <ContactDialog
+      open={showContact}
+      onOpenChange={setShowContact}
+      itemType="hotel"
+      itemName={hotel.name}
+    />
     <div className="flex flex-col md:flex-row bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-lg transition-shadow md:h-[240px]">
       {/* Image Section */}
       <div className="w-full md:w-[320px] h-[200px] md:h-full shrink-0 relative flex gap-0.5">
@@ -119,10 +137,26 @@ export function HotelSearchCard({ hotel, nights = 1 }: HotelSearchCardProps) {
            Chưa bao gồm thuế và phí
          </div>
 
-         <Button className="w-full bg-[#ff5e1f] hover:bg-[#e04f15] text-white font-bold h-10">
-           Chọn phòng
+         <Button 
+           className="w-full bg-[#ff5e1f] hover:bg-[#e04f15] text-white font-bold h-10"
+           onClick={() => setShowContact(true)}
+         >
+           <Phone className="w-4 h-4 mr-2" />
+           Liên hệ đặt phòng
          </Button>
+         {isLoggedIn && (
+           <Button 
+             variant="outline" 
+             size="sm"
+             className={`w-full h-8 text-xs mt-2 ${isSaved ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-600'}`}
+             onClick={() => setIsSaved(!isSaved)}
+           >
+             <Heart className={`w-3 h-3 mr-1 ${isSaved ? 'fill-red-500' : ''}`} />
+             {isSaved ? 'Đã lưu' : 'Lưu yêu thích'}
+           </Button>
+         )}
       </div>
     </div>
+    </>
   );
 }

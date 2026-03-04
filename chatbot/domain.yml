@@ -202,16 +202,16 @@ responses:
     - text: "Tiện nghi phổ biến gồm: WiFi miễn phí, điều hòa, minibar, phòng tắm riêng, bữa sáng. Bạn muốn tìm khách sạn có tiện nghi cụ thể nào?"
 
   utter_book_hotel:
-    - text: "Để đặt phòng, bạn hãy truy cập trang chi tiết khách sạn trên website và chọn ngày nhận/trả phòng. Tôi có thể giúp bạn tìm khách sạn phù hợp trước!"
-    - text: "Bạn có thể đặt phòng trực tiếp trên website. Cho tôi biết bạn muốn đặt ở đâu, ngày nào, tôi sẽ tìm phòng tốt nhất cho bạn!"
+    - text: "Hiện tại bạn có thể liên hệ tư vấn đặt phòng qua hotline 1900 1234, Zalo 0123 456 789 hoặc nhấn nút 'Liên hệ đặt phòng' trên trang khách sạn. Đội ngũ tư vấn sẽ hỗ trợ bạn nhanh nhất!"
+    - text: "Để đặt phòng khách sạn, bạn hãy liên hệ đội ngũ tư vấn qua hotline 1900 1234 hoặc Zalo 0123 456 789 nhé! Bạn cũng có thể lưu khách sạn yêu thích để xem lại sau."
 
   utter_book_flight:
-    - text: "Để đặt vé máy bay, bạn hãy truy cập mục Chuyến bay trên website. Tôi có thể giúp bạn tìm chuyến bay phù hợp trước nhé!"
-    - text: "Bạn có thể đặt vé bay trên website. Cho tôi biết điểm đi, điểm đến và ngày bay, tôi sẽ tìm chuyến bay tốt nhất!"
+    - text: "Để đặt vé máy bay, bạn hãy liên hệ đội ngũ tư vấn qua hotline 1900 1234 hoặc Zalo 0123 456 789. Nhấn nút 'Liên hệ' trên trang chuyến bay để được hỗ trợ nhanh nhất!"
+    - text: "Bạn có thể liên hệ tư vấn đặt vé qua hotline 1900 1234, Zalo 0123 456 789 hoặc email support@vivutravel.vn. Tôi có thể giúp bạn tìm chuyến bay phù hợp trước nhé!"
 
   utter_book_tour:
-    - text: "Để đặt tour, bạn hãy chọn tour phù hợp trên website và đặt lịch. Tôi có thể giúp bạn tìm tour trước nhé!"
-    - text: "Bạn có thể đặt tour trực tiếp trên website. Cho tôi biết bạn muốn đi đâu, bao lâu, tôi sẽ gợi ý tour tốt nhất!"
+    - text: "Để đặt tour, bạn hãy liên hệ đội ngũ tư vấn qua hotline 1900 1234 hoặc Zalo 0123 456 789. Ngoài ra bạn có thể nhấn nút 'Liên hệ tư vấn' trên trang tour để được hỗ trợ!"
+    - text: "Bạn có thể liên hệ tư vấn đăng ký tour qua hotline 1900 1234, Zalo 0123 456 789 hoặc email support@vivutravel.vn. Tôi có thể giúp bạn tìm tour phù hợp trước nhé!"
 
   utter_ask_location:
     - text: "Bạn muốn biết thông tin về địa điểm nào? Tôi có thể giới thiệu các điểm đến du lịch nổi tiếng tại Việt Nam và quốc tế."

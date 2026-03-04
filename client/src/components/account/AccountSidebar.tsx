@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import { Link } from "@/i18n/routing";
-import { User, Gift, ShoppingBag, Ticket } from "lucide-react";
+import { User, Heart, MessageSquare, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SidebarItem {
@@ -18,19 +18,19 @@ const sidebarItems: SidebarItem[] = [
     icon: <User className="w-5 h-5" />,
   },
   {
-    href: "/account/points",
-    label: "VivuPoint",
-    icon: <Gift className="w-5 h-5" />,
+    href: "/account/favourites",
+    label: "Đã lưu yêu thích",
+    icon: <Heart className="w-5 h-5" />,
   },
   {
-    href: "/account/orders",
-    label: "Đơn hàng của tôi",
-    icon: <ShoppingBag className="w-5 h-5" />,
+    href: "/account/reviews",
+    label: "Nhận xét của tôi",
+    icon: <MessageSquare className="w-5 h-5" />,
   },
   {
-    href: "/account/vouchers",
-    label: "Voucher của tôi",
-    icon: <Ticket className="w-5 h-5" />,
+    href: "/account/recently-viewed",
+    label: "Xem gần đây",
+    icon: <Clock className="w-5 h-5" />,
   },
 ];
 
@@ -47,7 +47,7 @@ export function AccountSidebar() {
         {sidebarItems.map((item) => (
           <li key={item.href}>
             <Link
-              href={item.href as "/account/profile" | "/account/orders" | "/account/points" | "/account/vouchers" | "/account/vacations" | "/account/reviews"}
+              href={item.href as "/account/profile" | "/account/favourites" | "/account/reviews" | "/account/recently-viewed"}
               className={cn(
                 "flex items-center gap-3 px-5 py-4 transition-colors",
                 isActive(item.href)

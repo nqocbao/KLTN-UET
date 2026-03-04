@@ -439,7 +439,6 @@ export function LocationAutocomplete({
           placeholder={placeholder}
           className="w-full px-3 py-2 pr-8 border-0 bg-transparent focus:outline-none text-gray-900 font-medium placeholder:text-gray-400 placeholder:font-normal"
         />
-        <Search className="absolute right-2 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
       </div>
 
       {typeof window !== 'undefined' && createPortal(dropdownContent, document.body)}
