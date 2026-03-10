@@ -21,12 +21,12 @@ function formatDateShort(date: Date | null | undefined): string {
 }
 
 const TOUR_PARTNERS = [
-  { name: "Saigontourist", src: "/images/partners/saigontourist.png" },
-  { name: "Vietravel", src: "/images/partners/Vietravel_Logo.png" },
-  { name: "TST Tourist", src: "/images/partners/TST tourist.webp" },
-  { name: "Fiditour", src: "/images/partners/Logo-Fiditour-Sl.webp" },
-  { name: "Hanoitourist", src: "/images/partners/Hanoitourist.png" },
-  { name: "BenThanh Tourist", src: "/images/partners/BenThanh Tourist.png" },
+  { name: "Saigontourist", src: "https://saigontourist.net/uploads/noidung/logo-saigontourist.png" },
+  { name: "Vietravel", src: "https://cdn.haitrieu.com/wp-content/uploads/2022/01/Logo-Vietravel.png" },
+  { name: "TST Tourist", src: "https://tsttourist.vn/wp-content/uploads/2023/05/TST-TOURIST-LOGO-01.png" },
+  { name: "Fiditour", src: "https://fiditour.com.vn/images/logo.png" },
+  { name: "Hanoitourist", src: "https://hanoitourist.vn/images/logo.png" },
+  { name: "BenThanh Tourist", src: "https://benthanhtravel.com/upload/photo/logo.png" }
 ];
 
 const PROMO_TABS = ["Mã giảm hot", "Tour nội địa", "Tour quốc tế", "Tour miền Trung"];
@@ -98,16 +98,16 @@ const FEATURED_TOURS = [
 ];
 
 const PAYMENT_PARTNERS = [
-  { name: "Mastercard", src: "/images/partners/Mastercard-logo.svg" },
-  { name: "JCB", src: "/images/partners/JCB_logo.svg" },
-  { name: "VISA", src: "/images/partners/visa.png" },
-  { name: "AMEX", src: "/images/partners/American_Express_logo_(2018).svg" },
-  { name: "VietQR", src: "/images/partners/VietQR_Logo.svg.png" },
-  { name: "Momo", src: "/images/partners/momo.png" },
-  { name: "Vietcombank", src: "/images/partners/vietcombank.png" },
-  { name: "VIB", src: "/images/partners/vib.png" },
-  { name: "Techcombank", src: "/images/partners/techcombank.png" },
-  { name: "MB", src: "/images/partners/mb.png" },
+  { name: "Mastercard", src: "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" },
+  { name: "JCB", src: "https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg" },
+  { name: "VISA", src: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" },
+  { name: "AMEX", src: "https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" },
+  { name: "VietQR", src: "https://vietqr.vn/img/vietqr_logo.svg" },
+  { name: "Momo", src: "https://developers.momo.vn/v3/assets/images/logo.svg" },
+  { name: "Vietcombank", src: "https://inkythuatso.com/uploads/thumbnails/800/2021/11/logo-vietcombank-inkythuatso-01-30-09-21-50.jpg" },
+  { name: "VIB", src: "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Logo-VIB-Ori.png" },
+  { name: "Techcombank", src: "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Logo-Techcombank-Ori.png" },
+  { name: "MB", src: "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Logo-MBBank-B-H.png" }
 ];
 
 const WHY_BOOK_REASONS = [
@@ -382,44 +382,46 @@ export default function ToursLandingPage() {
 
         {/* Partners Section */}
         <section className="container mx-auto px-4 py-16 border-t border-gray-100">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-12 gap-y-6">
-              {/* Row 1: Headers */}
-              <div>
-                 <h3 className="text-xl font-bold text-gray-900 mb-2">Đối tác du lịch</h3>
-                 <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-4">Các công ty lữ hành uy tín hàng đầu</p>
-                 <p className="text-sm text-gray-600 leading-relaxed">
-                    Chúng tôi hợp tác với các công ty lữ hành uy tín nhất Việt Nam để mang đến cho bạn những chuyến đi an toàn, chất lượng cao.
-                 </p>
-              </div>
-              <div>
-                 <h3 className="text-xl font-bold text-gray-900 mb-2">Đối tác thanh toán</h3>
-                 <p className="text-sm text-gray-600 leading-relaxed">
-                    Chúng tôi hợp tác với các nhà cung cấp dịch vụ thanh toán hàng đầu để đảm bảo mọi giao dịch đều suôn sẻ, an toàn và dễ dàng.
-                 </p>
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
+              <div className="space-y-6">
+                 <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Đối tác du lịch</h3>
+                    <p className="text-xs text-gray-500 uppercase font-bold tracking-widest mb-4">Các công ty lữ hành uy tín hàng đầu</p>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                       Chúng tôi hợp tác với các công ty lữ hành uy tín nhất Việt Nam để mang đến cho bạn những chuyến đi an toàn, chất lượng cao.
+                    </p>
+                 </div>
+                 <div className="grid grid-cols-3 md:grid-cols-3 gap-6">
+                    {TOUR_PARTNERS.map((partner, idx) => (
+                      <div key={idx} className="h-16 flex items-center justify-center group cursor-pointer">
+                        <img 
+                          src={partner.src} 
+                          alt={partner.name}
+                          className="h-full w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                        />
+                      </div>
+                    ))}
+                 </div>
               </div>
 
-              {/* Row 2: Logos — aligned at the same vertical level */}
-              <div className="grid grid-cols-3 gap-6">
-                 {TOUR_PARTNERS.map((partner, idx) => (
-                   <div key={idx} className="h-16 flex items-center justify-center group cursor-pointer">
-                     <img 
-                       src={partner.src} 
-                       alt={partner.name}
-                       className="h-full w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
-                     />
-                   </div>
-                 ))}
-              </div>
-              <div className="grid grid-cols-4 md:grid-cols-5 gap-6">
-                 {PAYMENT_PARTNERS.map((partner, idx) => (
-                   <div key={idx} className="h-16 flex items-center justify-center group cursor-pointer">
-                     <img 
-                       src={partner.src} 
-                       alt={partner.name}
-                       className="h-full w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
-                     />
-                   </div>
-                 ))}
+              <div className="space-y-6">
+                 <div>
+                    <h3 className="text-xl font-bold text-gray-900 mb-2">Đối tác thanh toán</h3>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                       Chúng tôi hợp tác với các nhà cung cấp dịch vụ thanh toán hàng đầu để đảm bảo mọi giao dịch đều suôn sẻ, an toàn và dễ dàng.
+                    </p>
+                 </div>
+                 <div className="grid grid-cols-4 md:grid-cols-5 gap-6">
+                    {PAYMENT_PARTNERS.map((partner, idx) => (
+                      <div key={idx} className="h-12 flex items-center justify-center group cursor-pointer">
+                        <img 
+                          src={partner.src} 
+                          alt={partner.name}
+                          className="h-full w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-300"
+                        />
+                      </div>
+                    ))}
+                 </div>
               </div>
            </div>
         </section>

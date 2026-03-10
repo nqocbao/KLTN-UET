@@ -108,16 +108,16 @@ const FEATURED_HOTELS = [
 ];
 
 const PAYMENT_PARTNERS = [
-  { name: "Mastercard", src: "/images/partners/Mastercard-logo.svg" },
-  { name: "JCB", src: "/images/partners/JCB_logo.svg" },
-  { name: "VISA", src: "/images/partners/visa.png" },
-  { name: "AMEX", src: "/images/partners/American_Express_logo_(2018).svg" },
-  { name: "VietQR", src: "/images/partners/VietQR_Logo.svg.png" },
-  { name: "Momo", src: "/images/partners/momo.png" },
-  { name: "Vietcombank", src: "/images/partners/vietcombank.png" },
-  { name: "VIB", src: "/images/partners/vib.png" },
-  { name: "Techcombank", src: "/images/partners/techcombank.png" },
-  { name: "MB", src: "/images/partners/mb.png" },
+  { name: "Mastercard", src: "https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg" },
+  { name: "JCB", src: "https://upload.wikimedia.org/wikipedia/commons/4/40/JCB_logo.svg" },
+  { name: "VISA", src: "https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg" },
+  { name: "AMEX", src: "https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg" },
+  { name: "VietQR", src: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/VietQR_Logo.svg/1280px-VietQR_Logo.svg.png" },
+  { name: "Momo", src: "https://cdn.haitrieu.com/wp-content/uploads/2022/10/Logo-MoMo-Square.png" },
+  { name: "Vietcombank", src: "https://upload.wikimedia.org/wikipedia/vi/thumb/9/9d/Vietcombank_Logo.svg/3840px-Vietcombank_Logo.svg.png" },
+  { name: "VIB", src: "https://upload.wikimedia.org/wikipedia/commons/5/55/LOGO-VIB-Blue.png" },
+  { name: "Techcombank", src: "https://upload.wikimedia.org/wikipedia/commons/7/7c/Techcombank_logo.png" },
+  { name: "MB", src: "https://cdn.haitrieu.com/wp-content/uploads/2022/02/Logo-MB-Bank-MBB.png" }
 ];
 
 const WHY_BOOK_REASONS = [
@@ -217,7 +217,7 @@ export default function HotelsLandingPage() {
                      <MapPin className="ml-3 text-gray-400 w-5 h-5" />
                      <Input 
                         placeholder="Thành phố, khách sạn, điểm đến" 
-                        className="border-none focus-visible:ring-0 text-sm font-medium shadow-none" 
+                        className="border-none focus-visible:ring-0 text-sm font-medium" 
                      />
                   </div>
                </div>
