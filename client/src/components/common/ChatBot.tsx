@@ -5,10 +5,44 @@ import { useState, useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
+interface CardItem {
+  name: string;
+  image_url?: string;
+  rating?: number;
+  price_text?: string;
+  available_rooms?: number;
+  duration?: number;
+  departure?: string;
+  arrival?: string;
+  dep_time?: string;
+  duration_text?: string;
+}
+
 interface Message {
-  text: string;
+  text?: string;
+  cards?: { type: string; items: CardItem[] };
   sender: "user" | "bot";
   timestamp: Date;
+}
+
+// Simple inline markdown renderer: handles **bold** and line breaks
+function renderMarkdown(text: string): React.ReactNode {
+  return text.split("\n").map((line, lineIndex, arr) => {
+    const parts = line.split(/(\*\*[^*]+\*\*)/g);
+    const rendered = parts.map((part, i) =>
+      part.startsWith("**") && part.endsWith("**") ? (
+        <strong key={i}>{part.slice(2, -2)}</strong>
+      ) : (
+        <span key={i}>{part}</span>
+      )
+    );
+    return (
+      <span key={lineIndex}>
+        {rendered}
+        {lineIndex < arr.length - 1 && <br />}
+      </span>
+    );
+  });
 }
 
 // Generate a persistent sender ID for RASA conversation tracking
@@ -88,12 +122,22 @@ export function ChatBot() {
       const data = await response.json();
 
       // RASA returns array of bot responses
+      console.log("[ChatBot] raw RASA response:", JSON.stringify(data));
       if (Array.isArray(data) && data.length > 0) {
-        const botMessages: Message[] = data.map((msg: any) => ({
-          text: msg.text || msg.custom?.text || "Xin lỗi, tôi không hiểu.",
-          sender: "bot" as const,
-          timestamp: new Date(),
-        }));
+        const botMessages: Message[] = data.map((msg: any) => {
+          if (msg.custom?.type && Array.isArray(msg.custom?.items)) {
+            return {
+              cards: { type: msg.custom.type, items: msg.custom.items },
+              sender: "bot" as const,
+              timestamp: new Date(),
+            };
+          }
+          return {
+            text: msg.text || msg.custom?.text || "Xin lỗi, tôi không hiểu.",
+            sender: "bot" as const,
+            timestamp: new Date(),
+          };
+        });
         setMessages((prev) => [...prev, ...botMessages]);
       } else {
         // Fallback response
@@ -169,25 +213,96 @@ export function ChatBot() {
                 }`}
               >
                 <div
-                  className={`p-3 rounded-2xl shadow-sm text-sm max-w-[85%] ${
-                    message.sender === "user"
-                      ? "bg-[#0194f3] text-white rounded-tr-none"
-                      : "bg-white text-gray-700 rounded-tl-none"
+                  className={`rounded-2xl text-sm max-w-[88%] ${
+                    message.cards
+                      ? "bg-transparent"
+                      : message.sender === "user"
+                      ? "bg-[#0194f3] text-white rounded-tr-none p-3 shadow-sm"
+                      : "bg-white text-gray-700 rounded-tl-none p-3 shadow-sm"
                   }`}
                 >
-                  <p className="whitespace-pre-wrap">{message.text}</p>
-                  <p
-                    className={`text-[10px] mt-1 ${
-                      message.sender === "user"
-                        ? "text-white/70 text-right"
-                        : "text-gray-400"
-                    }`}
-                  >
-                    {message.timestamp.toLocaleTimeString("vi-VN", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </p>
+                  {message.cards ? (
+                    <div className="flex flex-col gap-2">
+                      {message.cards.items.map((item: CardItem, idx: number) => (
+                        <div key={idx} className="bg-white border border-gray-100 rounded-xl shadow-sm overflow-hidden">
+                          {item.image_url && (
+                            <img
+                              src={item.image_url}
+                              alt={item.name}
+                              className="w-full h-28 object-cover"
+                              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+                            />
+                          )}
+                          <div className="p-3">
+                          <p className="font-semibold text-gray-800 text-sm leading-snug">{item.name}</p>
+                          {message.cards!.type === "hotel_cards" && (
+                            <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+                              {item.rating && (
+                                <span className="text-xs text-amber-600">⭐ {item.rating}/5</span>
+                              )}
+                              {item.available_rooms !== undefined && item.available_rooms !== null && (
+                                <span className="text-xs text-gray-500">
+                                  {item.available_rooms > 0 ? `🛏️ ${item.available_rooms} phòng` : "❌ Hết phòng"}
+                                </span>
+                              )}
+                              {item.price_text && (
+                                <span className="text-xs text-blue-600 font-semibold w-full">💰 Từ {item.price_text}/đêm</span>
+                              )}
+                            </div>
+                          )}
+                          {message.cards!.type === "tour_cards" && (
+                            <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2">
+                              {item.duration && (
+                                <span className="text-xs text-gray-500">⏱️ {item.duration} ngày</span>
+                              )}
+                              {item.rating && (
+                                <span className="text-xs text-amber-600">⭐ {item.rating}/5</span>
+                              )}
+                              {item.price_text && (
+                                <span className="text-xs text-blue-600 font-semibold w-full">💰 {item.price_text}/người</span>
+                              )}
+                            </div>
+                          )}
+                          {message.cards!.type === "flight_cards" && (
+                            <div className="mt-2 flex flex-col gap-1">
+                              {(item.departure || item.arrival) && (
+                                <p className="text-xs text-gray-600">
+                                  🛫 {item.departure} → 🛬 {item.arrival}
+                                  {item.dep_time && ` · 🕑 ${item.dep_time}`}
+                                </p>
+                              )}
+                              <div className="flex gap-x-3 flex-wrap">
+                                {item.duration_text && (
+                                  <span className="text-xs text-gray-500">⏱️ {item.duration_text}</span>
+                                )}
+                                {item.price_text && (
+                                  <span className="text-xs text-blue-600 font-semibold">💰 {item.price_text}</span>
+                                )}
+                              </div>
+                            </div>
+                          )}
+                          </div>
+                        </div>
+                      ))}
+                      <p className="text-[10px] text-gray-400 pl-1">
+                        {message.timestamp.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" })}
+                      </p>
+                    </div>
+                  ) : (
+                    <>
+                      <p className="whitespace-pre-wrap leading-relaxed">{renderMarkdown(message.text ?? "")}</p>
+                      <p
+                        className={`text-[10px] mt-1 ${
+                          message.sender === "user" ? "text-white/70 text-right" : "text-gray-400"
+                        }`}
+                      >
+                        {message.timestamp.toLocaleTimeString("vi-VN", {
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </p>
+                    </>
+                  )}
                 </div>
               </div>
             ))}

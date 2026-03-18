@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Header } from "@/components/common/Header";
 import { Footer } from "@/components/common/Footer";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { AirportAutocomplete } from "@/components/ui/airport-autocomplete";
 import { 
   Plane, 
   MapPin, 
@@ -14,15 +14,36 @@ import {
   ChevronRight, 
   ArrowRightLeft,
   Ticket,
-  Percent,
   ChevronDown
 } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
 
+// Format Date → "YYYY-MM-DD" cho API
+function formatDateParam(date: Date): string {
+  return date.toISOString().split("T")[0];
+}
+
 export default function FlightsLandingPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState("one-way");
+  const [fromValue, setFromValue] = useState("SGN");
+  const [toValue, setToValue] = useState("HAN");
+  // Default: 7 ngày tới
+  const defaultDate = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  const [searchDate, setSearchDate] = useState<string>(formatDateParam(defaultDate));
+
+  const handleSearch = () => {
+    const from = fromValue || "SGN";
+    const to = toValue || "HAN";
+    const params = new URLSearchParams({ from, to, date: searchDate });
+    router.push(`/vi/flights/search?${params.toString()}`);
+  };
+
+  const swapLocations = () => {
+    setFromValue(toValue);
+    setToValue(fromValue);
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -92,13 +113,19 @@ export default function FlightsLandingPage() {
               <div className="md:col-span-3">
                 <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Từ</div>
                 <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#469ae3] focus-within:border-[#469ae3] transition-all">
-                  <Plane className="w-5 h-5 text-gray-400 rotate-45 mr-3" />
-                  <Input placeholder="TP HCM (SGN)" className="border-none focus-visible:ring-0 p-0 font-bold" />
+                  <Plane className="w-5 h-5 text-gray-400 rotate-45 mr-3 shrink-0" />
+                  <AirportAutocomplete
+                    value={fromValue}
+                    onChange={setFromValue}
+                    placeholder="TP Hồ Chí Minh (SGN)"
+                  />
                 </div>
               </div>
 
               <div className="md:col-span-1 flex justify-center pb-2">
-                 <button className="w-10 h-10 bg-gray-50 rounded-full border border-gray-100 flex items-center justify-center hover:bg-gray-100 transition-all">
+                 <button
+                   onClick={swapLocations}
+                   className="w-10 h-10 bg-gray-50 rounded-full border border-gray-100 flex items-center justify-center hover:bg-gray-100 transition-all">
                     <ArrowRightLeft className="w-4 h-4 text-[#469ae3]" />
                  </button>
               </div>
@@ -106,23 +133,32 @@ export default function FlightsLandingPage() {
               <div className="md:col-span-3">
                 <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Đến</div>
                 <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#469ae3] focus-within:border-[#469ae3] transition-all">
-                  <Plane className="w-5 h-5 text-gray-400 -rotate-45 mr-3" />
-                  <Input placeholder="Bangkok (BKK)" className="border-none focus-visible:ring-0 p-0 font-bold" />
+                  <Plane className="w-5 h-5 text-gray-400 -rotate-45 mr-3 shrink-0" />
+                  <AirportAutocomplete
+                    value={toValue}
+                    onChange={setToValue}
+                    placeholder="Hà Nội (HAN)"
+                  />
                 </div>
               </div>
 
               <div className="md:col-span-2">
                 <div className="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-1 px-1">Ngày khởi hành</div>
                 <div className="relative h-12 border border-gray-200 rounded-lg flex items-center px-4 hover:border-[#469ae3] cursor-pointer">
-                  <Calendar className="w-5 h-5 text-gray-400 mr-3" />
-                  <span className="text-sm font-bold">22 thg 12, 2025</span>
+                  <Calendar className="w-5 h-5 text-gray-400 mr-3 shrink-0" />
+                  <input
+                    type="date"
+                    value={searchDate}
+                    onChange={(e) => setSearchDate(e.target.value)}
+                    className="text-sm font-bold bg-transparent outline-none w-full cursor-pointer"
+                  />
                 </div>
               </div>
 
               <div className="md:col-span-3">
                  <Button 
                    className="w-full h-12 bg-[#0194f3] hover:bg-[#017ccb] text-white font-bold text-lg rounded-xl"
-                   onClick={() => router.push("/vi/flights/search")}
+                   onClick={handleSearch}
                  >
                    Tìm chuyến bay
                  </Button>

@@ -1,35 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, Plane } from "lucide-react";
+import { Plane } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { apiClient } from "@/lib/api-client";
-
-interface Airport {
-  _id: string;
-  name: string;
-  code: string;
-  city: string;
-  country: string;
-}
+import { AIRPORTS, filterAirports, type AirportOption } from "@/data/airports";
 
 interface AirportAutocompleteProps {
-  value: string;
-  onChange: (value: string) => void;
+  value: string;           // IATA code, e.g. "SGN"
+  onChange: (code: string) => void;
   placeholder?: string;
   className?: string;
 }
@@ -41,115 +19,135 @@ export function AirportAutocomplete({
   className,
 }: AirportAutocompleteProps) {
   const [open, setOpen] = React.useState(false);
-  const [airports, setAirports] = React.useState<Airport[]>([]);
-  const [loading, setLoading] = React.useState(false);
-  const [searchQuery, setSearchQuery] = React.useState("");
+  const [query, setQuery] = React.useState("");
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  // Fetch airports on mount
+  // Selected airport from IATA code
+  const selected = React.useMemo(
+    () => AIRPORTS.find((a) => a.code === value) ?? null,
+    [value]
+  );
+
+  // Filtered dropdown list
+  const filtered = React.useMemo(() => filterAirports(query, 8), [query]);
+
+  // Close on outside click
   React.useEffect(() => {
-    const fetchAirports = async () => {
-      setLoading(true);
-      try {
-        const response = await apiClient.get<{ success: boolean; data: Airport[] }>(
-          "/admin/destinations?type=airport&limit=100"
-        );
-        setAirports(response.data);
-      } catch (error) {
-        console.error("Error fetching airports:", error);
-      } finally {
-        setLoading(false);
+    function handleClickOutside(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setOpen(false);
+        setQuery("");
       }
-    };
-
-    fetchAirports();
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  // Filter airports based on search
-  const filteredAirports = React.useMemo(() => {
-    if (!airports || airports.length === 0) return [];
-    if (!searchQuery) return airports;
-    
-    const query = searchQuery.toLowerCase();
-    return airports.filter(
-      (airport) =>
-        airport.name.toLowerCase().includes(query) ||
-        airport.code.toLowerCase().includes(query) ||
-        airport.city.toLowerCase().includes(query)
-    );
-  }, [airports, searchQuery]);
+  const handleFocus = () => {
+    setQuery("");
+    setOpen(true);
+  };
 
-  // Find selected airport
-  const selectedAirport = React.useMemo(() => {
-    if (!airports || airports.length === 0) return null;
-    return airports.find((airport) => airport.code === value || airport.name === value);
-  }, [airports, value]);
+  const handleSelect = (airport: AirportOption) => {
+    onChange(airport.code);
+    setQuery("");
+    setOpen(false);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Escape") {
+      setOpen(false);
+      setQuery("");
+    }
+  };
+
+  // Display text when dropdown closed
+  const displayText = selected ? `${selected.city} (${selected.code})` : "";
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="ghost"
-          role="combobox"
-          aria-expanded={open}
-          className={cn(
-            "w-full justify-start p-0 h-auto font-normal hover:bg-transparent",
-            className
+    <div ref={containerRef} className={cn("relative w-full", className)}>
+      <input
+        ref={inputRef}
+        type="text"
+        autoComplete="off"
+        spellCheck={false}
+        value={open ? query : displayText}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={handleFocus}
+        onKeyDown={handleKeyDown}
+        placeholder={placeholder}
+        className="w-full bg-transparent outline-none font-bold text-sm placeholder:font-normal placeholder:text-gray-400 text-gray-800"
+      />
+
+      {open && (
+        <div className="absolute top-[calc(100%+8px)] left-0 z-[9999] w-[320px] bg-white rounded-xl shadow-2xl border border-gray-100 overflow-hidden">
+          {/* Search hint row */}
+          {query === "" && (
+            <div className="px-4 py-2 text-[11px] text-gray-400 font-medium border-b border-gray-100 uppercase tracking-wider bg-gray-50">
+              Sân bay phổ biến
+            </div>
           )}
-        >
-          {selectedAirport ? (
-            <span className="truncate">
-              {selectedAirport.name} ({selectedAirport.code})
-            </span>
+
+          {filtered.length === 0 ? (
+            <div className="px-4 py-4 text-sm text-gray-400 text-center">
+              Không tìm thấy sân bay
+            </div>
           ) : (
-            <span className="text-gray-400 truncate">{placeholder}</span>
-          )}
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0" align="start">
-        <Command shouldFilter={false}>
-          <CommandInput
-            placeholder="Tìm sân bay..."
-            value={searchQuery}
-            onValueChange={setSearchQuery}
-          />
-          <CommandList>
-            <CommandEmpty>
-              {loading ? "Đang tải..." : "Không tìm thấy sân bay"}
-            </CommandEmpty>
-            <CommandGroup>
-              {filteredAirports.map((airport) => (
-                <CommandItem
-                  key={airport._id}
-                  value={airport.code}
-                  onSelect={(currentValue) => {
-                    onChange(currentValue === value ? "" : airport.name + " (" + airport.code + ")");
-                    setOpen(false);
-                  }}
-                  className="cursor-pointer"
-                >
-                  <Check
+            <ul className="max-h-[320px] overflow-y-auto">
+              {filtered.map((airport) => {
+                const isSelected = airport.code === value;
+                return (
+                  <li
+                    key={airport.code}
+                    onMouseDown={(e) => {
+                      e.preventDefault();
+                      handleSelect(airport);
+                    }}
                     className={cn(
-                      "mr-2 h-4 w-4",
-                      value === airport.code || value === airport.name + " (" + airport.code + ")"
-                        ? "opacity-100"
-                        : "opacity-0"
+                      "flex items-center justify-between gap-3 px-4 py-3 cursor-pointer transition-colors",
+                      isSelected ? "bg-blue-50" : "hover:bg-gray-50"
                     )}
-                  />
-                  <Plane className="mr-2 h-4 w-4 text-blue-500" />
-                  <div className="flex flex-col">
-                    <span className="font-medium">
-                      {airport.name} ({airport.code})
+                  >
+                    {/* Left: icon + city/airport */}
+                    <div className="flex items-center gap-3 min-w-0">
+                      <Plane
+                        className={cn(
+                          "w-4 h-4 shrink-0",
+                          isSelected ? "text-blue-500" : "text-gray-300"
+                        )}
+                      />
+                      <div className="min-w-0">
+                        <div
+                          className={cn(
+                            "font-bold text-sm leading-tight truncate",
+                            isSelected ? "text-blue-600" : "text-gray-800"
+                          )}
+                        >
+                          {airport.city}
+                        </div>
+                        <div className="text-xs text-gray-400 truncate">
+                          {airport.airport} · {airport.country}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Right: IATA badge */}
+                    <span
+                      className={cn(
+                        "shrink-0 text-xs font-bold px-2 py-0.5 rounded-md",
+                        isSelected ? "bg-blue-500 text-white" : "bg-gray-100 text-gray-500"
+                      )}
+                    >
+                      {airport.code}
                     </span>
-                    <span className="text-xs text-gray-500">
-                      {airport.city}, {airport.country}
-                    </span>
-                  </div>
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      )}
+    </div>
   );
 }

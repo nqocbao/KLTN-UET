@@ -48,7 +48,7 @@ export function FlightSearchHeader() {
     const params = new URLSearchParams();
     if (from) params.set("from", from);
     if (to) params.set("to", to);
-    if (departureDate) params.set("date", departureDate.toISOString());
+    if (departureDate) params.set("date", departureDate.toISOString().split("T")[0]);
     params.set("passengers", passengers.toString());
     
     const sortBy = searchParams.get("sortBy");

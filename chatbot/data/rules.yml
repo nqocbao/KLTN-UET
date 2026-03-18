@@ -38,22 +38,49 @@ rules:
       - intent: deny
       - action: utter_deny
 
-  # === Search rules - using custom actions ===
+  # === Form rules - Multi-turn slot filling ===
 
-  - rule: Search hotels via API
-    steps:
-      - intent: search_hotel
-      - action: action_search_hotels
-
-  - rule: Search tours via API
-    steps:
-      - intent: search_tour
-      - action: action_search_tours
-
-  - rule: Search flights via API
+  - rule: Activate flight form
     steps:
       - intent: search_flight
+      - action: flight_form
+      - active_loop: flight_form
+
+  - rule: Submit flight form
+    condition:
+      - active_loop: flight_form
+    steps:
+      - action: flight_form
+      - active_loop: null
       - action: action_search_flights
+
+  - rule: Activate hotel form
+    steps:
+      - intent: search_hotel
+      - action: hotel_form
+      - active_loop: hotel_form
+
+  - rule: Submit hotel form
+    condition:
+      - active_loop: hotel_form
+    steps:
+      - action: hotel_form
+      - active_loop: null
+      - action: action_search_hotels
+
+  - rule: Activate tour form
+    steps:
+      - intent: search_tour
+      - action: tour_form
+      - active_loop: tour_form
+
+  - rule: Submit tour form
+    condition:
+      - active_loop: tour_form
+    steps:
+      - action: tour_form
+      - active_loop: null
+      - action: action_search_tours
 
   - rule: Search destinations via API
     steps:

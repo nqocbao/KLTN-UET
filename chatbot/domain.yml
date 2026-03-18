@@ -22,6 +22,7 @@ intents:
   - ask_opening_hours
   - help
   - bot_challenge
+  - provide_location
 
 # Entities - Thực thể cần trích xuất
 entities:
@@ -55,6 +56,10 @@ slots:
     mappings:
       - type: from_entity
         entity: location
+      - type: from_text
+        conditions:
+          - active_loop: hotel_form
+            requested_slot: location
   
   destination:
     type: text
@@ -62,6 +67,15 @@ slots:
     mappings:
       - type: from_entity
         entity: destination
+      - type: from_entity
+        entity: location
+        conditions:
+          - active_loop: tour_form
+            requested_slot: destination
+      - type: from_text
+        conditions:
+          - active_loop: tour_form
+            requested_slot: destination
   
   check_in_date:
     type: text
@@ -104,6 +118,15 @@ slots:
     mappings:
       - type: from_entity
         entity: flight_from
+      - type: from_entity
+        entity: location
+        conditions:
+          - active_loop: flight_form
+            requested_slot: flight_from
+      - type: from_text
+        conditions:
+          - active_loop: flight_form
+            requested_slot: flight_from
 
   flight_to:
     type: text
@@ -111,6 +134,15 @@ slots:
     mappings:
       - type: from_entity
         entity: flight_to
+      - type: from_entity
+        entity: location
+        conditions:
+          - active_loop: flight_form
+            requested_slot: flight_to
+      - type: from_text
+        conditions:
+          - active_loop: flight_form
+            requested_slot: flight_to
 
   flight_date:
     type: text
@@ -138,6 +170,21 @@ slots:
     influence_conversation: false
     mappings:
       - type: custom
+
+# Forms - Multi-turn slot filling
+forms:
+  flight_form:
+    required_slots:
+      - flight_from
+      - flight_to
+
+  hotel_form:
+    required_slots:
+      - location
+
+  tour_form:
+    required_slots:
+      - destination
 
 # Responses - Câu trả lời của bot
 responses:
@@ -214,8 +261,8 @@ responses:
     - text: "Bạn có thể liên hệ tư vấn đăng ký tour qua hotline 1900 1234, Zalo 0123 456 789 hoặc email support@vivutravel.vn. Tôi có thể giúp bạn tìm tour phù hợp trước nhé!"
 
   utter_ask_location:
-    - text: "Bạn muốn biết thông tin về địa điểm nào? Tôi có thể giới thiệu các điểm đến du lịch nổi tiếng tại Việt Nam và quốc tế."
-    - text: "Hãy cho tôi biết địa điểm bạn quan tâm, tôi sẽ cung cấp thông tin chi tiết về đó!"
+    - text: "Bạn muốn tìm ở thành phố nào? (ví dụ: Hà Nội, Đà Nẵng, Nha Trang, Hồ Chí Minh)"
+    - text: "Hãy cho tôi biết địa điểm bạn muốn tìm kiếm!"
 
   utter_ask_weather:
     - text: "Thời tiết Việt Nam thay đổi theo vùng miền. Bạn muốn biết thời tiết ở đâu? Tôi sẽ gợi ý thời điểm du lịch tốt nhất."
@@ -233,6 +280,15 @@ responses:
     - text: "Không sao! Bạn cứ hỏi tôi bất cứ khi nào cần nhé."
     - text: "Ok! Nếu cần gì, cứ nhắn cho tôi."
 
+  utter_ask_flight_from:
+    - text: "Bạn muốn bay từ thành phố nào? (ví dụ: Hà Nội, Đà Nẵng, TP.HCM)"
+
+  utter_ask_flight_to:
+    - text: "Bạn muốn bay đến đâu? (ví dụ: Đà Nẵng, Phú Quốc, Singapore, Hà Nội)"
+
+  utter_ask_destination:
+    - text: "Bạn muốn đi tour đến đâu? (ví dụ: Đà Lạt, Sapa, Phú Quốc, Nhật Bản)"
+
 # Actions - Các hành động custom
 actions:
   - action_search_hotels
@@ -242,6 +298,9 @@ actions:
   - action_get_destination_info
   - action_save_conversation
   - action_get_recommendations
+  - validate_flight_form
+  - validate_hotel_form
+  - validate_tour_form
 
 # Session configuration
 session_config:

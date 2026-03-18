@@ -38,6 +38,11 @@ export interface ITransport extends Document {
   
   // Status
   is_active: boolean;
+
+  // Flight-specific fields
+  stops?: number;       // Số điểm dừng (0 = bay thẳng)
+  flight_date?: Date;   // Ngày bay (dùng làm key cache theo ngày)
+  fetched_at?: Date;    // Lần cuối fetch từ SerpAPI
   
   // Partner reference (optional)
   partner_id?: Schema.Types.ObjectId;
@@ -143,7 +148,21 @@ const TransportSchema = new Schema<ITransport>(
       type: Boolean,
       default: true,
     },
-    
+
+    // Flight-specific fields
+    stops: {
+      type: Number,
+      default: null,
+    },
+    flight_date: {
+      type: Date,
+      default: null,
+    },
+    fetched_at: {
+      type: Date,
+      default: null,
+    },
+
     // Partner reference (optional)
     partner_id: {
       type: Schema.Types.ObjectId,
@@ -161,6 +180,8 @@ TransportSchema.index({ type: 1, pickup_location: 1, dropoff_location: 1 });
 TransportSchema.index({ type: 1, price: 1 });
 TransportSchema.index({ type: 1, rating: -1 });
 TransportSchema.index({ service_name: "text" });
+// Cache lookup index cho flight search
+TransportSchema.index({ type: 1, departure_location: 1, arrival_location: 1, flight_date: 1, service_name: 1, departure_time: 1 });
 
 export const Transport = model<ITransport>("Transport", TransportSchema);
 export default Transport;

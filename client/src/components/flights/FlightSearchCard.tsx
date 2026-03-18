@@ -56,10 +56,15 @@ export function FlightSearchCard({ flight }: FlightSearchCardProps) {
          {/* Airline Info */}
          <div className="w-full md:w-[200px] shrink-0">
            <div className="flex items-center gap-3 mb-2">
-             <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-600">
-               {flight.logo}
+             <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden shrink-0">
+               {flight.logo.startsWith("http") ? (
+                 // eslint-disable-next-line @next/next/no-img-element
+                 <img src={flight.logo} alt={flight.airline} className="w-full h-full object-contain p-0.5" />
+               ) : (
+                 <span className="text-xs font-bold text-gray-600">{flight.logo}</span>
+               )}
              </div>
-             <span className="font-semibold text-gray-900">{flight.airline}</span>
+             <span className="font-semibold text-gray-900 truncate">{flight.airline}</span>
            </div>
            
            <div className="flex gap-2 text-xs text-gray-500">

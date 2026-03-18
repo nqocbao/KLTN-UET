@@ -10,6 +10,7 @@ from typing import Any, Text, Dict, List, Optional
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
 from rasa_sdk.events import SlotSet
+from rasa_sdk.forms import FormValidationAction
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -129,21 +130,26 @@ class ActionSearchHotels(Action):
             total = data.get("pagination", {}).get("total", 0)
 
             if hotels:
-                msg = f"🏨 Tìm thấy **{total} khách sạn** ở **{location}**:\n\n"
-                for i, hotel in enumerate(hotels[:5], 1):
-                    name = hotel.get("name", "N/A")
-                    rating = hotel.get("rating")
-                    price = hotel.get("priceTwoSingleBed")
-
-                    msg += f"**{i}. {name}**"
-                    if rating:
-                        msg += f" ⭐ {rating}/5"
-                    if price:
-                        msg += f" — từ {format_price(price)}/đêm"
-                    msg += "\n"
-
-                msg += f"\nBạn muốn xem chi tiết khách sạn nào? Hoặc tôi có thể lọc theo giá cho bạn."
-                dispatcher.utter_message(text=msg)
+                dispatcher.utter_message(
+                    text=f"🏨 Tìm thấy **{total} khách sạn** ở **{location}**:"
+                )
+                items = []
+                for hotel in hotels[:5]:
+                    price = hotel.get("priceTwoSingleBed") or hotel.get("priceOneSingleOneDoubleBed")
+                    items.append({
+                        "name": hotel.get("name", "N/A"),
+                        "image_url": hotel.get("image_url") or hotel.get("banner_url"),
+                        "rating": hotel.get("rating"),
+                        "price_text": format_price(price) if price else None,
+                        "available_rooms": hotel.get("availableRooms"),
+                    })
+                dispatcher.utter_message(json_message={
+                    "type": "hotel_cards",
+                    "items": items,
+                })
+                dispatcher.utter_message(
+                    text="💬 Nhập tên khách sạn để xem chi tiết, hoặc cho tôi biết ngân sách của bạn nhé!"
+                )
             else:
                 dispatcher.utter_message(
                     text=f"Xin lỗi, tôi không tìm thấy khách sạn ở **{location}**. "
@@ -206,24 +212,26 @@ class ActionSearchTours(Action):
 
             if tours:
                 location_text = f" tại **{search_term}**" if search_term else ""
-                msg = f"🎫 Tìm thấy **{total} tour**{location_text}:\n\n"
-                for i, tour in enumerate(tours[:5], 1):
-                    name = tour.get("name", "N/A")
+                dispatcher.utter_message(
+                    text=f"🎫 Tìm thấy **{total} tour**{location_text}:"
+                )
+                items = []
+                for tour in tours[:5]:
                     price = tour.get("adult_price")
-                    duration = tour.get("duration_days")
-                    rating = tour.get("rating")
-
-                    msg += f"**{i}. {name}**"
-                    if duration:
-                        msg += f" ({duration} ngày)"
-                    if rating:
-                        msg += f" ⭐ {rating}/5"
-                    if price:
-                        msg += f" — {format_price(price)}/người"
-                    msg += "\n"
-
-                msg += "\nBạn quan tâm tour nào? Tôi có thể cho bạn xem chi tiết lịch trình."
-                dispatcher.utter_message(text=msg)
+                    items.append({
+                        "name": tour.get("name", "N/A"),
+                        "image_url": tour.get("image") or tour.get("banner_url"),
+                        "rating": tour.get("rating"),
+                        "price_text": format_price(price) if price else None,
+                        "duration": tour.get("duration_days"),
+                    })
+                dispatcher.utter_message(json_message={
+                    "type": "tour_cards",
+                    "items": items,
+                })
+                dispatcher.utter_message(
+                    text="💬 Bạn quan tâm tour nào? Tôi có thể xem chi tiết lịch trình cho bạn!"
+                )
             else:
                 fallback = f" liên quan đến **{search_term}**" if search_term else ""
                 dispatcher.utter_message(
@@ -289,27 +297,28 @@ class ActionSearchFlights(Action):
                 elif flight_to:
                     route = f" đến **{flight_to}**"
 
-                msg = f"✈️ Tìm thấy **{len(flights)} chuyến bay**{route}:\n\n"
-                for i, flight in enumerate(flights[:5], 1):
-                    name = flight.get("service_name", "N/A")
-                    dep = flight.get("departure_location", "")
-                    arr = flight.get("arrival_location", "")
-                    dep_time = flight.get("departure_time", "")
+                dispatcher.utter_message(
+                    text=f"✈️ Tìm thấy **{len(flights)} chuyến bay**{route}:"
+                )
+                items = []
+                for flight in flights[:5]:
                     price = flight.get("price")
-                    duration = flight.get("duration", "")
-
-                    msg += f"**{i}. {name}**\n"
-                    msg += f"   {dep} → {arr}"
-                    if dep_time:
-                        msg += f" | {dep_time}"
-                    if duration:
-                        msg += f" | {duration}"
-                    if price:
-                        msg += f" | {format_price(price)}"
-                    msg += "\n"
-
-                msg += "\nBạn muốn đặt chuyến bay nào?"
-                dispatcher.utter_message(text=msg)
+                    items.append({
+                        "name": flight.get("service_name", "N/A"),
+                        "image_url": flight.get("image"),
+                        "departure": flight.get("departure_location", ""),
+                        "arrival": flight.get("arrival_location", ""),
+                        "dep_time": flight.get("departure_time", ""),
+                        "duration_text": flight.get("duration", ""),
+                        "price_text": format_price(price) if price else None,
+                    })
+                dispatcher.utter_message(json_message={
+                    "type": "flight_cards",
+                    "items": items,
+                })
+                dispatcher.utter_message(
+                    text="💬 Bạn muốn đặt chuyến bay nào?"
+                )
             else:
                 dispatcher.utter_message(
                     text="Xin lỗi, không tìm thấy chuyến bay phù hợp. "
@@ -555,3 +564,130 @@ class ActionSaveConversation(Action):
         # Conversation đã được lưu bởi Backend chatbot controller
         # Action này chỉ dùng làm placeholder nếu cần xử lý thêm
         return []
+
+
+# =============================================================================
+# FORM VALIDATION ACTIONS
+# Xử lý và làm sạch giá trị slot trong các form multi-turn
+# =============================================================================
+
+VIETNAMESE_LOCATION_PREFIXES = [
+    "ở ", "tại ", "đến ", "đi ", "về ",
+    "bay đến ", "bay từ ", "từ ", "xuất phát từ ",
+    "tour đi ", "tour tại ", "muốn đi ", "cần đi ",
+]
+
+
+def clean_location_text(text: str) -> Optional[str]:
+    """Làm sạch text địa điểm: xóa prefix 'ở/tại/đến', chuẩn hóa hoa thường.
+
+    Nếu sau khi xóa prefix vẫn còn > 3 từ (câu đầy đủ như "tôi muốn bay đến đà nẵng"),
+    dùng extract_location_from_text để tách địa danh thực sự.
+    """
+    if not text:
+        return None
+    original = text.strip()
+    text = original
+    text_lower = text.lower()
+    for prefix in VIETNAMESE_LOCATION_PREFIXES:
+        if text_lower.startswith(prefix):
+            text = text[len(prefix):].strip()
+            text_lower = text.lower()
+            break  # Chỉ xóa một prefix duy nhất
+    # Nếu sau khi xóa prefix vẫn còn > 3 từ → câu đầy đủ, thử extract địa danh
+    if len(text.split()) > 3:
+        return extract_location_from_text(original)
+    # Loại bỏ nếu quá ngắn (< 2 ký tự) hoặc quá dài (> 60 ký tự)
+    if len(text) < 2 or len(text) > 60:
+        return None
+    # Không chấp nhận câu hỏi lưu vào slot
+    question_markers = ["?", "không", "giú", "như nào", "bao nhiêu"]
+    for marker in question_markers:
+        if marker in text_lower:
+            return None
+    return text.title()
+
+
+class ValidateFlightForm(FormValidationAction):
+    """Validate và làm sạch dữ liệu tìm kiếm chuyến bay."""
+
+    def name(self) -> Text:
+        return "validate_flight_form"
+
+    def validate_flight_from(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        cleaned = clean_location_text(str(slot_value))
+        if not cleaned:
+            dispatcher.utter_message(
+                text="Tôi chưa hiểu điểm xuất phát. "
+                "Bạn muốn bay từ thành phố nào? (ví dụ: Hà Nội, TP.HCM, Đà Nẵng)"
+            )
+            return {"flight_from": None}
+        return {"flight_from": cleaned}
+
+    def validate_flight_to(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        cleaned = clean_location_text(str(slot_value))
+        if not cleaned:
+            dispatcher.utter_message(
+                text="Tôi chưa hiểu điểm đến. "
+                "Bạn muốn bay đến đâu? (ví dụ: Đà Nẵng, Phú Quốc, Singapore)"
+            )
+            return {"flight_to": None}
+        return {"flight_to": cleaned}
+
+
+class ValidateHotelForm(FormValidationAction):
+    """Validate và làm sạch dữ liệu tìm kiếm khách sạn."""
+
+    def name(self) -> Text:
+        return "validate_hotel_form"
+
+    def validate_location(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        cleaned = clean_location_text(str(slot_value))
+        if not cleaned:
+            dispatcher.utter_message(
+                text="Tôi chưa hiểu địa điểm bạn muốn tìm. "
+                "Bạn muốn tìm khách sạn ở đâu? (ví dụ: Hà Nội, Đà Nẵng, Nha Trang)"
+            )
+            return {"location": None}
+        return {"location": cleaned}
+
+
+class ValidateTourForm(FormValidationAction):
+    """Validate và làm sạch dữ liệu tìm kiếm tour."""
+
+    def name(self) -> Text:
+        return "validate_tour_form"
+
+    def validate_destination(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        cleaned = clean_location_text(str(slot_value))
+        if not cleaned:
+            dispatcher.utter_message(
+                text="Tôi chưa hiểu điểm đến bạn muốn đi. "
+                "Bạn muốn đi tour đến đâu? (ví dụ: Đà Lạt, Sapa, Phú Quốc, Nhật Bản)"
+            )
+            return {"destination": None}
+        return {"destination": cleaned}
