@@ -5,6 +5,7 @@ import {
   getConversationById,
   endConversation,
   sendMessageToRasa,
+  getItineraryRecommendation,
 } from "../controllers/chatbot.controller.js";
 
 const router = express.Router();
@@ -43,5 +44,12 @@ router.put("/conversations/:id/end", endConversation);
  * @access  Public
  */
 router.post("/message", sendMessageToRasa);
+
+/**
+ * @route   POST /api/chatbot/recommend
+ * @desc    Smart itinerary recommendation: message → entity extraction → DB query → trip package
+ * @access  Public
+ */
+router.post("/recommend", getItineraryRecommendation);
 
 export default router;

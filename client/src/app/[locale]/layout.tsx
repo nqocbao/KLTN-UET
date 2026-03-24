@@ -4,7 +4,7 @@ import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Montserrat } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ChatBot } from "@/components/common/ChatBot";
+import { ChatBotButton } from "@/components/common/ChatBotButton";
 import "../globals.css";
 
 const montserrat = Montserrat({
@@ -48,7 +48,7 @@ export default async function LocaleLayout({
         >
           <NextIntlClientProvider messages={messages}>
             {children}
-            <ChatBot />
+            <ChatBotButton />
           </NextIntlClientProvider>
         </ThemeProvider>
       </body>

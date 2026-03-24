@@ -298,6 +298,7 @@ actions:
   - action_get_destination_info
   - action_save_conversation
   - action_get_recommendations
+  - action_get_full_itinerary
   - validate_flight_form
   - validate_hotel_form
   - validate_tour_form

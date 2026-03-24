@@ -566,6 +566,67 @@ class ActionSaveConversation(Action):
         return []
 
 
+class ActionGetFullItinerary(Action):
+    """Gọi /api/chatbot/recommend để lấy gói lịch trình đầy đủ (tour + chuyến bay + khách sạn)."""
+
+    def name(self) -> Text:
+        return "action_get_full_itinerary"
+
+    def run(
+        self,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> List[Dict[Text, Any]]:
+        destination = tracker.get_slot("destination") or tracker.get_slot("location")
+
+        # Fallback to raw text if no slot
+        if not destination:
+            raw = tracker.latest_message.get("text", "")
+            destination = extract_location_from_text(raw)
+
+        if not destination:
+            dispatcher.utter_message(
+                text="Bạn muốn đi đâu? Hãy cho tôi biết điểm đến để tôi gợi ý lịch trình đầy đủ nhé!"
+            )
+            return []
+
+        raw_text = tracker.latest_message.get("text", "")
+
+        try:
+            response = requests.post(
+                f"{BACKEND_URL}/api/chatbot/recommend",
+                json={"message": raw_text or f"đi {destination}", "sender": tracker.sender_id},
+                timeout=12,
+            )
+            data = response.json()
+
+            intro = data.get("text", f"Đây là gợi ý lịch trình cho chuyến đi {destination}:")
+            dispatcher.utter_message(text=intro)
+
+            trip_package = data.get("trip_package")
+            if trip_package:
+                # Forward as custom JSON so that the frontend can render TripPackageCard
+                dispatcher.utter_message(json_message={"type": "trip_package", **trip_package})
+            else:
+                dispatcher.utter_message(
+                    text=f"Hiện tại chưa có dữ liệu đủ cho {destination}. "
+                    "Bạn thử Đà Nẵng, Phú Quốc, Nha Trang hoặc Đà Lạt nhé!"
+                )
+
+        except requests.exceptions.ConnectionError:
+            dispatcher.utter_message(
+                text="Xin lỗi, hệ thống đang bảo trì. Vui lòng thử lại sau ít phút."
+            )
+        except Exception as e:
+            print(f"[action_get_full_itinerary] Error: {e}")
+            dispatcher.utter_message(
+                text="Có lỗi xảy ra khi tạo lịch trình. Vui lòng thử lại sau."
+            )
+
+        return [SlotSet("destination", destination)]
+
+
 # =============================================================================
 # FORM VALIDATION ACTIONS
 # Xử lý và làm sạch giá trị slot trong các form multi-turn
