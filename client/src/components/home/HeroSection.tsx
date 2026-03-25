@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { DateRangePicker, type DateRange } from "@/components/ui/date-range-picker";
 import { GuestRoomPicker, type GuestRoomValue } from "@/components/ui/guest-room-picker";
 import { LocationAutocomplete } from "@/components/ui/location-autocomplete";
+import { AirportAutocomplete } from "@/components/ui/airport-autocomplete";
+import { DatePicker } from "@/components/ui/date-picker";
 import { Search, Calendar, User, Hotel, Plane, Bus, Car, MapPin, Grid, Home, Building, ChevronDown, ArrowLeftRight, Clock } from "lucide-react";
 import { useRouter } from "next/navigation";
 
@@ -32,6 +34,13 @@ export function HeroSection() {
     adults: 2,
     children: 0,
   });
+
+  // Flight search states
+  const [flightFrom, setFlightFrom] = useState("SGN");
+  const [flightTo, setFlightTo] = useState("HAN");
+  const [flightDate, setFlightDate] = useState<Date | undefined>(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000));
+  const [flightReturnDate, setFlightReturnDate] = useState<Date | undefined>(new Date(Date.now() + 10 * 24 * 60 * 60 * 1000));
+  const [roundTrip, setRoundTrip] = useState(false);
 
   // Bus search states
   const [busFrom, setBusFrom] = useState("");
@@ -65,10 +74,10 @@ export function HeroSection() {
 
 
   return (
-    <div className="relative h-[600px] w-full bg-[#469ae3] overflow-hidden">
+    <div className="relative h-[600px] w-full bg-[#469ae3]">
       {/* Background Image */}
       <div 
-        className="absolute inset-0 bg-cover bg-center"
+        className="absolute inset-0 bg-cover bg-center overflow-hidden"
         style={{ 
           backgroundImage: 'url("https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=2070&auto=format&fit=crop")', // Mountains
           filter: 'brightness(0.6)'
@@ -324,19 +333,24 @@ export function HeroSection() {
                   {/* From */}
                   <div className="col-span-12 md:col-span-3 relative group">
                     <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Từ</div>
-                    <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200">
-                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
-                      <Input 
-                        placeholder="TP HCM (SGN)" 
-                        defaultValue="TP HCM (SGN)"
-                        className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
-                      />
+                    <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center">
+                      <Plane className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3 flex-shrink-0" />
+                      <div className="pl-12 w-full pt-6 pb-2">
+                        <AirportAutocomplete
+                          value={flightFrom}
+                          onChange={setFlightFrom}
+                          placeholder="Chọn sân bay đi"
+                        />
+                      </div>
                     </div>
                   </div>
 
                   {/* Swap Icon */}
                   <div className="hidden md:flex col-span-0 md:col-span-1 justify-center items-center">
-                    <div className="w-10 h-10 bg-white border-2 border-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-50 transition-colors shadow-sm -mx-5 z-10">
+                    <div
+                      onClick={() => { const t = flightFrom; setFlightFrom(flightTo); setFlightTo(t); }}
+                      className="w-10 h-10 bg-white border-2 border-blue-500 rounded-full flex items-center justify-center cursor-pointer hover:bg-blue-50 transition-colors shadow-sm -mx-5 z-10"
+                    >
                       <ArrowLeftRight className="w-5 h-5 text-blue-500" />
                     </div>
                   </div>
@@ -344,38 +358,50 @@ export function HeroSection() {
                   {/* To */}
                   <div className="col-span-12 md:col-span-3 relative group">
                     <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Đến</div>
-                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200">
-                      <Plane className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
-                      <Input 
-                        placeholder="Bangkok (BKKA)" 
-                        defaultValue="Bangkok (BKKA)"
-                        className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
-                      />
+                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center">
+                      <Plane className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3 flex-shrink-0" />
+                      <div className="pl-12 w-full pt-6 pb-2">
+                        <AirportAutocomplete
+                          value={flightTo}
+                          onChange={setFlightTo}
+                          placeholder="Chọn sân bay đến"
+                        />
+                      </div>
                     </div>
                   </div>
 
                   {/* Departure Date */}
                   <div className="col-span-12 md:col-span-2 relative group">
                     <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Ngày khởi hành</div>
-                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center cursor-pointer">
-                      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
-                      <div className="pl-12 pt-5 text-base text-gray-700 font-medium truncate">
-                        20 thg 12 2025
-                      </div>
+                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center">
+                      <DatePicker
+                        date={flightDate}
+                        onSelect={setFlightDate}
+                        placeholder="Chọn ngày"
+                        className="pl-10 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-4 rounded-none"
+                      />
                     </div>
                   </div>
 
                   {/* Return Date + Checkbox */}
                   <div className="col-span-12 md:col-span-2 relative group">
                     <div className="flex items-center gap-2 absolute right-4 top-2 z-10">
-                      <input type="checkbox" id="roundTrip" className="w-4 h-4 accent-blue-500" />
+                      <input
+                        type="checkbox"
+                        id="roundTrip"
+                        className="w-4 h-4 accent-blue-500"
+                        checked={roundTrip}
+                        onChange={(e) => setRoundTrip(e.target.checked)}
+                      />
                       <label htmlFor="roundTrip" className="text-gray-500 text-xs font-medium">Khứ hồi</label>
                     </div>
-                    <div className="relative h-14 bg-gray-100 hover:bg-gray-50 transition-colors flex items-center cursor-pointer">
-                      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 mt-3" />
-                      <div className="pl-12 pt-5 text-base text-gray-400 font-medium truncate">
-                        22 thg 12 2025
-                      </div>
+                    <div className={`relative h-14 ${roundTrip ? 'bg-white' : 'bg-gray-100'} hover:bg-gray-50 transition-colors flex items-center`}>
+                      <DatePicker
+                        date={flightReturnDate}
+                        onSelect={setFlightReturnDate}
+                        placeholder="Chọn ngày về"
+                        className={`pl-10 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-4 rounded-none ${!roundTrip ? 'opacity-50 pointer-events-none' : ''}`}
+                      />
                     </div>
                   </div>
 
@@ -383,7 +409,13 @@ export function HeroSection() {
                   <div className="col-span-12 md:col-span-1 flex justify-end">
                     <Button 
                       className="h-14 w-14 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0"
-                      onClick={() => router.push("/vi/flights/search")}
+                      onClick={() => {
+                        const params = new URLSearchParams();
+                        if (flightFrom) params.set("from", flightFrom);
+                        if (flightTo) params.set("to", flightTo);
+                        if (flightDate) params.set("date", flightDate.toISOString().split("T")[0]);
+                        router.push(`/vi/flights/search?${params.toString()}`);
+                      }}
                     >
                       <Search className="w-6 h-6 text-white" />
                     </Button>
@@ -396,7 +428,13 @@ export function HeroSection() {
                 <Button 
                   size="sm" 
                   className="rounded-full bg-[#007ce8] hover:bg-[#006bb3] text-white font-medium px-4 h-8"
-                  onClick={() => router.push("/vi/flights/search")}
+                  onClick={() => {
+                    const params = new URLSearchParams();
+                    if (flightFrom) params.set("from", flightFrom);
+                    if (flightTo) params.set("to", flightTo);
+                    if (flightDate) params.set("date", flightDate.toISOString().split("T")[0]);
+                    router.push(`/vi/flights/search?${params.toString()}`);
+                  }}
                 >
                   Tìm kiếm
                 </Button>
@@ -459,11 +497,13 @@ export function HeroSection() {
                   {/* Departure Date */}
                   <div className="col-span-12 md:col-span-2 relative group">
                     <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Ngày đi</div>
-                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center cursor-pointer">
-                      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
-                      <div className="pl-12 pt-5 text-base text-gray-700 font-medium truncate">
-                        20 thg 12 2025
-                      </div>
+                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center">
+                      <DatePicker
+                        date={busDate}
+                        onSelect={(d) => d && setBusDate(d)}
+                        placeholder="Chọn ngày"
+                        className="pl-10 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-4 rounded-none"
+                      />
                     </div>
                   </div>
 
@@ -509,14 +549,15 @@ export function HeroSection() {
                   {/* Airport */}
                   <div className="col-span-12 md:col-span-3 relative group">
                     <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Sân bay</div>
-                    <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200">
-                      <Plane className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
-                      <Input 
-                        value={transferPickup}
-                        onChange={(e) => setTransferPickup(e.target.value)}
-                        placeholder="Nội Bài (HAN)" 
-                        className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
-                      />
+                    <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center">
+                      <Plane className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3 flex-shrink-0" />
+                      <div className="pl-12 w-full pt-6 pb-2">
+                        <AirportAutocomplete
+                          value={transferPickup}
+                          onChange={setTransferPickup}
+                          placeholder="Chọn sân bay"
+                        />
+                      </div>
                     </div>
                   </div>
 
@@ -537,11 +578,13 @@ export function HeroSection() {
                   {/* Pickup Date */}
                   <div className="col-span-12 md:col-span-2 relative group">
                     <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Ngày đón</div>
-                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center cursor-pointer">
-                      <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
-                      <div className="pl-12 pt-5 text-base text-gray-700 font-medium truncate">
-                        20 thg 12 2025
-                      </div>
+                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200 flex items-center">
+                      <DatePicker
+                        date={transferDate}
+                        onSelect={(d) => d && setTransferDate(d)}
+                        placeholder="Chọn ngày"
+                        className="pl-10 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-4 rounded-none"
+                      />
                     </div>
                   </div>
 

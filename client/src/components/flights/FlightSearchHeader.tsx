@@ -1,16 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { 
-  ArrowLeft, 
-  Calendar, 
-  User, 
-  ChevronLeft, 
-  ChevronRight, 
+import {
+  ArrowLeft,
+  Calendar,
+  Users,
   Search,
   Plane,
-  ArrowRightLeft
+  ArrowRightLeft,
+  ChevronDown,
+  X,
+  Minus,
+  Plus,
 } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { AirportAutocomplete } from "@/components/ui/airport-autocomplete";
@@ -19,8 +21,8 @@ import { DatePicker } from "@/components/ui/date-picker";
 export function FlightSearchHeader() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  
-  // Parse URL params
+  const panelRef = useRef<HTMLDivElement>(null);
+
   const [from, setFrom] = useState(searchParams.get("from") || "");
   const [to, setTo] = useState(searchParams.get("to") || "");
   const [departureDate, setDepartureDate] = useState<Date | undefined>(
@@ -29,33 +31,44 @@ export function FlightSearchHeader() {
   const [passengers, setPassengers] = useState(
     parseInt(searchParams.get("passengers") || "1")
   );
-  const [showSearchDialog, setShowSearchDialog] = useState(false);
+  const [expanded, setExpanded] = useState(false);
 
-  // Sync with URL params
   useEffect(() => {
     const f = searchParams.get("from");
     const t = searchParams.get("to");
     const d = searchParams.get("date");
     const p = searchParams.get("passengers");
-    
+
     if (f) setFrom(f);
     if (t) setTo(t);
     if (d) setDepartureDate(new Date(d));
     if (p) setPassengers(parseInt(p));
   }, [searchParams]);
 
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+        setExpanded(false);
+      }
+    }
+    if (expanded) document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [expanded]);
+
   const handleSearch = () => {
     const params = new URLSearchParams();
     if (from) params.set("from", from);
     if (to) params.set("to", to);
-    if (departureDate) params.set("date", departureDate.toISOString().split("T")[0]);
+    if (departureDate)
+      params.set("date", departureDate.toISOString().split("T")[0]);
     params.set("passengers", passengers.toString());
-    
+
     const sortBy = searchParams.get("sortBy");
     if (sortBy) params.set("sortBy", sortBy);
-    
+
     router.push(`/vi/flights/search?${params.toString()}`);
     router.refresh();
+    setExpanded(false);
   };
 
   const swapLocations = () => {
@@ -64,142 +77,132 @@ export function FlightSearchHeader() {
     setTo(temp);
   };
 
-  // Fake dates for the strip
-  const dates = [
-    { day: "Thứ 2", date: "16 thg 12", price: "2.449.200 VND", active: false },
-    { day: "Thứ 3", date: "17 thg 12", price: "2.000.000 VND", active: false },
-    { day: "Thứ 4", date: "18 thg 12", price: "1.950.000 VND", active: false },
-    { day: "Thứ 5", date: "19 thg 12", price: "1.995.758 VND", active: false },
-    { day: "Thứ 6", date: "20 thg 12", price: "2.512.889 VND", active: false },
-    { day: "Thứ 7", date: "21 thg 12", price: "2.468.000 VND", active: false },
-    { day: "CN", date: "22 thg 12", price: "1.995.758 VND", active: true },
-    { day: "Thứ 2", date: "23 thg 12", price: "1.504.000 VND", active: false },
-    { day: "Thứ 3", date: "24 thg 12", price: "1.485.000 VND", active: false },
-  ];
-
   return (
-    <div className="bg-[#4bc3ff] pb-4 py-4">
-      <div className="container mx-auto px-4">
-        {/* Combined Row: Route Info + Date Strip */}
-        <div className="flex flex-col lg:flex-row gap-4 items-center">
-          {/* Left: Route Info */}
-          <div className="flex items-center gap-4 w-full lg:w-auto min-w-0 lg:min-w-[400px]">
-             <Button 
-               variant="ghost" 
-               size="icon" 
-               onClick={() => router.back()} 
-               className="text-white hover:bg-white/20 shrink-0"
-             >
-               <ArrowLeft className="w-6 h-6" />
-             </Button>
-             
-             <div 
-               className="bg-white/10 backdrop-blur-sm rounded px-4 py-2 flex-1 flex items-center justify-between gap-4 cursor-pointer hover:bg-white/20 transition-colors text-white"
-               onClick={() => setShowSearchDialog(!showSearchDialog)}
-             >
-               <div className="flex flex-col min-w-0">
-                  <span className="font-bold flex items-center gap-2 truncate">
-                    {from || "Điểm đi"} <span className="text-white/60">→</span> {to || "Điểm đến"}
-                  </span>
-                  <div className="flex items-center gap-3 text-sm text-white/80 flex-wrap">
-                    <span className="flex items-center gap-1">
-                      <Calendar className="w-3 h-3" /> 
-                      {departureDate?.toLocaleDateString('vi-VN')}
-                    </span>
-                    <span className="w-px h-3 bg-white/30"></span>
-                    <span className="flex items-center gap-1">
-                      <User className="w-3 h-3" /> {passengers} hành khách
-                    </span>
-                  </div>
-               </div>
-               <Search className="w-5 h-5 text-white/80 shrink-0" />
-             </div>
-          </div>
-        
-          {/* Right: Date Strip */}
-          <div className="relative flex-1 w-full min-w-0">
-             <Button 
-               variant="ghost" 
-               size="icon" 
-               className="absolute left-0 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-black/20 -ml-2 disabled:opacity-30"
-             >
-               <ChevronLeft className="w-6 h-6" />
-             </Button>
-             
-             <div className="flex gap-2 overflow-x-auto scrollbar-hide px-8 pb-2">
-               {dates.map((item, index) => (
-                 <div 
-                   key={index}
-                   className={`
-                     min-w-[120px] p-2 rounded cursor-pointer transition-all text-center flex flex-col gap-1
-                     ${item.active 
-                       ? "bg-white text-blue-600 font-bold shadow-lg transform scale-105" 
-                       : "bg-white/10 text-white hover:bg-white/20"
-                     }
-                   `}
-                 >
-                   <div className="text-xs">{item.day}, {item.date}</div>
-                   <div className="text-xs">{item.price}</div>
-                 </div>
-               ))}
-             </div>
-             
-             <Button 
-               variant="ghost" 
-               size="icon" 
-               className="absolute right-0 top-1/2 -translate-y-1/2 z-10 text-white hover:bg-black/20 -mr-2"
-             >
-               <ChevronRight className="w-6 h-6" />
-             </Button>
+    <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] py-3 shadow-md">
+      <div className="container mx-auto px-4" ref={panelRef}>
+        {/* Summary Bar */}
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => router.back()}
+            className="text-white hover:bg-white/10 shrink-0 rounded-full h-9 w-9"
+          >
+            <ArrowLeft className="w-5 h-5" />
+          </Button>
+
+          <div
+            className="flex-1 flex items-center gap-2 bg-white rounded-xl px-4 py-2.5 cursor-pointer hover:shadow-lg transition-shadow group"
+            onClick={() => setExpanded(!expanded)}
+          >
+            <Plane className="w-4 h-4 text-blue-600 shrink-0" />
+
+            <div className="flex flex-1 items-center gap-2 min-w-0 flex-wrap">
+              <span className="font-bold text-gray-900 truncate">
+                {from || "---"}
+              </span>
+              <ArrowRightLeft className="w-3.5 h-3.5 text-gray-400 shrink-0" />
+              <span className="font-bold text-gray-900 truncate">
+                {to || "---"}
+              </span>
+
+              <span className="hidden sm:inline w-px h-4 bg-gray-200" />
+              <span className="hidden sm:flex text-sm text-gray-500 items-center gap-1">
+                <Calendar className="w-3.5 h-3.5" />
+                {departureDate?.toLocaleDateString("vi-VN", {
+                  day: "2-digit",
+                  month: "short",
+                })}
+              </span>
+
+              <span className="hidden sm:inline w-px h-4 bg-gray-200" />
+              <span className="hidden sm:flex text-sm text-gray-500 items-center gap-1">
+                <Users className="w-3.5 h-3.5" />
+                {passengers}
+              </span>
+            </div>
+
+            <ChevronDown
+              className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${
+                expanded ? "rotate-180" : ""
+              }`}
+            />
           </div>
         </div>
 
-        {/* Search Dialog */}
-        {showSearchDialog && (
-          <div className="mt-4 bg-white rounded-lg shadow-lg p-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-              
-              {/* From */}
-              <div className="relative">
-                <label className="text-xs text-gray-500 mb-1 block">Điểm đi</label>
-                <div className="flex items-center gap-2">
-                  <Plane className="w-4 h-4 text-blue-500" />
+        {/* Expandable Search Panel */}
+        <div
+          className={`transition-all duration-300 ease-in-out ${
+            expanded
+              ? "max-h-[500px] opacity-100 mt-3 overflow-visible"
+              : "max-h-0 opacity-0 overflow-hidden"
+          }`}
+        >
+          <div className="bg-white rounded-2xl shadow-xl p-5 border border-gray-100">
+            {/* Header */}
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-sm font-bold text-gray-800 flex items-center gap-2">
+                <Search className="w-4 h-4 text-blue-600" />
+                Chỉnh sửa tìm kiếm
+              </h3>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setExpanded(false)}
+                className="h-7 w-7 rounded-full text-gray-400 hover:text-gray-600 hover:bg-gray-100"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </div>
+
+            {/* From / Swap / To */}
+            <div className="flex items-end gap-2 mb-4">
+              <div className="flex-1 min-w-0">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5 block">
+                  Điểm đi
+                </label>
+                <div className="relative">
+                  <Plane className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500 pointer-events-none" />
                   <AirportAutocomplete
                     value={from}
                     onChange={setFrom}
-                    placeholder="Chọn sân bay đi..."
+                    placeholder="Sân bay đi..."
+                    className="pl-9"
                   />
                 </div>
               </div>
 
-              {/* Swap Button */}
-              <div className="flex items-end justify-center pb-2">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={swapLocations}
-                  className="rounded-full"
-                >
-                  <ArrowRightLeft className="w-4 h-4" />
-                </Button>
-              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={swapLocations}
+                className="rounded-full h-10 w-10 border-blue-200 text-blue-600 hover:bg-blue-50 hover:border-blue-300 shrink-0 mb-px transition-colors"
+              >
+                <ArrowRightLeft className="w-4 h-4" />
+              </Button>
 
-              {/* To */}
-              <div className="relative">
-                <label className="text-xs text-gray-500 mb-1 block">Điểm đến</label>
-                <div className="flex items-center gap-2">
-                  <Plane className="w-4 h-4 text-blue-500" />
+              <div className="flex-1 min-w-0">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5 block">
+                  Điểm đến
+                </label>
+                <div className="relative">
+                  <Plane className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-500 rotate-90 pointer-events-none" />
                   <AirportAutocomplete
                     value={to}
                     onChange={setTo}
-                    placeholder="Chọn sân bay đến..."
+                    placeholder="Sân bay đến..."
+                    className="pl-9"
                   />
                 </div>
               </div>
+            </div>
 
-              {/* Date */}
-              <div className="relative">
-                <label className="text-xs text-gray-500 mb-1 block">Ngày bay</label>
+            {/* Date + Passengers + Search */}
+            <div className="flex flex-col sm:flex-row items-end gap-3">
+              <div className="flex-1 w-full sm:w-auto">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5 block">
+                  Ngày bay
+                </label>
                 <DatePicker
                   date={departureDate}
                   onSelect={setDepartureDate}
@@ -207,33 +210,43 @@ export function FlightSearchHeader() {
                 />
               </div>
 
-              {/* Passengers */}
-              <div className="relative">
-                <label className="text-xs text-gray-500 mb-1 block">Hành khách</label>
-                <input
-                  type="number"
-                  min="1"
-                  max="9"
-                  value={passengers === 0 ? "" : passengers}
-                  onChange={(e) => setPassengers(e.target.value === "" ? 0 : parseInt(e.target.value))}
-                  onBlur={(e) => { if (e.target.value === "" || passengers < 1) setPassengers(1); }}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
+              <div className="w-full sm:w-[160px]">
+                <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5 block">
+                  Hành khách
+                </label>
+                <div className="flex items-center h-10 border border-gray-200 rounded-lg overflow-hidden">
+                  <button
+                    type="button"
+                    onClick={() => setPassengers(Math.max(1, passengers - 1))}
+                    className="h-full px-3 text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition-colors disabled:opacity-30"
+                    disabled={passengers <= 1}
+                  >
+                    <Minus className="w-3.5 h-3.5" />
+                  </button>
+                  <span className="flex-1 text-center text-sm font-semibold text-gray-800">
+                    {passengers}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setPassengers(Math.min(9, passengers + 1))}
+                    className="h-full px-3 text-gray-500 hover:bg-gray-50 hover:text-blue-600 transition-colors disabled:opacity-30"
+                    disabled={passengers >= 9}
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
               </div>
 
-              {/* Search Button */}
-              <div className="flex items-end md:col-span-2 lg:col-span-3">
-                <Button
-                  onClick={handleSearch}
-                  className="w-full bg-blue-500 hover:bg-blue-600"
-                >
-                  <Search className="w-4 h-4 mr-2" />
-                  Tìm chuyến bay
-                </Button>
-              </div>
+              <Button
+                onClick={handleSearch}
+                className="w-full sm:w-auto h-10 px-8 bg-[#0071c2] hover:bg-[#005fa3] text-white font-bold rounded-lg shadow-sm transition-colors"
+              >
+                <Search className="w-4 h-4 mr-2" />
+                Tìm kiếm
+              </Button>
             </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );
