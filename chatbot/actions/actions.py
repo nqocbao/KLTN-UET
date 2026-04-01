@@ -6,6 +6,7 @@ Kết nối với Backend API để query dữ liệu thực từ MongoDB
 import os
 import re
 import requests
+from datetime import datetime, timedelta
 from typing import Any, Text, Dict, List, Optional
 from rasa_sdk import Action, Tracker
 from rasa_sdk.executor import CollectingDispatcher
@@ -82,6 +83,45 @@ def format_price(price: int) -> str:
     elif price >= 1_000:
         return f"{price / 1_000:.0f}K"
     return str(price)
+
+
+def normalize_flight_date(raw_value: Optional[str]) -> Optional[str]:
+    """Chuẩn hóa ngày bay về định dạng YYYY-MM-DD."""
+    if not raw_value:
+        return None
+
+    text = raw_value.strip().lower()
+    today = datetime.now()
+
+    if text in {"hôm nay", "hom nay", "today"}:
+        return today.strftime("%Y-%m-%d")
+    if text in {"mai", "ngày mai", "ngay mai", "tomorrow"}:
+        return (today + timedelta(days=1)).strftime("%Y-%m-%d")
+
+    if re.match(r"^\d{4}-\d{2}-\d{2}$", text):
+        return text
+
+    ddmmyyyy = re.match(r"^(\d{1,2})[/-](\d{1,2})[/-](\d{4})$", text)
+    if ddmmyyyy:
+        day, month, year = ddmmyyyy.groups()
+        try:
+            return datetime(int(year), int(month), int(day)).strftime("%Y-%m-%d")
+        except ValueError:
+            return None
+
+    ddmm = re.match(r"^(\d{1,2})[/-](\d{1,2})$", text)
+    if ddmm:
+        day, month = ddmm.groups()
+        year = today.year
+        try:
+            candidate = datetime(year, int(month), int(day))
+            if candidate.date() < today.date():
+                candidate = datetime(year + 1, int(month), int(day))
+            return candidate.strftime("%Y-%m-%d")
+        except ValueError:
+            return None
+
+    return None
 
 
 class ActionSearchHotels(Action):
@@ -266,21 +306,35 @@ class ActionSearchFlights(Action):
 
         flight_from = tracker.get_slot("flight_from")
         flight_to = tracker.get_slot("flight_to")
+        flight_date = normalize_flight_date(tracker.get_slot("flight_date"))
+        guests = tracker.get_slot("number_of_guests")
+
+        if not flight_date:
+            raw_text = tracker.latest_message.get("text", "")
+            flight_date = normalize_flight_date(raw_text)
+
+        if not flight_from or not flight_to:
+            dispatcher.utter_message(
+                text="Bạn muốn bay từ đâu đến đâu? Ví dụ: Hà Nội đi Đà Nẵng."
+            )
+            return []
+
+        if not flight_date:
+            dispatcher.utter_message(
+                text="Bạn muốn bay ngày nào? Ví dụ: 2026-04-20 hoặc ngày mai."
+            )
+            return []
 
         try:
             params: Dict[str, Any] = {
-                "type": "flight",
-                "limit": 5,
-                "sortBy": "price_asc",
+                "from": flight_from,
+                "to": flight_to,
+                "date": flight_date,
+                "adults": int(guests) if guests else 1,
             }
 
-            if flight_from:
-                params["from"] = flight_from
-            if flight_to:
-                params["to"] = flight_to
-
             response = requests.get(
-                f"{BACKEND_URL}/api/client/flights",
+                f"{BACKEND_URL}/api/client/flights/search",
                 params=params,
                 timeout=8,
             )
@@ -298,7 +352,7 @@ class ActionSearchFlights(Action):
                     route = f" đến **{flight_to}**"
 
                 dispatcher.utter_message(
-                    text=f"✈️ Tìm thấy **{len(flights)} chuyến bay**{route}:"
+                    text=f"✈️ Tìm thấy **{len(flights)} chuyến bay**{route} ngày **{flight_date}**:"
                 )
                 items = []
                 for flight in flights[:5]:
@@ -334,7 +388,7 @@ class ActionSearchFlights(Action):
                 text="Có lỗi xảy ra khi tìm chuyến bay. Vui lòng thử lại sau."
             )
 
-        return []
+        return [SlotSet("flight_date", flight_date)]
 
 
 class ActionGetHotelDetails(Action):
@@ -706,6 +760,21 @@ class ValidateFlightForm(FormValidationAction):
             )
             return {"flight_to": None}
         return {"flight_to": cleaned}
+
+    def validate_flight_date(
+        self,
+        slot_value: Any,
+        dispatcher: CollectingDispatcher,
+        tracker: Tracker,
+        domain: Dict[Text, Any],
+    ) -> Dict[Text, Any]:
+        normalized = normalize_flight_date(str(slot_value))
+        if not normalized:
+            dispatcher.utter_message(
+                text="Ngày bay chưa hợp lệ. Hãy nhập dạng YYYY-MM-DD hoặc ví dụ: ngày mai."
+            )
+            return {"flight_date": None}
+        return {"flight_date": normalized}
 
 
 class ValidateHotelForm(FormValidationAction):

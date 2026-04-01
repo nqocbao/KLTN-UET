@@ -134,9 +134,17 @@ stories:
         entities:
           - location: "Đà Nẵng"
       - action: flight_form
+      - slot_was_set:
+          - flight_to: "Đà Nẵng"
+          - requested_slot: flight_date
+      - intent: provide_location
+        entities:
+          - flight_date: "2026-04-20"
+      - action: flight_form
       - active_loop: null
       - slot_was_set:
           - flight_to: "Đà Nẵng"
+          - flight_date: "2026-04-20"
           - requested_slot: null
       - action: action_search_flights
 
@@ -147,6 +155,7 @@ stories:
         entities:
           - flight_from: "Hà Nội"
           - flight_to: "Đà Nẵng"
+          - flight_date: "2026-04-20"
       - action: flight_form
       - active_loop: null
       - action: action_search_flights

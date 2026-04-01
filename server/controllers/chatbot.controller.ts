@@ -394,15 +394,21 @@ export const sendMessageToRasa = async (req: Request, res: Response) => {
     }
 
     const senderId = sender || `user_${Date.now()}`;
+    let resolvedConversationId = conversation_id;
 
-    if (conversation_id) {
-      const userMessage = new Message({
-        conversation_id,
-        sender: "user",
-        content: message,
+    if (!resolvedConversationId) {
+      const conversation = await Conversation.create({
+        started_at: new Date(),
       });
-      await userMessage.save();
+      resolvedConversationId = conversation._id;
     }
+
+    const userMessage = new Message({
+      conversation_id: resolvedConversationId,
+      sender: "user",
+      content: message,
+    });
+    await userMessage.save();
 
     const rasaResponse = await axios.post(
       RASA_WEBHOOK_URL,
@@ -420,10 +426,10 @@ export const sendMessageToRasa = async (req: Request, res: Response) => {
 
     const botResponses = rasaResponse.data;
 
-    if (conversation_id && Array.isArray(botResponses)) {
+    if (Array.isArray(botResponses)) {
       for (const response of botResponses) {
         const botMessage = new Message({
-          conversation_id,
+          conversation_id: resolvedConversationId,
           sender: "bot",
           content: response.text || response.custom?.text || "",
         });

@@ -146,10 +146,14 @@ slots:
 
   flight_date:
     type: text
-    influence_conversation: false
+    influence_conversation: true
     mappings:
       - type: from_entity
         entity: flight_date
+      - type: from_text
+        conditions:
+          - active_loop: flight_form
+            requested_slot: flight_date
 
   tour_type:
     type: text
@@ -177,6 +181,7 @@ forms:
     required_slots:
       - flight_from
       - flight_to
+      - flight_date
 
   hotel_form:
     required_slots:
@@ -285,6 +290,9 @@ responses:
 
   utter_ask_flight_to:
     - text: "Bạn muốn bay đến đâu? (ví dụ: Đà Nẵng, Phú Quốc, Singapore, Hà Nội)"
+
+  utter_ask_flight_date:
+    - text: "Bạn muốn bay ngày nào? (ví dụ: 2026-04-20 hoặc ngày mai)"
 
   utter_ask_destination:
     - text: "Bạn muốn đi tour đến đâu? (ví dụ: Đà Lạt, Sapa, Phú Quốc, Nhật Bản)"

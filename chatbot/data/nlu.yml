@@ -329,6 +329,10 @@ nlu:
       - bay đến [nha trang](flight_to) nhé
       - tôi cần vé đến [hà nội](flight_to)
       - hướng đến [đà nẵng](flight_to)
+      - [2026-04-20](flight_date)
+      - [20/04/2026](flight_date)
+      - [20/04](flight_date)
+      - [ngày mai](flight_date)
       - đi [đà lạt](destination)
       - [sapa](destination)
       - [nhật bản](destination)
@@ -337,11 +341,9 @@ nlu:
       - [phú quốc](destination)
       - [đà lạt](destination)
       - [hội an](destination)
-      - tôi muốn đi tour [sapa](destination)
       - tôi muốn đi [đà lạt](destination)
       - cho tôi tour đến [phú quốc](destination)
       - tour đi [hội an](destination) nhé
-      - tôi muốn tìm khách sạn ở [hà nội](location)
       - cho tôi khách sạn tại [đà nẵng](location)
       - tôi cần phòng ở [nha trang](location)
       - hotel ở [phú quốc](location)

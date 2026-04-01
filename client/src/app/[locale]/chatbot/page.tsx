@@ -23,6 +23,7 @@ export default function ChatbotPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [activeCategory, setActiveCategory] = useState("itinerary");
   const [senderId] = useState<string>(getSenderId);
+  const [conversationId, setConversationId] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -34,6 +35,30 @@ export default function ChatbotPage() {
   useEffect(() => {
     scrollToBottom();
   }, [messages, scrollToBottom]);
+
+  const ensureConversationId = useCallback(async (): Promise<string | null> => {
+    if (conversationId) return conversationId;
+
+    try {
+      const response = await fetch(`${API_URL}/chatbot/conversations`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: null }),
+      });
+
+      if (!response.ok) return null;
+      const data = await response.json();
+      const createdId = data?._id || null;
+      if (createdId) setConversationId(createdId);
+      return createdId;
+    } catch {
+      return null;
+    }
+  }, [conversationId]);
+
+  useEffect(() => {
+    void ensureConversationId();
+  }, [ensureConversationId]);
 
   const extractedEntities = extractEntitiesFromMessages(messages);
 
@@ -53,6 +78,8 @@ export default function ChatbotPage() {
       setIsLoading(true);
 
       try {
+        const activeConversationId = await ensureConversationId();
+
         // Determine which endpoint to use based on active category
         const endpoint =
           activeCategory === "itinerary"
@@ -66,6 +93,7 @@ export default function ChatbotPage() {
             message: textToSend,
             sender: senderId,
             category: activeCategory,
+            conversation_id: activeConversationId,
           }),
         });
 
@@ -135,7 +163,7 @@ export default function ChatbotPage() {
         setTimeout(() => inputRef.current?.focus(), 100);
       }
     },
-    [activeCategory, inputMessage, isLoading, senderId]
+    [activeCategory, ensureConversationId, inputMessage, isLoading, senderId]
   );
 
   const handleCategorySelect = (id: string) => {
