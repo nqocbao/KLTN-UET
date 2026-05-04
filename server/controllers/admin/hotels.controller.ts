@@ -6,6 +6,76 @@ import Ward from "../../models/wards.model.js";
 import Address from "../../models/addresses.model.js";
 import Destination from "../../models/destinations.model.js";
 import Country from "../../models/countries.model.js";
+import {
+  fetchHotelsAutocompleteFromSerpApi,
+  fetchHotelsFromSerpApi,
+  type SerpApiHotelAutocompleteSuggestion,
+  type SerpApiHotelProperty,
+} from "../../services/serpapi.service.js";
+
+function isValidDateString(value: string): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(parsed.getTime());
+}
+
+function mapSerpApiHotelToClient(hotel: SerpApiHotelProperty) {
+  const image =
+    hotel.images?.[0]?.thumbnail || hotel.images?.[0]?.original_image || null;
+
+  const numericPrice =
+    hotel.rate_per_night?.extracted_lowest ??
+    hotel.total_rate?.extracted_lowest ??
+    null;
+
+  const priceText =
+    hotel.rate_per_night?.lowest || hotel.total_rate?.lowest || null;
+
+  return {
+    name: hotel.name || "N/A",
+    image_url: image,
+    rating: hotel.overall_rating ?? null,
+    price: numericPrice,
+    price_text: priceText,
+    hotel_class: hotel.extracted_hotel_class ?? null,
+    reviews: hotel.reviews ?? 0,
+    amenities: Array.isArray(hotel.amenities) ? hotel.amenities.slice(0, 8) : [],
+    description: hotel.description || "",
+    location: hotel.gps_coordinates || null,
+  };
+}
+
+function mapSerpApiHotelAutocompleteSuggestionToClient(
+  suggestion: SerpApiHotelAutocompleteSuggestion,
+  index: number
+) {
+  const name =
+    (suggestion.value as string | undefined)?.trim() ||
+    (suggestion.autocomplete_suggestion as string | undefined)?.trim() ||
+    "";
+
+  const fallbackId = `${name || "hotel"}-${index}`;
+
+  return {
+    id:
+      (suggestion.property_token as string | undefined) ||
+      (suggestion.kgmid as string | undefined) ||
+      (suggestion.data_cid as string | undefined) ||
+      fallbackId,
+    name,
+    type: (suggestion.type as string | undefined) || "accommodation",
+    location: (suggestion.location as string | undefined) || null,
+    thumbnail: (suggestion.thumbnail as string | undefined) || null,
+    highlighted_words: Array.isArray(suggestion.highlighted_words)
+      ? suggestion.highlighted_words
+      : [],
+    autocomplete_suggestion:
+      (suggestion.autocomplete_suggestion as string | undefined) || null,
+    property_token: (suggestion.property_token as string | undefined) || null,
+    serpapi_google_hotels_link:
+      (suggestion.serpapi_google_hotels_link as string | undefined) || null,
+  };
+}
 
 // Get all hotels
 export const getAllHotels = async (req: Request, res: Response) => {
@@ -150,6 +220,163 @@ export const getAllHotels = async (req: Request, res: Response) => {
   } catch (error: any) {
     console.error(`[Search] Error:`, error);
     res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+export const searchHotelsWithSerpApi = async (req: Request, res: Response) => {
+  try {
+    const {
+      q,
+      check_in_date,
+      check_out_date,
+      gl,
+      hl,
+      currency,
+      adults,
+      children,
+      children_ages,
+    } = req.query as Record<string, string>;
+
+    if (!q || !check_in_date || !check_out_date) {
+      return res.status(400).json({
+        success: false,
+        message: "Thiếu thông tin bắt buộc: q, check_in_date, check_out_date",
+      });
+    }
+
+    if (!isValidDateString(check_in_date) || !isValidDateString(check_out_date)) {
+      return res.status(400).json({
+        success: false,
+        message: "Định dạng ngày không hợp lệ, yêu cầu YYYY-MM-DD",
+      });
+    }
+
+    if (new Date(check_out_date) <= new Date(check_in_date)) {
+      return res.status(400).json({
+        success: false,
+        message: "check_out_date phải sau check_in_date",
+      });
+    }
+
+    const normalizedAdults = adults ? Number(adults) : 2;
+    const normalizedChildren = children ? Number(children) : 0;
+
+    if (!Number.isInteger(normalizedAdults) || normalizedAdults < 1) {
+      return res.status(400).json({
+        success: false,
+        message: "adults phải là số nguyên >= 1",
+      });
+    }
+
+    if (!Number.isInteger(normalizedChildren) || normalizedChildren < 0) {
+      return res.status(400).json({
+        success: false,
+        message: "children phải là số nguyên >= 0",
+      });
+    }
+
+    if (children_ages && normalizedChildren === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "children_ages chỉ hợp lệ khi children > 0",
+      });
+    }
+
+    if (children_ages) {
+      const ages = children_ages.split(",").map((age) => Number(age.trim()));
+      if (ages.length !== normalizedChildren || ages.some((age) => !Number.isFinite(age) || age < 1 || age > 17)) {
+        return res.status(400).json({
+          success: false,
+          message: "children_ages phải khớp số children và nằm trong khoảng 1-17",
+        });
+      }
+    }
+
+    const properties = await fetchHotelsFromSerpApi({
+      q,
+      check_in_date,
+      check_out_date,
+      adults: normalizedAdults,
+      children: normalizedChildren,
+      ...(gl ? { gl } : {}),
+      ...(hl ? { hl } : {}),
+      ...(currency ? { currency } : {}),
+      ...(children_ages ? { children_ages } : {}),
+    });
+
+    const mapped = properties.map(mapSerpApiHotelToClient);
+
+    return res.json({
+      success: true,
+      data: mapped,
+      total: mapped.length,
+      meta: {
+        query: q,
+        check_in_date,
+        check_out_date,
+        adults: normalizedAdults,
+        children: normalizedChildren,
+        source: "serpapi_google_hotels",
+      },
+    });
+  } catch (error: any) {
+    console.error("[Hotel Search SerpAPI] Error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi khi tìm khách sạn từ SerpAPI",
+      error: error.message,
+    });
+  }
+};
+
+export const autocompleteHotelsWithSerpApi = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { q, gl, hl, currency, limit } = req.query as Record<string, string>;
+
+    const normalizedQuery = (q || "").trim();
+    if (normalizedQuery.length < 2) {
+      return res.status(400).json({
+        success: false,
+        message: "q là bắt buộc và cần tối thiểu 2 ký tự",
+      });
+    }
+
+    const parsedLimit = Number(limit);
+    const normalizedLimit = Number.isFinite(parsedLimit)
+      ? Math.min(Math.max(Math.trunc(parsedLimit), 1), 20)
+      : 10;
+
+    const suggestions = await fetchHotelsAutocompleteFromSerpApi({
+      q: normalizedQuery,
+      ...(gl ? { gl } : {}),
+      ...(hl ? { hl } : {}),
+      ...(currency ? { currency } : {}),
+    });
+
+    const mapped = suggestions
+      .map((item, index) => mapSerpApiHotelAutocompleteSuggestionToClient(item, index))
+      .filter((item) => Boolean(item.name))
+      .slice(0, normalizedLimit);
+
+    return res.status(200).json({
+      success: true,
+      data: mapped,
+      total: mapped.length,
+      meta: {
+        query: normalizedQuery,
+        source: "serpapi_google_hotels_autocomplete",
+      },
+    });
+  } catch (error: any) {
+    console.error("[Hotel Autocomplete SerpAPI] Error:", error.message);
+    return res.status(500).json({
+      success: false,
+      message: "Lỗi khi gợi ý khách sạn từ SerpAPI",
+      error: error.message,
+    });
   }
 };
 

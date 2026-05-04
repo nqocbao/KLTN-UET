@@ -1,0 +1,52 @@
+[
+  {
+    "id": "q1",
+    "query": "bun cha ngon ha noi",
+    "required_terms": ["bun cha", "ha noi"]
+  },
+  {
+    "id": "q2",
+    "query": "pho bo ngon",
+    "required_terms": ["pho"]
+  },
+  {
+    "id": "q3",
+    "query": "banh mi sai gon",
+    "required_terms": ["banh mi", "sai gon"]
+  },
+  {
+    "id": "q4",
+    "query": "hai san phu quoc",
+    "required_terms": ["hai san", "phu quoc"]
+  },
+  {
+    "id": "q5",
+    "query": "lau bo da nang",
+    "required_terms": ["lau", "da nang"]
+  },
+  {
+    "id": "q6",
+    "query": "banh xeo",
+    "required_terms": ["banh xeo"]
+  },
+  {
+    "id": "q7",
+    "query": "quan oc ha noi",
+    "required_terms": ["oc", "ha noi"]
+  },
+  {
+    "id": "q8",
+    "query": "tra sua da lat",
+    "required_terms": ["tra sua", "da lat"]
+  },
+  {
+    "id": "q9",
+    "query": "com tam tphcm",
+    "required_terms": ["com tam", "tphcm"]
+  },
+  {
+    "id": "q10",
+    "query": "bun rieu ha noi",
+    "required_terms": ["bun rieu", "ha noi"]
+  }
+]

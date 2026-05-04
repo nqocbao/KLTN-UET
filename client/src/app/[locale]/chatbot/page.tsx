@@ -12,6 +12,7 @@ import { FlightCard } from "@/components/chatbot/FlightCard";
 import { TripPackageCard } from "@/components/chatbot/TripPackageCard";
 import { WelcomeScreen } from "@/components/chatbot/WelcomeScreen";
 import { EntityPanel } from "@/components/chatbot/EntityPanel";
+import { FoodReviewCard } from "@/components/chatbot/FoodReviewCard";
 
 export default function ChatbotPage() {
   const router = useRouter();
@@ -348,6 +349,10 @@ export default function ChatbotPage() {
                           {message.cards.type === "flight_cards" &&
                             message.cards.items.map((item, i) => (
                               <FlightCard key={i} item={item} />
+                            ))}
+                          {message.cards.type === "food_review_cards" &&
+                            message.cards.items.map((item, i) => (
+                              <FoodReviewCard key={i} item={item} />
                             ))}
                         </div>
                       )}

@@ -123,6 +123,7 @@ export function Header({ variant = "transparent" }: HeaderProps) {
           <Link href="/tours" className="hover:text-white/80">Tours trọn gói</Link>
           <Link href="/hotels" className="hover:text-white/80">Khách sạn</Link>
           <Link href="/flights" className="hover:text-white/80">Vé máy bay</Link>
+          <Link href="/foodtour" className="hover:text-white/80">Foodtour</Link>
           <Link href="/" className="hover:text-white/80">Vé xe khách</Link>
           <Link href="/" className="hover:text-white/80">Đưa đón sân bay</Link>
           <Link href="/" className="flex items-center gap-1 hover:text-white/80">

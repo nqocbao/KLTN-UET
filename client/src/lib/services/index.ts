@@ -9,6 +9,8 @@ export { toursApi } from "./tours.service";
 export { destinationsApi } from "./destinations.service";
 export { hotelsApi } from "./hotels.service";
 export { restaurantsApi } from "./restaurants.service";
+export { foodReviewsApi } from "./food-reviews.service";
+export { adminFoodReviewsApi } from "./admin-food-reviews.service";
 export {
   countriesApi,
   provincesApi,

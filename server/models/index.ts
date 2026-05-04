@@ -29,6 +29,7 @@ export { default as Destination } from "./destinations.model.js";
 
 // ================== REVIEWS & FAVORITES ==================
 export { default as Review } from "./reviews.model.js";
+export { default as FoodReview } from "./food_reviews.model.js";
 export { default as Favourite } from "./favourites.model.js";
 export { default as TravelHistory } from "./travel_history.model.js";
 

@@ -46,6 +46,7 @@ export default function Sidebar() {
       title: "Content",
       items: [
         { label: "Reviews", href: "/admin/reviews", icon: "⭐" },
+        { label: "Food Reviews", href: "/admin/food-reviews", icon: "🍜" },
         { label: "Guides", href: "/admin/guides", icon: "📖" },
         { label: "Conversations", href: "/admin/conversations", icon: "💬" },
       ],

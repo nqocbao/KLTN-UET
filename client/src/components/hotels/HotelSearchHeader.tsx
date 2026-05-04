@@ -96,6 +96,7 @@ export function HotelSearchHeader() {
                  value={location}
                  onChange={setLocation}
                  placeholder="Nhập địa điểm..."
+                 mode="hotels-only"
                />
             </div>
           </div>

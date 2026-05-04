@@ -1,11 +1,13 @@
 {
   "type": "module",
   "scripts": {
-    "dev": "tsx index.ts",
-    "seed": "tsx seeders/seed.ts"
+    "dev": "tsx watch index.ts",
+    "seed": "tsx seeders/seed.ts",
+    "import:food-reviews": "tsx scripts/import-food-reviews.ts"
   },
   "dependencies": {
     "@types/bcrypt": "^6.0.0",
+    "apify-client": "^2.13.0",
     "axios": "^1.13.4",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.5",

@@ -1,0 +1,1247 @@
+[
+  {
+    "qa_id": "QA_21",
+    "ref_tour_id": "T021",
+    "user_query": "Từ Hà Nội tôi muốn đi ngắm lúa chín Tây Bắc khoảng 3 ngày.",
+    "response_design": {
+      "suggestion": "Bạn nên chọn tour Mù Cang Chải 3 ngày 2 đêm để ngắm ruộng bậc thang mùa lúa chín tuyệt đẹp.",
+      "milestones": ["Hà Nội", "Đèo Khau Phạ", "La Pán Tẩn", "Mù Cang Chải"],
+      "extra_suggestions": {
+        "between": ["Hà Nội", "Đèo Khau Phạ"],
+        "spots": ["Đồi chè Thanh Sơn", "Thung lũng Tú Lệ (ăn xôi nếp)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_22",
+    "ref_tour_id": "T022",
+    "user_query": "Tư vấn cho tôi lịch trình đi Điện Biên thăm di tích lịch sử.",
+    "response_design": {
+      "suggestion": "Hành trình Điện Biên 3 ngày 2 đêm rất phù hợp để tìm hiểu lịch sử và văn hóa Tây Bắc.",
+      "milestones": ["Hà Nội", "Đèo Pha Đin", "Đồi A1", "Hầm Đờ Cát"],
+      "extra_suggestions": {
+        "between": ["Đồi A1", "Hầm Đờ Cát"],
+        "spots": ["Bảo tàng chiến thắng Điện Biên Phủ", "Tượng đài chiến thắng"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_23",
+    "ref_tour_id": "T023",
+    "user_query": "Có tour nào đi hồ Ba Bể ngắn ngày cuối tuần không?",
+    "response_design": {
+      "suggestion": "Tour Hà Nội - Hồ Ba Bể 2 ngày 1 đêm với giá 1.800.000đ là lựa chọn lý tưởng cho cuối tuần thư giãn.",
+      "milestones": ["Hà Nội", "Vườn quốc gia Ba Bể", "Đảo Bà Góa", "Bản Pác Ngòi"],
+      "extra_suggestions": {
+        "between": ["Vườn quốc gia Ba Bể", "Đảo Bà Góa"],
+        "spots": ["Động Puông", "Đền An Mạ"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_24",
+    "ref_tour_id": "T024",
+    "user_query": "Gia đình tôi ở Hà Nội muốn đi biển miền Bắc 3 ngày, nên đi đâu?",
+    "response_design": {
+      "suggestion": "Cát Bà là điểm đến hoàn hảo với biển xanh và vịnh Lan Hạ tuyệt đẹp.",
+      "milestones": ["Hà Nội", "Đảo Cát Bà", "Vịnh Lan Hạ", "Vườn quốc gia Cát Bà"],
+      "extra_suggestions": {
+        "between": ["Đảo Cát Bà", "Vịnh Lan Hạ"],
+        "spots": ["Đảo Khỉ", "Làng chài Cái Bèo"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_25",
+    "ref_tour_id": "T025",
+    "user_query": "Từ Sài Gòn đi đảo Nam Du thì lịch trình ra sao?",
+    "response_design": {
+      "suggestion": "Tour Nam Du 2 ngày 2 đêm xuất phát từ TP.HCM qua Rạch Giá là lịch trình tối ưu nhất.",
+      "milestones": ["TP.HCM", "Rạch Giá", "Đảo Nam Du", "Hòn Mấu"],
+      "extra_suggestions": {
+        "between": ["Đảo Nam Du", "Hòn Mấu"],
+        "spots": ["Hòn Hai Bờ Đập (lặn san hô)", "Dốc Ông Tình"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_26",
+    "ref_tour_id": "T026",
+    "user_query": "Chủ nhật tôi muốn đi Tây Ninh viếng núi Bà trong 1 ngày.",
+    "response_design": {
+      "suggestion": "Chuyến đi Tây Ninh 1 ngày kết hợp cáp treo lên đỉnh núi Bà Đen rất thuận tiện và nhẹ nhàng.",
+      "milestones": ["TP.HCM", "Núi Bà Đen", "Tòa Thánh Tây Ninh"],
+      "extra_suggestions": {
+        "between": ["Núi Bà Đen", "Tòa Thánh Tây Ninh"],
+        "spots": ["Chợ Long Hoa (mua đặc sản bánh tráng)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_27",
+    "ref_tour_id": "T027",
+    "user_query": "Mình đang ở Đà Nẵng, muốn đi đảo Cù Lao Chàm lặn san hô.",
+    "response_design": {
+      "suggestion": "Tour ghép Cù Lao Chàm 1 ngày đi và về bằng cano cao tốc sẽ cho bạn trải nghiệm tuyệt vời.",
+      "milestones": ["Đà Nẵng", "Cảng Cửa Đại", "Cù Lao Chàm", "Khu lặn biển"],
+      "extra_suggestions": {
+        "between": ["Cảng Cửa Đại", "Cù Lao Chàm"],
+        "spots": ["Khu bảo tồn biển", "Chùa Hải Tạng"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_28",
+    "ref_tour_id": "T028",
+    "user_query": "Xin gợi ý tour đi Tà Đùng Đắk Nông từ TP.HCM.",
+    "response_design": {
+      "suggestion": "Bạn có thể đi Tà Đùng 2 ngày 1 đêm để cắm trại hoặc ở homestay ngắm 'Vịnh Hạ Long Tây Nguyên'.",
+      "milestones": ["TP.HCM", "Gia Nghĩa", "Hồ Tà Đùng"],
+      "extra_suggestions": {
+        "between": ["Gia Nghĩa", "Hồ Tà Đùng"],
+        "spots": ["Thác Liêng Nung", "Khu bảo tồn thiên nhiên Tà Đùng"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_29",
+    "ref_tour_id": "T029",
+    "user_query": "Tôi muốn đi săn mây Tà Xùa, đi 2 ngày có đủ không?",
+    "response_design": {
+      "suggestion": "2 ngày 1 đêm là khoảng thời gian lý tưởng nhất cho hành trình săn mây Tà Xùa từ Hà Nội.",
+      "milestones": ["Hà Nội", "Bắc Yên", "Tà Xùa", "Sống lưng Khủng Long"],
+      "extra_suggestions": {
+        "between": ["Bắc Yên", "Tà Xùa"],
+        "spots": ["Mỏm Cá Heo", "Cây Cô Đơn"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_30",
+    "ref_tour_id": "T030",
+    "user_query": "Gợi ý cho mình tour đi đảo Bình Ba ăn tôm hùm với.",
+    "response_design": {
+      "suggestion": "Tour Bình Ba 2 ngày 2 đêm từ TP.HCM kết hợp nghỉ ngơi và thưởng thức hải sản trên bè là lựa chọn tốt.",
+      "milestones": ["TP.HCM", "Cảng Ba Ngòi", "Đảo Bình Ba", "Bãi Nồm"],
+      "extra_suggestions": {
+        "between": ["Đảo Bình Ba", "Bãi Nồm"],
+        "spots": ["Bãi Chướng (ngắm bình minh)", "Bãi Nhà Cũ (lặn san hô)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_31",
+    "ref_tour_id": "T031",
+    "user_query": "Từ Cần Thơ mình muốn tổ chức đi Cà Mau chạm mốc cực Nam.",
+    "response_design": {
+      "suggestion": "Hành trình Cần Thơ - Cà Mau 2 ngày 1 đêm sẽ đưa bạn xuyên rừng đước đến với Đất Mũi.",
+      "milestones": ["Cần Thơ", "TP Cà Mau", "Đất Mũi Cà Mau", "Cột mốc GPS 0001"],
+      "extra_suggestions": {
+        "between": ["Cần Thơ", "TP Cà Mau"],
+        "spots": ["Nhà thờ Tắc Sậy (Cha Diệp) tại Bạc Liêu"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_32",
+    "ref_tour_id": "T032",
+    "user_query": "Cần tour nghỉ dưỡng nhẹ nhàng Mai Châu Pù Luông 2 ngày.",
+    "response_design": {
+      "suggestion": "Chuyến đi Mai Châu - Pù Luông 2 ngày 1 đêm mang phong cách sinh thái, rất hợp để chữa lành.",
+      "milestones": ["Hà Nội", "Mai Châu", "Bản Lác", "Pù Luông"],
+      "extra_suggestions": {
+        "between": ["Hà Nội", "Mai Châu"],
+        "spots": ["Đèo Thung Khe (đèo Đá Trắng)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_33",
+    "ref_tour_id": "T033",
+    "user_query": "Thiết kế tour Phú Yên 3 ngày giúp tôi nhé, từ Sài Gòn.",
+    "response_design": {
+      "suggestion": "Phú Yên 3 ngày 2 đêm sẽ bao trọn các điểm đẹp nhất: Gành Đá Đĩa, Hoa vàng trên cỏ xanh, Mũi Điện.",
+      "milestones": ["TP.HCM", "Tuy Hòa", "Gành Đá Đĩa", "Mũi Điện"],
+      "extra_suggestions": {
+        "between": ["Tuy Hòa", "Gành Đá Đĩa"],
+        "spots": ["Tháp Nhạn", "Bãi Xép", "Đầm Ô Loan"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_34",
+    "ref_tour_id": "T034",
+    "user_query": "Từ Đà Nẵng ra Quảng Bình đi hang động thì đi thế nào?",
+    "response_design": {
+      "suggestion": "Bạn có thể đi ô tô dọc miền Trung, lịch trình 2 ngày 1 đêm khám phá Động Phong Nha là hợp lý.",
+      "milestones": ["Đà Nẵng", "Quảng Trị", "Phong Nha", "Động Phong Nha"],
+      "extra_suggestions": {
+        "between": ["Đà Nẵng", "Quảng Trị"],
+        "spots": ["Thành Cổ Quảng Trị", "Vĩ tuyến 17"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_35",
+    "ref_tour_id": "T035",
+    "user_query": "Có tour nào từ HCM đi rừng gần gần không? Đi cuối tuần.",
+    "response_design": {
+      "suggestion": "Nam Cát Tiên cách HCM khoảng 3.5 tiếng đi xe, tour 2 ngày 1 đêm là hoàn hảo để hòa mình vào thiên nhiên.",
+      "milestones": ["TP.HCM", "VQG Cát Tiên", "Bàu Sấu"],
+      "extra_suggestions": {
+        "between": ["VQG Cát Tiên", "Bàu Sấu"],
+        "spots": ["Thác Bến Cự", "Cây Tung cổ thụ"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_36",
+    "ref_tour_id": "T036",
+    "user_query": "Lịch trình đi Tam Đảo 2 ngày 1 đêm trốn nóng từ Hà Nội.",
+    "response_design": {
+      "suggestion": "Tam Đảo là điểm trốn nóng tuyệt vời. Bạn nên lưu trú 1 đêm để thưởng thức trọn vẹn không khí sương mù.",
+      "milestones": ["Hà Nội", "Tam Đảo", "Quảng trường Tam Đảo", "Thác Bạc"],
+      "extra_suggestions": {
+        "between": ["Quảng trường Tam Đảo", "Thác Bạc"],
+        "spots": ["Nhà thờ đá Tam Đảo", "Quán cafe view núi"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_37",
+    "ref_tour_id": "T037",
+    "user_query": "Tôi muốn đi du lịch Măng Đen Kon Tum, xuất phát từ HCM.",
+    "response_design": {
+      "suggestion": "Bạn bay lên Pleiku rồi di chuyển xe ô tô lên Măng Đen, lịch trình 3 ngày 2 đêm là thoải mái nhất.",
+      "milestones": ["TP.HCM", "Pleiku", "Măng Đen", "Thác Pa Sỹ"],
+      "extra_suggestions": {
+        "between": ["Pleiku", "Măng Đen"],
+        "spots": ["Nhà thờ Gỗ Kon Tum", "Hồ Đăk Ke"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_38",
+    "ref_tour_id": "T038",
+    "user_query": "Từ Cần Thơ đi viếng chùa Sóc Trăng và điện gió Bạc Liêu trong ngày được không?",
+    "response_design": {
+      "suggestion": "Hoàn toàn được. Cung đường Cần Thơ - Sóc Trăng - Bạc Liêu rất đẹp và thuận tiện đi về trong ngày.",
+      "milestones": ["Cần Thơ", "Sóc Trăng", "Bạc Liêu", "Cánh đồng Điện Gió"],
+      "extra_suggestions": {
+        "between": ["Sóc Trăng", "Bạc Liêu"],
+        "spots": ["Chùa Dơi", "Nhà Công tử Bạc Liêu"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_39",
+    "ref_tour_id": "T039",
+    "user_query": "Mình muốn lên plan đi đảo Cô Tô 3 ngày từ Hà Nội.",
+    "response_design": {
+      "suggestion": "Tour Đảo Cô Tô 3 ngày 2 đêm sẽ đưa bạn khám phá bãi đá Cầu Mỵ và những bãi biển xanh ngắt.",
+      "milestones": ["Hà Nội", "Cảng Cái Rồng", "Đảo Cô Tô", "Bãi đá Cầu Mỵ"],
+      "extra_suggestions": {
+        "between": ["Đảo Cô Tô", "Bãi đá Cầu Mỵ"],
+        "spots": ["Bãi tắm Vàn Chảy", "Hải đăng Cô Tô"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_40",
+    "ref_tour_id": "T040",
+    "user_query": "Tìm tour resort nghỉ dưỡng Hồ Tràm cuối tuần cho gia đình từ Sài Gòn.",
+    "response_design": {
+      "suggestion": "Chỉ mất hơn 2 tiếng lái xe, tour Hồ Tràm 2 ngày 1 đêm chuẩn resort là lựa chọn số một cho gia đình.",
+      "milestones": ["TP.HCM", "Hồ Tràm", "Suối nước nóng Bình Châu"],
+      "extra_suggestions": {
+        "between": ["TP.HCM", "Hồ Tràm"],
+        "spots": ["Đồi cừu Suối Nghệ"]
+      }
+    }
+  },
+  {
+    "tour_id": "T041",
+    "tour_name": "Hà Nội - Lạng Sơn: Chinh phục Mẫu Sơn",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.450.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lạng Sơn",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan Ải Chi Lăng, Đền Mẫu Đồng Đăng, chợ biên giới Tân Thanh. Di chuyển lên đỉnh Mẫu Sơn.",
+        "evening": "Thưởng thức lợn quay lá mắc mật, ếch hương Mẫu Sơn."
+      },
+      {
+        "day": 2,
+        "activities": "Đón bình minh trên đỉnh Mẫu Sơn, tham quan Động Tam Thanh, núi Tô Thị.",
+        "evening": "Khởi hành về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T042",
+    "tour_name": "HCM - Đảo Phú Quý: Viêng ngọc Bình Thuận",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "3.200.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Bình Thuận",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến cảng Phan Thiết, đi tàu cao tốc ra đảo Phú Quý. Tắm biển Vịnh Triều Dương.",
+        "evening": "Ăn hải sản tại làng bè, thưởng thức cua mặt trăng."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Cột cờ chủ quyền, Gành Hang, hồ Vô Cực, Dốc Phượt, lặn ngắm san hô Hòn Tranh.",
+        "evening": "Dạo quanh đảo, uống cafe ngắm biển đêm."
+      },
+      {
+        "day": 3,
+        "activities": "Viếng chùa Linh Sơn, núi Cao Cát.",
+        "evening": "Lên tàu về đất liền, xe đưa về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T043",
+    "tour_name": "Cần Thơ - Đồng Tháp: Mùa nước nổi Tràm Chim",
+    "duration": "1 Ngày",
+    "price": "850.000 VNĐ",
+    "departure": "Cần Thơ",
+    "destination": "Đồng Tháp",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan Vườn quốc gia Tràm Chim, đi xuồng ba lá ngắm sếu đầu đỏ, hái súng, trải nghiệm giăng lưới bắt cá.",
+        "evening": "Ăn tối với lẩu cá linh bông điên điển trước khi về lại Cần Thơ."
+      }
+    ]
+  },
+  {
+    "tour_id": "T044",
+    "tour_name": "Hà Nội - Na Hang: Tiên cảnh Tuyên Quang",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.750.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Tuyên Quang",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Tuyên Quang, đi thuyền trên hồ sinh thái Na Hang, ngắm cọc Vài Phạ, check-in Thác Khuổi Nhi.",
+        "evening": "Ăn tối trên thuyền, nghe hát Then của đồng bào dân tộc Tày."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan đền Pác Tạ, ghé thăm bản làng ven hồ.",
+        "evening": "Khởi hành về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T045",
+    "tour_name": "HCM - Ninh Thuận: Vĩnh Hy - Hang Rái",
+    "duration": "2 Ngày 2 Đêm",
+    "price": "2.100.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Ninh Thuận",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan Tháp Po Klong Garai, làng gốm Bàu Trúc. Nhận phòng gần Vịnh Vĩnh Hy.",
+        "evening": "Tự do thưởng thức dông cát nướng, hải sản tươi sống."
+      },
+      {
+        "day": 2,
+        "activities": "Đi tàu đáy kính ngắm san hô Vĩnh Hy, check-in Hang Rái - sao Hỏa trên mặt đất, vườn nho Thái An.",
+        "evening": "Lên xe giường nằm về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T046",
+    "tour_name": "Đà Nẵng - Rừng dừa Bảy Mẫu: Miền Tây thu nhỏ",
+    "duration": "1 Ngày",
+    "price": "600.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Quảng Nam",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển vào Hội An, trải nghiệm ngồi thúng chai quay vòng tại Rừng dừa Bảy Mẫu, xem biểu diễn bơi thúng, quăng chài bắt cá.",
+        "evening": "Kết hợp dạo phố cổ Hội An ăn tối trước khi về lại Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T047",
+    "tour_name": "Hà Nội - Bình Liêu: Sống lưng khủng long vùng biên",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.600.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Quảng Ninh",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến Bình Liêu, trekking lên các cột mốc biên giới 1297, ngắm đồi cỏ lau trắng.",
+        "evening": "Nghỉ tại homestay bản người Dao, thưởng thức gà đồi, phở xào Bình Liêu."
+      },
+      {
+        "day": 2,
+        "activities": "Chinh phục Sống Lưng Khủng Long và Cột mốc 1305 cao nhất Quảng Ninh.",
+        "evening": "Lên xe trở về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T048",
+    "tour_name": "HCM - Bảo Lộc: Trà Đạo và Săn mây",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.650.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Lâm Đồng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Bảo Lộc, tham quan Thác Dambri, đồi chè Tâm Châu, Tu viện Bát Nhã.",
+        "evening": "Cắm trại hoặc nghỉ homestay, BBQ sưởi ấm trong sương mù."
+      },
+      {
+        "day": 2,
+        "activities": "Dậy sớm săn mây tại đồi núi Linh Quy Pháp Ấn.",
+        "evening": "Xuống núi về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T049",
+    "tour_name": "Hà Nội - Hải Phòng: Foodtour & Đồ Sơn",
+    "duration": "1 Ngày",
+    "price": "700.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Hải Phòng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Trải nghiệm đi tàu hỏa xuống Hải Phòng, foodtour với Bánh đa cua, pate cột đèn, dừa dầm. Chiều di chuyển ra biển Đồ Sơn.",
+        "evening": "Lên tàu hỏa chuyến muộn về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T050",
+    "tour_name": "HCM - Bến Tre - Trà Vinh: Hương sắc miền Tây",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.550.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Trà Vinh",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Ghé Bến Tre tham quan lò kẹo dừa, đi xe ngựa. Chiều sang Trà Vinh tham quan Ao Bà Om, Chùa Hang.",
+        "evening": "Thưởng thức bún nước lèo đặc sản Trà Vinh."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Biển Ba Động, Thiền viện Trúc Lâm Trà Vinh.",
+        "evening": "Khởi hành về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T051",
+    "tour_name": "Hà Nội - Y Tý: Mây ngàn biên ải",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.550.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lào Cai",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đi xe giường nằm lên Sapa, chuyển xe nhỏ đi Y Tý. Nhận homestay nhà Trình Tường của người Hà Nhì.",
+        "evening": "Thưởng thức lợn cắp nách, tắm lá thuốc người Dao đỏ."
+      },
+      {
+        "day": 2,
+        "activities": "Săn mây tại Ngải Thầu, tham quan Công viên Choản Thèn, ngã ba Lũng Pô (nơi sông Hồng chảy vào đất Việt).",
+        "evening": "Giao lưu văn hóa bản địa."
+      },
+      {
+        "day": 3,
+        "activities": "Dạo chợ phiên Y Tý, mua nấm hương rừng.",
+        "evening": "Trở về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T052",
+    "tour_name": "HCM - Cần Giờ: Đảo Khỉ & Rừng Sác",
+    "duration": "1 Ngày",
+    "price": "650.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "TP.HCM",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đi phà Bình Khánh sang Cần Giờ. Tham quan Lâm viên Cần Giờ (Đảo Khỉ), đi cano len lỏi vào chiến khu Rừng Sác.",
+        "evening": "Ăn hải sản tại chợ Hàng Dương, chiều tắm biển 30/4 rồi về lại trung tâm TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T053",
+    "tour_name": "Đà Nẵng - Huế - Phong Nha: Di sản miền Trung",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "3.800.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Quảng Bình",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Khởi hành đi Huế, tham quan Đại Nội, Lăng Tự Đức, Chùa Thiên Mụ.",
+        "evening": "Nghe ca Huế trên sông Hương."
+      },
+      {
+        "day": 2,
+        "activities": "Rời Huế đi Quảng Bình, dọc đường ghé Thành Cổ Quảng Trị. Chiều tham quan Động Phong Nha.",
+        "evening": "Nghỉ đêm tại TP. Đồng Hới."
+      },
+      {
+        "day": 3,
+        "activities": "Khám phá Động Thiên Đường.",
+        "evening": "Trả khách tại Đồng Hới hoặc quay về Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T054",
+    "tour_name": "Hà Nội - Quan Lạn: Biển vắng thanh bình",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.650.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Quảng Ninh",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến cảng Vân Đồn, đi tàu ra đảo Quan Lạn. Tắm biển Quan Lạn.",
+        "evening": "Ăn tối hải sản sà sùng, mực nhảy."
+      },
+      {
+        "day": 2,
+        "activities": "Thuê xe tuk tuk tham quan Đình Quan Lạn, tắm biển Minh Châu trong xanh.",
+        "evening": "Tự do khám phá đảo đêm."
+      },
+      {
+        "day": 3,
+        "activities": "Check-in eo gió Quan Lạn.",
+        "evening": "Lên tàu về đất liền và về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T055",
+    "tour_name": "HCM - Làng nổi Tân Lập: Đi giữa rừng tràm",
+    "duration": "1 Ngày",
+    "price": "550.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Long An",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển tới Long An, đi xuồng cáp kéo tham quan Làng nổi Tân Lập, tản bộ trên con đường xuyên rừng tràm dài 5km.",
+        "evening": "Ăn cá lóc nướng trui, lẩu mắm trước khi lên xe về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T056",
+    "tour_name": "Đà Nẵng - Kon Tum: Ngã ba Đông Dương",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "2.200.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Kon Tum",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Vượt đèo Lò Xo lên Kon Tum, check-in Ngã ba Đông Dương (Việt - Lào - Campuchia) tại cửa khẩu Bờ Y.",
+        "evening": "Ăn tối tại Ngọc Hồi, nghỉ ngơi."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Tòa giám mục Kon Tum, Cầu treo Kon Klor, Nhà rông Kon Klor.",
+        "evening": "Quay về Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T057",
+    "tour_name": "Hà Nội - Thung Nai - Đền Thác Bờ",
+    "duration": "1 Ngày",
+    "price": "650.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Hòa Bình",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến cảng Thung Nai, đi thuyền trên lòng hồ thủy điện Hòa Bình, viếng đền Chúa Thác Bờ, tham quan Động Thác Bờ.",
+        "evening": "Ăn trưa cá nướng sông Đà, chiều lên xe về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T058",
+    "tour_name": "HCM - Bình Châu - Hồ Cốc",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.900.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Bà Rịa - Vũng Tàu",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến suối khoáng nóng Bình Châu, trải nghiệm luộc trứng bằng nước khoáng, tắm bùn, ngâm chân.",
+        "evening": "Di chuyển ra khu vực Hồ Cốc nhận phòng, nghe sóng biển rì rào."
+      },
+      {
+        "day": 2,
+        "activities": "Tắm biển Hồ Cốc, chụp hình tại rừng tràm ven biển.",
+        "evening": "Trở về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T059",
+    "tour_name": "Cần Thơ - Kiên Giang: Quần đảo Hải Tặc",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.850.000 VNĐ",
+    "departure": "Cần Thơ",
+    "destination": "Kiên Giang",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến Hà Tiên, lên tàu ra Quần đảo Hải Tặc. Tắm biển, trải nghiệm lặn bắt nhum, mò cua ốc.",
+        "evening": "Ăn tối BBQ hải sản tự đánh bắt cùng người dân đảo."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan cột mốc chủ quyền, tìm hiểu về giai thoại cướp biển Cánh Buồm Đen.",
+        "evening": "Về lại Hà Tiên, xe đưa về Cần Thơ."
+      }
+    ]
+  },
+  {
+    "tour_id": "T060",
+    "tour_name": "Hà Nội - Lai Châu: Cầu kính Rồng Mây",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.800.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lai Châu",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Khởi hành đi Sapa qua cao tốc, tiếp tục vượt đèo Ô Quy Hồ sang địa phận Lai Châu. Nhận phòng tại Tam Đường.",
+        "evening": "Nghỉ ngơi, thưởng thức lẩu cá tầm."
+      },
+      {
+        "day": 2,
+        "activities": "Trải nghiệm Cầu kính Rồng Mây trên đỉnh đèo Ô Quy Hồ, tham quan cọn nước Nà Khương.",
+        "evening": "Tự do khám phá thành phố Lai Châu."
+      },
+      {
+        "day": 3,
+        "activities": "Tham quan đồi chè Tân Uyên.",
+        "evening": "Lên xe về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T061",
+    "tour_name": "HCM - Tứ Bình: Bình Hưng - Bình Lập",
+    "duration": "2 Ngày 2 Đêm",
+    "price": "2.250.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Khánh Hòa",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đêm từ HCM. Sáng đến Cam Ranh, đi tàu ra đảo Bình Hưng, tắm biển Bãi Cây Me, lặn san hô Hòn Chút.",
+        "evening": "Thưởng thức tiệc BBQ hải sản tôm hùm trên bè nổi."
+      },
+      {
+        "day": 2,
+        "activities": "Di chuyển sang bán đảo Bình Lập, check-in resort Sao Biển, tắm biển Bãi Ngang trong vắt.",
+        "evening": "Lên xe trở về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T062",
+    "tour_name": "Đà Nẵng - Vườn Quốc gia Bạch Mã",
+    "duration": "1 Ngày",
+    "price": "900.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Thừa Thiên Huế",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Vượt đèo Hải Vân đến chân núi Bạch Mã. Đổi xe đặc chủng lên đỉnh, tham quan Hải Vọng Đài, trekking Ngũ Hồ, Thác Đỗ Quyên.",
+        "evening": "Xuống núi, kết thúc hành trình và về lại Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T063",
+    "tour_name": "Hà Nội - Sóc Sơn: Cắm trại ven hồ Đồng Đò",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.100.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Hà Nội",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Chạy xe lên Sóc Sơn, tham quan Đền Gióng, Việt Phủ Thành Chương. Chiều tới hồ Đồng Đò dựng lều, chèo SUP.",
+        "evening": "Tổ chức tiệc nướng BBQ ngoài trời, đàn hát quanh lửa trại."
+      },
+      {
+        "day": 2,
+        "activities": "Dậy sớm ngắm bình minh trên hồ, uống cafe chill sương sớm.",
+        "evening": "Thu dọn lều trại về nội thành."
+      }
+    ]
+  },
+  {
+    "tour_id": "T064",
+    "tour_name": "HCM - Madagui: Khám phá rừng thiêng",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.700.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Lâm Đồng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến KDL Madagui, chơi các trò chơi cảm giác mạnh: zipline, bắn súng sơn, chèo thuyền phao.",
+        "evening": "Nghỉ ngơi tại phòng sinh thái giữa rừng, đốt lửa trại."
+      },
+      {
+        "day": 2,
+        "activities": "Trekking tham quan Hang Dơi, Hang Thầy, rừng cây ăn trái.",
+        "evening": "Về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T065",
+    "tour_name": "Hà Nội - Mộc Châu - Tà Xùa: Cao nguyên & Biển mây",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.750.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Sơn La",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Mộc Châu, tham quan đồi chè Trái Tim, thác Dải Yếm, rừng thông Bản Áng.",
+        "evening": "Ăn tối đặc sản Tây Bắc, ngủ homestay Mộc Châu."
+      },
+      {
+        "day": 2,
+        "activities": "Rời Mộc Châu đi Bắc Yên, vượt đèo lên Tà Xùa. Check-in mỏm Cá Heo.",
+        "evening": "Nghỉ đêm tại Tà Xùa."
+      },
+      {
+        "day": 3,
+        "activities": "Đón bình minh tại Sống Lưng Khủng Long, săn biển mây.",
+        "evening": "Xuống núi về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T066",
+    "tour_name": "HCM - Thác Giang Điền - Bửu Long",
+    "duration": "1 Ngày",
+    "price": "450.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Đồng Nai",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Sáng đi KDL Thác Giang Điền tắm thác, tản bộ. Chiều di chuyển qua KDL Bửu Long (Vịnh Hạ Long thu nhỏ) đạp vịt, vãn cảnh chùa.",
+        "evening": "Khởi hành về TP.HCM kết thúc tour."
+      }
+    ]
+  },
+  {
+    "tour_id": "T067",
+    "tour_name": "Hà Nội - Đại Lải: Nghỉ dưỡng Flamingo",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "2.800.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Vĩnh Phúc",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển lên Flamingo Đại Lải Resort. Tự do tắm bơi, đi xe đạp dạo quanh rừng thông, chèo Kayak trên hồ.",
+        "evening": "Ăn tối buffet tại nhà hàng sang trọng."
+      },
+      {
+        "day": 2,
+        "activities": "Thư giãn tại tổ hợp xông hơi Jjim Jil Bang Hàn Quốc, tham quan bảo tàng nghệ thuật ngoài trời.",
+        "evening": "Trả phòng và về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T068",
+    "tour_name": "Đà Nẵng - Cù Lao Ré (Lý Sơn): Thiên đường xanh",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.900.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Quảng Ngãi",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Xe đưa vào cảng Sa Kỳ, đi tàu siêu tốc ra đảo Lý Sơn. Nhận phòng, thăm Đạo Nhai Ân Tự.",
+        "evening": "Thưởng thức hải sản tươi và gỏi tỏi Lý Sơn."
+      },
+      {
+        "day": 2,
+        "activities": "Đón bình minh Hang Câu, chinh phục đỉnh Thới Lới. Sang Đảo Bé lặn ngắm san hô.",
+        "evening": "Đi dạo quảng trường biển."
+      },
+      {
+        "day": 3,
+        "activities": "Check-in Cổng Tò Vò, mua sắm tỏi đen.",
+        "evening": "Lên tàu về đất liền, xe đưa về Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T069",
+    "tour_name": "Hà Nội - Bắc Sơn: Thung lũng lúa vàng",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.300.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lạng Sơn",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến thung lũng Bắc Sơn, leo núi Nà Lay ngắm toàn cảnh cánh đồng lúa hình bát quái.",
+        "evening": "Nghỉ homestay Làng văn hóa Quỳnh Sơn, ăn xôi cẩm, thịt rang cháy cạnh."
+      },
+      {
+        "day": 2,
+        "activities": "Đạp xe dạo quanh các bản làng dân tộc Tày, tham quan suối Mỏ Mắm.",
+        "evening": "Về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T070",
+    "tour_name": "HCM - Cổ Thạch: Mùa rêu phong",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.500.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Bình Thuận",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến Tuy Phong, viếng chùa Hang (Cổ Thạch Tự), tắm biển tại Bãi đá Bảy màu.",
+        "evening": "Thưởng thức hải sản nướng."
+      },
+      {
+        "day": 2,
+        "activities": "Dậy sớm ngắm bình minh và chụp ảnh bãi đá phủ rêu xanh (đặc trưng mùa xuân). Ghé đồi cát Nam Cương.",
+        "evening": "Lên xe về TP.HCM."
+      }
+    ]
+  },
+  {
+    "qa_id": "QA_41",
+    "ref_tour_id": "T041",
+    "user_query": "Mình muốn đi Lạng Sơn lên đỉnh Mẫu Sơn chơi vào mùa đông.",
+    "response_design": {
+      "suggestion": "Mẫu Sơn mùa đông rất lạnh và có thể có tuyết, bạn đi 2 ngày 1 đêm là vừa đẹp.",
+      "milestones": ["Hà Nội", "Đền Mẫu Đồng Đăng", "Đỉnh Mẫu Sơn"],
+      "extra_suggestions": {
+        "between": ["Hà Nội", "Đền Mẫu Đồng Đăng"],
+        "spots": ["Ải Chi Lăng"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_42",
+    "ref_tour_id": "T042",
+    "user_query": "Sài Gòn đi đảo Phú Quý 3 ngày thì đi như thế nào?",
+    "response_design": {
+      "suggestion": "Tour Phú Quý 3N2Đ từ Phan Thiết sẽ cho bạn đủ thời gian khám phá hết hòn đảo hoang sơ này.",
+      "milestones": ["TP.HCM", "Cảng Phan Thiết", "Đảo Phú Quý", "Gành Hang"],
+      "extra_suggestions": {
+        "between": ["Cảng Phan Thiết", "Đảo Phú Quý"],
+        "spots": ["Vịnh Triều Dương (khi cập cảng)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_43",
+    "ref_tour_id": "T043",
+    "user_query": "Ở Cần Thơ mình muốn đi Tràm Chim ngắm mùa nước nổi về trong ngày.",
+    "response_design": {
+      "suggestion": "Từ Cần Thơ lên Đồng Tháp chỉ mất khoảng 2-3 tiếng, tour 1 ngày đi xuồng ngắm chim là lựa chọn tuyệt vời.",
+      "milestones": ["Cần Thơ", "Đồng Tháp", "Vườn quốc gia Tràm Chim"],
+      "extra_suggestions": {
+        "between": ["Đồng Tháp", "Vườn quốc gia Tràm Chim"],
+        "spots": ["Trạm dừng chân mua nem Lai Vung"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_44",
+    "ref_tour_id": "T044",
+    "user_query": "Tư vấn cho tôi lịch trình đi Tuyên Quang hồ Na Hang.",
+    "response_design": {
+      "suggestion": "Khám phá 'Vịnh Hạ Long trên núi' Na Hang trong 2 ngày 1 đêm giúp bạn hòa mình trọn vẹn vào thiên nhiên.",
+      "milestones": ["Hà Nội", "TP Tuyên Quang", "Hồ Na Hang", "Thác Khuổi Nhi"],
+      "extra_suggestions": {
+        "between": ["Hồ Na Hang", "Thác Khuổi Nhi"],
+        "spots": ["Cọc Vài Phạ (trên thuyền)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_45",
+    "ref_tour_id": "T045",
+    "user_query": "Tìm tour Ninh Thuận đi Hang Rái từ Sài Gòn.",
+    "response_design": {
+      "suggestion": "Hành trình HCM - Ninh Thuận 2 ngày 2 đêm rất phổ biến để ngắm Hang Rái và Vịnh Vĩnh Hy.",
+      "milestones": ["TP.HCM", "Ninh Thuận", "Vịnh Vĩnh Hy", "Hang Rái"],
+      "extra_suggestions": {
+        "between": ["Ninh Thuận", "Vịnh Vĩnh Hy"],
+        "spots": ["Tháp Po Klong Garai", "Vườn Nho Thái An"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_46",
+    "ref_tour_id": "T046",
+    "user_query": "Tôi vào Đà Nẵng, muốn đi chơi thúng ở Hội An.",
+    "response_design": {
+      "suggestion": "Bạn có thể mua tour Rừng dừa Bảy Mẫu nửa ngày hoặc 1 ngày, kết hợp chơi thúng và dạo Hội An buổi chiều.",
+      "milestones": ["Đà Nẵng", "Hội An", "Rừng dừa Bảy Mẫu"],
+      "extra_suggestions": {
+        "between": ["Đà Nẵng", "Hội An"],
+        "spots": ["Làng đá mỹ nghệ Non Nước"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_47",
+    "ref_tour_id": "T047",
+    "user_query": "Cần lịch trình đi Bình Liêu ngắm cỏ lau mùa thu.",
+    "response_design": {
+      "suggestion": "Bình Liêu 2 ngày 1 đêm là cung đường trekking tuyệt đẹp, đặc biệt là chinh phục cột mốc 1305.",
+      "milestones": ["Hà Nội", "Bình Liêu", "Cột mốc 1297", "Cột mốc 1305"],
+      "extra_suggestions": {
+        "between": ["Bình Liêu", "Cột mốc 1297"],
+        "spots": ["Thác Khe Vằn (nếu đi mùa nước)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_48",
+    "ref_tour_id": "T048",
+    "user_query": "Cuối tuần muốn tránh nóng Sài Gòn, đi Bảo Lộc có ổn không?",
+    "response_design": {
+      "suggestion": "Bảo Lộc rất mát mẻ và vắng hơn Đà Lạt. Tour 2N1Đ săn mây Linh Quy Pháp Ấn là cực kỳ hợp lý.",
+      "milestones": ["TP.HCM", "Bảo Lộc", "Thác Dambri", "Linh Quy Pháp Ấn"],
+      "extra_suggestions": {
+        "between": ["Bảo Lộc", "Thác Dambri"],
+        "spots": ["Tu viện Bát Nhã"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_49",
+    "ref_tour_id": "T049",
+    "user_query": "Giới thiệu tour Foodtour Hải Phòng 1 ngày từ Hà Nội.",
+    "response_design": {
+      "suggestion": "Trải nghiệm đi tàu hỏa xuống Hải Phòng ăn uống và ngắm biển Đồ Sơn trong ngày rất được giới trẻ ưa chuộng.",
+      "milestones": ["Hà Nội", "Ga Hải Phòng", "Trung tâm Hải Phòng", "Biển Đồ Sơn"],
+      "extra_suggestions": {
+        "between": ["Ga Hải Phòng", "Trung tâm Hải Phòng"],
+        "spots": ["Chợ Cố Đạo (Ăn vặt)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_50",
+    "ref_tour_id": "T050",
+    "user_query": "Tour miền Tây đi Bến Tre Trà Vinh thì thế nào?",
+    "response_design": {
+      "suggestion": "Hành trình HCM - Bến Tre - Trà Vinh 2 ngày sẽ đưa bạn ngắm những rừng dừa bạt ngàn và văn hóa Khmer độc đáo.",
+      "milestones": ["TP.HCM", "Bến Tre", "Trà Vinh", "Ao Bà Om"],
+      "extra_suggestions": {
+        "between": ["Bến Tre", "Trà Vinh"],
+        "spots": ["Lò kẹo dừa", "Chùa Hang"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_51",
+    "ref_tour_id": "T051",
+    "user_query": "Lịch trình đi Y Tý Lào Cai săn mây như nào?",
+    "response_design": {
+      "suggestion": "Đường lên Y Tý khá ngoằn ngoèo, bạn nên đi 3 ngày 2 đêm từ Hà Nội để có thời gian săn mây và nghỉ ngơi.",
+      "milestones": ["Hà Nội", "Sapa", "Y Tý", "Ngải Thầu"],
+      "extra_suggestions": {
+        "between": ["Sapa", "Y Tý"],
+        "spots": ["Ngã ba Lũng Pô"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_52",
+    "ref_tour_id": "T052",
+    "user_query": "Có tour nào trong ngày từ Sài Gòn đi Cần Giờ không?",
+    "response_design": {
+      "suggestion": "Cần Giờ rất gần HCM, bạn hoàn toàn có thể đi tour 1 ngày thăm đảo Khỉ và ăn hải sản rồi về.",
+      "milestones": ["TP.HCM", "Phà Bình Khánh", "Đảo Khỉ", "Biển 30/4"],
+      "extra_suggestions": {
+        "between": ["Đảo Khỉ", "Biển 30/4"],
+        "spots": ["Chiến khu Rừng Sác", "Chợ Hàng Dương"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_53",
+    "ref_tour_id": "T053",
+    "user_query": "Từ Đà Nẵng đi dọc miền Trung ra Quảng Bình thì đi đâu?",
+    "response_design": {
+      "suggestion": "Con đường di sản miền Trung từ Đà Nẵng qua Huế ra Phong Nha mất khoảng 3 ngày 2 đêm là chuẩn nhất.",
+      "milestones": ["Đà Nẵng", "Huế", "Đồng Hới", "Động Phong Nha"],
+      "extra_suggestions": {
+        "between": ["Huế", "Đồng Hới"],
+        "spots": ["Thành cổ Quảng Trị", "Cầu Hiền Lương"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_54",
+    "ref_tour_id": "T054",
+    "user_query": "Muốn đi biển miền Bắc hoang sơ, ngoài Cô Tô còn ở đâu?",
+    "response_design": {
+      "suggestion": "Đảo Quan Lạn (Quảng Ninh) là điểm đến tuyệt vời với bãi biển cát trắng tinh và cực kỳ yên tĩnh.",
+      "milestones": ["Hà Nội", "Cảng Vân Đồn", "Đảo Quan Lạn", "Biển Minh Châu"],
+      "extra_suggestions": {
+        "between": ["Đảo Quan Lạn", "Biển Minh Châu"],
+        "spots": ["Đình Quan Lạn", "Eo gió Quan Lạn"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_55",
+    "ref_tour_id": "T055",
+    "user_query": "Sài Gòn muốn đi Làng Nổi Tân Lập Long An trong ngày.",
+    "response_design": {
+      "suggestion": "Điểm này chỉ cách HCM khoảng 100km, tour 1 ngày tản bộ xuyên rừng tràm là chuyến đi picnic lý tưởng.",
+      "milestones": ["TP.HCM", "Long An", "Làng nổi Tân Lập"],
+      "extra_suggestions": {
+        "between": ["Long An", "Làng nổi Tân Lập"],
+        "spots": ["Chợ nông sản Thạnh Hóa (mua đặc sản)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_56",
+    "ref_tour_id": "T056",
+    "user_query": "Xin lịch trình từ Đà Nẵng lên Kon Tum checkin cột mốc Đông Dương.",
+    "response_design": {
+      "suggestion": "Bạn có thể chạy xe ô tô lên Tây Nguyên, 2 ngày 1 đêm đủ để check-in ngã ba Đông Dương và tham quan Kon Tum.",
+      "milestones": ["Đà Nẵng", "Ngọc Hồi", "Ngã ba Đông Dương", "TP. Kon Tum"],
+      "extra_suggestions": {
+        "between": ["Ngọc Hồi", "TP. Kon Tum"],
+        "spots": ["Nhà rông Kon Klor", "Cầu treo Kon Klor"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_57",
+    "ref_tour_id": "T057",
+    "user_query": "Từ HN muốn đi viếng Đền Thác Bờ Hòa Bình trong 1 ngày.",
+    "response_design": {
+      "suggestion": "Hành trình đi Thung Nai và viếng Đền Thác Bờ trong 1 ngày là cung đường tâm linh kết hợp ngắm cảnh rất đẹp.",
+      "milestones": ["Hà Nội", "Hòa Bình", "Cảng Thung Nai", "Đền Thác Bờ"],
+      "extra_suggestions": {
+        "between": ["Cảng Thung Nai", "Đền Thác Bờ"],
+        "spots": ["Động Thác Bờ (đi thuyền)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_58",
+    "ref_tour_id": "T058",
+    "user_query": "Tư vấn tour Hồ Cốc Bình Châu cho gia đình nghỉ dưỡng.",
+    "response_design": {
+      "suggestion": "Tour 2 ngày 1 đêm từ HCM đi tắm suối khoáng nóng Bình Châu và thư giãn tại biển Hồ Cốc rất hợp cho gia đình.",
+      "milestones": ["TP.HCM", "Suối khoáng Bình Châu", "Hồ Cốc"],
+      "extra_suggestions": {
+        "between": ["Suối khoáng Bình Châu", "Hồ Cốc"],
+        "spots": ["Khu bảo tồn thiên nhiên Bình Châu - Phước Bửu"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_59",
+    "ref_tour_id": "T059",
+    "user_query": "Muốn ra đảo Hải Tặc Kiên Giang từ Cần Thơ.",
+    "response_design": {
+      "suggestion": "Bạn cần xuống Hà Tiên rồi đi tàu ra đảo. Lịch trình 2 ngày 1 đêm sống cùng người dân đảo sẽ rất thú vị.",
+      "milestones": ["Cần Thơ", "Hà Tiên", "Quần đảo Hải Tặc"],
+      "extra_suggestions": {
+        "between": ["Hà Tiên", "Quần đảo Hải Tặc"],
+        "spots": ["Chợ đêm Hà Tiên (nếu ngủ lại đất liền)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_60",
+    "ref_tour_id": "T060",
+    "user_query": "Đi cầu kính Lai Châu từ Hà Nội thì đi thế nào?",
+    "response_design": {
+      "suggestion": "Bạn sẽ đi theo đường Sapa rồi vượt đèo Ô Quy Hồ. Tour 3 ngày 2 đêm sẽ giúp bạn không bị quá mệt.",
+      "milestones": ["Hà Nội", "Sapa", "Đèo Ô Quy Hồ", "Cầu kính Rồng Mây", "Lai Châu"],
+      "extra_suggestions": {
+        "between": ["Đèo Ô Quy Hồ", "Lai Châu"],
+        "spots": ["Cọn nước Nà Khương"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_61",
+    "ref_tour_id": "T061",
+    "user_query": "Nghe nói Tứ Bình rất đẹp, xin lịch trình từ SG.",
+    "response_design": {
+      "suggestion": "Tour khám phá Bình Hưng - Bình Lập 2 ngày 2 đêm sẽ đưa bạn đến với Maldives của Việt Nam.",
+      "milestones": ["TP.HCM", "Cam Ranh", "Đảo Bình Hưng", "Bán đảo Bình Lập"],
+      "extra_suggestions": {
+        "between": ["Đảo Bình Hưng", "Bán đảo Bình Lập"],
+        "spots": ["Bãi Cây Me", "Resort Sao Biển"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_62",
+    "ref_tour_id": "T062",
+    "user_query": "Ở Đà Nẵng muốn đi trekking nhẹ nhàng, có điểm nào không?",
+    "response_design": {
+      "suggestion": "Vườn quốc gia Bạch Mã (Huế) cách Đà Nẵng không xa, đi tour 1 ngày để leo núi và ngắm thác là chuẩn nhất.",
+      "milestones": ["Đà Nẵng", "Chân núi Bạch Mã", "Hải Vọng Đài", "Thác Đỗ Quyên"],
+      "extra_suggestions": {
+        "between": ["Hải Vọng Đài", "Thác Đỗ Quyên"],
+        "spots": ["Ngũ Hồ Bạch Mã"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_63",
+    "ref_tour_id": "T063",
+    "user_query": "Tìm chỗ cắm trại gần Hà Nội cuối tuần.",
+    "response_design": {
+      "suggestion": "Hồ Đồng Đò (Sóc Sơn) chỉ cách HN khoảng 40km. Bạn có thể tự lái xe lên cắm trại 2N1Đ rất chill.",
+      "milestones": ["Hà Nội", "Sóc Sơn", "Hồ Đồng Đò"],
+      "extra_suggestions": {
+        "between": ["Hà Nội", "Sóc Sơn"],
+        "spots": ["Việt Phủ Thành Chương", "Đền Gióng"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_64",
+    "ref_tour_id": "T064",
+    "user_query": "Muốn chơi trò chơi mạo hiểm trong rừng từ SG thì đi đâu?",
+    "response_design": {
+      "suggestion": "Khu du lịch Madagui (Lâm Đồng) có đầy đủ zipline, bắn súng sơn. Tour 2N1Đ là lựa chọn số một.",
+      "milestones": ["TP.HCM", "Lâm Đồng", "KDL Madagui", "Hang Dơi"],
+      "extra_suggestions": {
+        "between": ["Lâm Đồng", "KDL Madagui"],
+        "spots": ["Rừng cao su Đồng Nai (dọc đường đi)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_65",
+    "ref_tour_id": "T065",
+    "user_query": "Mình muốn đi combo cả Mộc Châu và Tà Xùa.",
+    "response_design": {
+      "suggestion": "Cung đường này đi thành một vòng tròn khá thuận tiện. Lịch trình 3 ngày 2 đêm sẽ bao trọn cảnh đẹp 2 nơi.",
+      "milestones": ["Hà Nội", "Mộc Châu", "Bắc Yên", "Tà Xùa"],
+      "extra_suggestions": {
+        "between": ["Mộc Châu", "Bắc Yên"],
+        "spots": ["Đồi chè Trái Tim", "Bến phà Vạn Yên (qua sông Đà)"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_66",
+    "ref_tour_id": "T066",
+    "user_query": "Gia đình muốn đi Thác Giang Điền Đồng Nai 1 ngày.",
+    "response_design": {
+      "suggestion": "Thác Giang Điền kết hợp với khu du lịch Bửu Long sẽ tạo thành một ngày vui chơi trọn vẹn cho gia đình.",
+      "milestones": ["TP.HCM", "Đồng Nai", "Thác Giang Điền", "KDL Bửu Long"],
+      "extra_suggestions": {
+        "between": ["Thác Giang Điền", "KDL Bửu Long"],
+        "spots": ["Chùa Bửu Phong"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_67",
+    "ref_tour_id": "T067",
+    "user_query": "Tìm resort nghỉ dưỡng sang trọng gần Hà Nội.",
+    "response_design": {
+      "suggestion": "Flamingo Đại Lải (Vĩnh Phúc) là resort 5 sao gần HN nhất, đi 2 ngày 1 đêm tận hưởng không khí trong lành.",
+      "milestones": ["Hà Nội", "Vĩnh Phúc", "Hồ Đại Lải", "Flamingo Resort"],
+      "extra_suggestions": {
+        "between": ["Hồ Đại Lải", "Flamingo Resort"],
+        "spots": ["Bảo tàng nghệ thuật ngoài trời"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_68",
+    "ref_tour_id": "T068",
+    "user_query": "Ở Đà Nẵng bay vào, muốn đi đảo Lý Sơn ăn tỏi.",
+    "response_design": {
+      "suggestion": "Từ ĐN bạn đi xe vào cảng Sa Kỳ (Quảng Ngãi) rồi ra Lý Sơn. Tour 3N2Đ sẽ khám phá cả Đảo Lớn và Đảo Bé.",
+      "milestones": ["Đà Nẵng", "Cảng Sa Kỳ", "Đảo Lý Sơn", "Đảo Bé"],
+      "extra_suggestions": {
+        "between": ["Đảo Lý Sơn", "Đảo Bé"],
+        "spots": ["Đỉnh Thới Lới", "Cổng Tò Vò"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_69",
+    "ref_tour_id": "T069",
+    "user_query": "Đi ngắm lúa ở thung lũng Bắc Sơn Lạng Sơn.",
+    "response_design": {
+      "suggestion": "Bắc Sơn rất gần HN, đi 2 ngày 1 đêm leo đỉnh Nà Lay ngắm lúa chín là trải nghiệm cực kỳ ấn tượng.",
+      "milestones": ["Hà Nội", "Lạng Sơn", "Thung lũng Bắc Sơn", "Đỉnh Nà Lay"],
+      "extra_suggestions": {
+        "between": ["Thung lũng Bắc Sơn", "Đỉnh Nà Lay"],
+        "spots": ["Làng văn hóa Quỳnh Sơn"]
+      }
+    }
+  },
+  {
+    "qa_id": "QA_70",
+    "ref_tour_id": "T070",
+    "user_query": "Tư vấn đi biển Cổ Thạch Bình Thuận mùa rêu.",
+    "response_design": {
+      "suggestion": "Mùa rêu Cổ Thạch rất độc đáo, bạn đi 2 ngày 1 đêm từ HCM là vừa đủ để chụp ảnh và ăn hải sản.",
+      "milestones": ["TP.HCM", "Tuy Phong", "Cổ Thạch Tự", "Bãi đá Bảy Màu"],
+      "extra_suggestions": {
+        "between": ["Cổ Thạch Tự", "Bãi đá Bảy Màu"],
+        "spots": ["Đồi cát Nam Cương"]
+      }
+    }
+  }
+]

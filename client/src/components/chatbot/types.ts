@@ -15,6 +15,9 @@ export interface CardItem {
   tour_code?: string;
   description?: string;
   departure_dates?: string[];
+  location?: string;
+  post_url?: string;
+  engagement_score?: number;
 }
 
 export interface ItineraryDay {

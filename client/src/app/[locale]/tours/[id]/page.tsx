@@ -144,6 +144,11 @@ export default function TourDetailPage() {
       try {
         const res = await toursApi.getById(tourId);
         if (res.success && res.data) {
+          const departureLocation =
+            res.data.departure_location_id && typeof res.data.departure_location_id === "object"
+              ? res.data.departure_location_id.name
+              : undefined;
+
           setTour(res.data);
           // Track recently viewed
           addRecentlyViewed({
@@ -151,9 +156,9 @@ export default function TourDetailPage() {
             type: "tour",
             name: res.data.name,
             image: res.data.images?.[0],
-            location: res.data.departure_location,
+            location: departureLocation,
             price: res.data.adult_price,
-            rating: res.data.average_rating,
+            rating: res.data.rating,
             url: `/tours/${res.data._id}`,
           });
         }

@@ -50,6 +50,24 @@ stories:
         entities:
           - location: "Hà Nội"
       - action: hotel_form
+      - slot_was_set:
+          - requested_slot: check_in_date
+      - intent: provide_location
+        entities:
+          - check_in_date: "2026-04-20"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: check_out_date
+      - intent: provide_location
+        entities:
+          - check_out_date: "2026-04-22"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: number_of_guests
+      - intent: provide_location
+        entities:
+          - number_of_guests: "2"
+      - action: hotel_form
       - active_loop: null
       - slot_was_set:
           - requested_slot: null
@@ -74,6 +92,24 @@ stories:
       - intent: provide_location
         entities:
           - location: "Đà Nẵng"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: check_in_date
+      - intent: provide_location
+        entities:
+          - check_in_date: "2026-04-20"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: check_out_date
+      - intent: provide_location
+        entities:
+          - check_out_date: "2026-04-23"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: number_of_guests
+      - intent: provide_location
+        entities:
+          - number_of_guests: "2"
       - action: hotel_form
       - active_loop: null
       - slot_was_set:
@@ -172,6 +208,24 @@ stories:
         entities:
           - location: "Hà Nội"
       - action: hotel_form
+      - slot_was_set:
+          - requested_slot: check_in_date
+      - intent: provide_location
+        entities:
+          - check_in_date: "2026-04-20"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: check_out_date
+      - intent: provide_location
+        entities:
+          - check_out_date: "2026-04-22"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: number_of_guests
+      - intent: provide_location
+        entities:
+          - number_of_guests: "2"
+      - action: hotel_form
       - active_loop: null
       - slot_was_set:
           - location: "Hà Nội"
@@ -184,6 +238,25 @@ stories:
       - intent: search_hotel
         entities:
           - location: "Đà Nẵng"
+      - action: hotel_form
+      - active_loop: hotel_form
+      - slot_was_set:
+          - requested_slot: check_in_date
+      - intent: provide_location
+        entities:
+          - check_in_date: "2026-04-20"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: check_out_date
+      - intent: provide_location
+        entities:
+          - check_out_date: "2026-04-22"
+      - action: hotel_form
+      - slot_was_set:
+          - requested_slot: number_of_guests
+      - intent: provide_location
+        entities:
+          - number_of_guests: "2"
       - action: hotel_form
       - active_loop: null
       - action: action_search_hotels

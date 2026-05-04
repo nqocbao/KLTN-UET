@@ -1,4 +1,4 @@
-import { Sparkles, Hotel, Plane, Bus } from "lucide-react";
+import { Sparkles, Hotel, Plane, Bus, Utensils } from "lucide-react";
 
 export const CATEGORIES = [
   {
@@ -55,6 +55,20 @@ export const CATEGORIES = [
       "Xe từ sân bay Tân Sơn Nhất về trung tâm",
       "Giá đưa đón sân bay Đà Nẵng",
       "Thuê xe riêng từ sân bay",
+    ],
+  },
+  {
+    id: "foodtour",
+    label: "Food Review",
+    icon: Utensils,
+    color: "text-amber-600",
+    bg: "bg-amber-50 hover:bg-amber-100",
+    activeBg: "bg-amber-600 text-white",
+    quickReplies: [
+      "Ăn gì ở Hà Nội",
+      "Review bún chả ngon",
+      "Quán ăn ngon ở Đà Nẵng",
+      "Food tour Sài Gòn có gì hot",
     ],
   },
 ];

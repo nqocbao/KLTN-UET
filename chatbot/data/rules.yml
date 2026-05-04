@@ -92,6 +92,11 @@ rules:
       - intent: ask_recommendation
       - action: action_get_recommendations
 
+  - rule: Answer food tour review questions
+    steps:
+      - intent: ask_foodtour
+      - action: action_rag_food_reviews
+
   # === Informational rules ===
 
   - rule: Answer hotel price question

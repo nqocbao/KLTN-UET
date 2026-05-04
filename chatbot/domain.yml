@@ -18,6 +18,7 @@ intents:
   - ask_hotel_amenities
   - ask_location
   - ask_recommendation
+  - ask_foodtour
   - ask_weather
   - ask_opening_hours
   - help
@@ -83,6 +84,10 @@ slots:
     mappings:
       - type: from_entity
         entity: check_in_date
+      - type: from_text
+        conditions:
+          - active_loop: hotel_form
+            requested_slot: check_in_date
   
   check_out_date:
     type: text
@@ -90,6 +95,10 @@ slots:
     mappings:
       - type: from_entity
         entity: check_out_date
+      - type: from_text
+        conditions:
+          - active_loop: hotel_form
+            requested_slot: check_out_date
   
   number_of_guests:
     type: float
@@ -97,6 +106,10 @@ slots:
     mappings:
       - type: from_entity
         entity: number_of_guests
+      - type: from_text
+        conditions:
+          - active_loop: hotel_form
+            requested_slot: number_of_guests
   
   room_type:
     type: text
@@ -118,6 +131,9 @@ slots:
     mappings:
       - type: from_entity
         entity: flight_from
+        conditions:
+          - active_loop: flight_form
+            requested_slot: flight_from
       - type: from_entity
         entity: location
         conditions:
@@ -134,6 +150,9 @@ slots:
     mappings:
       - type: from_entity
         entity: flight_to
+        conditions:
+          - active_loop: flight_form
+            requested_slot: flight_to
       - type: from_entity
         entity: location
         conditions:
@@ -186,6 +205,9 @@ forms:
   hotel_form:
     required_slots:
       - location
+      - check_in_date
+      - check_out_date
+      - number_of_guests
 
   tour_form:
     required_slots:
@@ -294,6 +316,15 @@ responses:
   utter_ask_flight_date:
     - text: "Bạn muốn bay ngày nào? (ví dụ: 2026-04-20 hoặc ngày mai)"
 
+  utter_ask_check_in_date:
+    - text: "Bạn muốn nhận phòng ngày nào? (ví dụ: 2026-04-20 hoặc ngày mai)"
+
+  utter_ask_check_out_date:
+    - text: "Bạn muốn trả phòng ngày nào? (ví dụ: 2026-04-22)"
+
+  utter_ask_number_of_guests:
+    - text: "Có bao nhiêu khách lưu trú? (ví dụ: 2 người)"
+
   utter_ask_destination:
     - text: "Bạn muốn đi tour đến đâu? (ví dụ: Đà Lạt, Sapa, Phú Quốc, Nhật Bản)"
 
@@ -306,6 +337,7 @@ actions:
   - action_get_destination_info
   - action_save_conversation
   - action_get_recommendations
+  - action_rag_food_reviews
   - action_get_full_itinerary
   - validate_flight_form
   - validate_hotel_form

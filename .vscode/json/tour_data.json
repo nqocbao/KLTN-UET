@@ -1,0 +1,1032 @@
+[
+  {
+    "tour_id": "T001",
+    "tour_name": "Hà Nội - Hạ Long: Du thuyền 5 sao",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "3.500.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Quảng Ninh",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển từ Hà Nội đến Tuần Châu, lên du thuyền, tham quan Hang Sửng Sốt, chèo thuyền Kayak tại hang Luồn.",
+        "evening": "Ăn tối trên du thuyền, câu mực đêm hoặc xem phim, nghỉ đêm trên vịnh."
+      },
+      {
+        "day": 2,
+        "activities": "Tập Taichi trên boong tàu, tham quan đảo Ti Tốp, tắm biển và leo núi ngắm toàn cảnh vịnh.",
+        "evening": "Về đến bến cảng, xe đưa khách trở lại Hà Nội. Kết thúc tour."
+      }
+    ]
+  },
+  {
+    "tour_id": "T002",
+    "tour_name": "Hà Nội - Sapa: Chinh phục Fansipan",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "2.250.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lào Cai",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển xe giường nằm đến Sapa, đi bộ tham quan bản Cát Cát, tìm hiểu văn hóa người H'Mông.",
+        "evening": "Ăn tối lẩu cá hồi, tham quan nhà thờ Đá, đi chợ tình Sapa (nếu vào thứ 7)."
+      },
+      {
+        "day": 2, 
+        "activities": "Trải nghiệm cáp treo lên đỉnh Fansipan - Nóc nhà Đông Dương, check-in cột mốc 3.143m.",
+        "evening": "Lên xe về lại Hà Nội vào buổi chiều muộn."
+      }
+    ]
+  },
+  {
+    "tour_id": "T003",
+    "tour_name": "Hà Nội - Ninh Bình: Tràng An - Bái Đính",
+    "duration": "1 Ngày",
+    "price": "950.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Ninh Bình",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan chùa Bái Đính - ngôi chùa lớn nhất Việt Nam, đi thuyền tại khu sinh thái Tràng An qua các hang động.",
+        "evening": "Về lại Hà Nội buổi tối. Không có hoạt động qua đêm."
+      }
+    ]
+  },
+  {
+    "tour_id": "T004",
+    "tour_name": "Hà Nội - Đà Nẵng - Hội An",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "4.800.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Đà Nẵng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Bay đến Đà Nẵng, tham quan Bán đảo Sơn Trà, chùa Linh Ứng, Ngũ Hành Sơn.",
+        "evening": "Tham quan Phố cổ Hội An, thả hoa đăng, ăn tối đặc sản Cao Lầu."
+      },
+      {
+        "day": 2,
+        "activities": "Vui chơi tại Bà Na Hills, check-in Cầu Vàng, hầm rượu Debay, công viên Fantasy Park.",
+        "evening": "Xem show Ký ức Hội An hoặc tự do xem Cầu Rồng phun lửa."
+      },
+      {
+        "day": 3,
+        "activities": "Tắm biển Mỹ Khê, đi chợ Hàn mua quà lưu niệm, hải sản khô.",
+        "evening": "Đáp chuyến bay về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T005",
+    "tour_name": "Hà Nội - Hà Giang: Cao nguyên đá Đồng Văn",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.850.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Hà Giang",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Vượt dốc Bắc Sum, cổng trời Quản Bạ, núi đôi Cô Tiên, di chuyển đến Yên Minh.",
+        "evening": "Ăn tối tại thị trấn Yên Minh, nghỉ ngơi sau hành trình dài."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Dinh Thự Vua Mèo, cột cờ Lũng Cú, chinh phục đèo Mã Pí Lèng, đi thuyền trên sông Nho Quế.",
+        "evening": "Dạo phố cổ Đồng Văn, uống cafe cực Bắc."
+      },
+      {
+        "day": 3,
+        "activities": "Đi chợ phiên Đồng Văn, tham quan làng văn hóa Lũng Cẩm.",
+        "evening": "Về đến Hà Nội đêm khuya."
+      }
+    ]
+  },
+  {
+    "tour_id": "T006",
+    "tour_name": "HCM - Vũng Tàu: Biển xanh vẫy gọi",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.500.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Vũng Tàu",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến Vũng Tàu, tham quan Tượng Chúa Kitô Vua, Bạch Dinh, tắm biển Bãi Sau.",
+        "evening": "Ăn hải sản tại chợ đêm Vũng Tàu, đi dạo đường ven biển."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Ngọn Hải Đăng ngắm toàn cảnh thành phố, đi khu du lịch Hồ Mây.",
+        "evening": "Về lại TP.HCM vào buổi chiều."
+      }
+    ]
+  },
+  {
+    "tour_id": "T007",
+    "tour_name": "HCM - Đà Lạt: Thành phố ngàn hoa",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.600.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Lâm Đồng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Xe đón tại HCM đi Đà Lạt, tham quan thác Datanla, dinh Bảo Đại.",
+        "evening": "Dạo chợ đêm Đà Lạt, uống sữa đậu nành nóng."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Langbiang, thung lũng Tình Yêu, vườn hoa thành phố.",
+        "evening": "Ăn lẩu gà lá é, tham quan quảng trường Lâm Viên."
+      },
+      {
+        "day": 3,
+        "activities": "Viếng thiền viện Trúc Lâm, ngắm hồ Tuyền Lâm, đi chợ mua rau củ quả.",
+        "evening": "Lên xe về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T008",
+    "tour_name": "HCM - Phan Thiết: Mũi Né cát trắng",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.850.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Bình Thuận",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Mũi Né, tham quan tháp Chăm Poshanư, lầu Ông Hoàng, tắm biển.",
+        "evening": "Ăn tối tại khu vực bờ kè với hải sản tươi sống."
+      },
+      {
+        "day": 2,
+        "activities": "Đón bình minh tại Đồi Cát Bay, tham quan Bàu Trắng, Suối Tiên.",
+        "evening": "Khởi hành về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T009",
+    "tour_name": "HCM - Cần Thơ: Miền Tây sông nước",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.450.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Cần Thơ",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Ghé Mỹ Tho tham quan chùa Vĩnh Tràng, đi thuyền trên sông Tiền, tham quan các cù lao.",
+        "evening": "Đến Cần Thơ, dùng bữa trên du thuyền Cần Thơ, nghe đờn ca tài tử."
+      },
+      {
+        "day": 2,
+        "activities": "Đi chợ nổi Cái Răng từ sớm, tham quan vườn trái cây, lò hủ tiếu truyền thống.",
+        "evening": "Di chuyển về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T010",
+    "tour_name": "HCM - Phú Quốc: Đảo Ngọc thiên đường",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "5.500.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Kiên Giang",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Bay đến Phú Quốc, tham quan Dinh Cậu, Suối Tranh, cơ sở sản xuất nước mắm.",
+        "evening": "Dạo chợ đêm Phú Quốc, thưởng thức bún quậy."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan cáp treo Hòn Thơm, lặn ngắm san hô, tắm biển Bãi Sao.",
+        "evening": "Tham quan thành phố không ngủ Grand World, xem show nhạc nước."
+      },
+      {
+        "day": 3,
+        "activities": "Mua sắm ngọc trai, hồ tiêu, rượu sim rừng.",
+        "evening": "Tiễn sân bay về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T011",
+    "tour_name": "Hà Nội - Quy Nhơn: Kỳ Co - Eo Gió",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "4.200.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Bình Định",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Bay đến Quy Nhơn, tham quan Ghềnh Ráng Tiên Sa, mộ Hàn Mặc Tử, tháp Đôi.",
+        "evening": "Ăn tối tại phố ẩm thực Ngô Văn Sở."
+      },
+      {
+        "day": 2,
+        "activities": "Đi cano sang đảo Kỳ Co, tắm biển, ngắm san hô tại Bãi Dứa, check-in Eo Gió.",
+        "evening": "Tự do dạo biển Quy Nhơn đêm."
+      },
+      {
+        "day": 3,
+        "activities": "Tham quan bảo tàng Quang Trung, xem biểu diễn võ cổ truyền Bình Định.",
+        "evening": "Đáp chuyến bay về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T012",
+    "tour_name": "HCM - Nha Trang: Biển gọi",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "3.300.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Khánh Hòa",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Nha Trang, tham quan Chùa Long Sơn, Nhà thờ Núi, tháp Bà Ponagar.",
+        "evening": "Dạo chợ đêm Nha Trang, ăn nem nướng Đặng Văn Quyên."
+      },
+      {
+        "day": 2,
+        "activities": "Vui chơi trọn gói tại VinWonders Nha Trang hoặc đi tour 3 đảo lặn ngắm san hô.",
+        "evening": "Thưởng thức tiệc buffet hải sản."
+      },
+      {
+        "day": 3,
+        "activities": "Tắm bùn khoáng nóng, mua sắm tại chợ Đầm.",
+        "evening": "Lên xe/tàu về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T013",
+    "tour_name": "Hà Nội - Huế: Cố đô cổ kính",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "2.900.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Thừa Thiên Huế",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan Đại Nội Huế, chùa Thiên Mụ, các lăng tẩm (Minh Mạng, Khải Định).",
+        "evening": "Nghe ca Huế trên sông Hương, dạo cầu Trường Tiền."
+      },
+      {
+        "day": 2,
+        "activities": "Thưởng thức ẩm thực Huế, đi chợ Đông Ba, tham quan làng hương Thủy Xuân.",
+        "evening": "Bay về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T014",
+    "tour_name": "Đà Nẵng - Quảng Bình: Động Thiên Đường",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.950.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Quảng Bình",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Khởi hành từ Đà Nẵng đi Quảng Bình, tham quan vĩ tuyến 17, cầu Hiền Lương - sông Bến Hải.",
+        "evening": "Ăn tối tại Đồng Hới, dạo chơi ven biển Nhật Lệ."
+      },
+      {
+        "day": 2,
+        "activities": "Khám phá Động Thiên Đường - hoàng cung trong lòng đất, ghé thăm Suối Nước Moọc.",
+        "evening": "Quay về lại Đà Nẵng kết thúc tour."
+      }
+    ]
+  },
+  {
+    "tour_id": "T015",
+    "tour_name": "HCM - Côn Đảo: Tâm linh & Nghỉ dưỡng",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "6.800.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Bà Rịa - Vũng Tàu",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Bay đến Côn Đảo, tham quan Dinh Chúa Đảo, hệ thống chuồng cọp Pháp - Mỹ.",
+        "evening": "Viếng nghĩa trang Hàng Dương, thắp nhang mộ chị Võ Thị Sáu vào lúc đêm khuya."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Miếu Bà Phi Yến, tắm biển bãi Đầm Trầu, ngắm máy bay hạ cánh sát mặt biển.",
+        "evening": "Bay về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T016",
+    "tour_name": "Hà Nội - Mộc Châu: Mùa hoa cải trắng",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.350.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Sơn La",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan đèo Đá Trắng, rừng thông Bản Áng, thác Dải Yếm, cầu kính Tình Yêu.",
+        "evening": "Ăn tối món ăn dân tộc Thái, đốt lửa trại giao lưu văn nghệ."
+      },
+      {
+        "day": 2,
+        "activities": "Check-in đồi chè Trái Tim, thung lũng Nà Ka, mua mận và sữa Mộc Châu.",
+        "evening": "Về đến Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T017",
+    "tour_name": "HCM - Buôn Ma Thuột: Thủ phủ Cà phê",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "3.100.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Đắk Lắk",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Buôn Ma Thuột, tham quan bảo tàng Thế giới Cà phê, chùa Sắc Tứ Khải Đoan.",
+        "evening": "Thưởng thức cà phê Ban Mê, ăn bún đỏ."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Buôn Đôn, cưỡi voi, đi cầu treo, khám phá thác Dray Nur hùng vĩ.",
+        "evening": "Giao lưu cồng chiêng Tây Nguyên với người dân bản địa."
+      },
+      {
+        "day": 3,
+        "activities": "Đi thuyền trên hồ Lắk, tham quan buôn Jun.",
+        "evening": "Lên máy bay/xe về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T018",
+    "tour_name": "Cần Thơ - Châu Đốc: Rừng tràm Trà Sư",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.200.000 VNĐ",
+    "departure": "Cần Thơ",
+    "destination": "An Giang",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đi Châu Đốc, tham quan miếu Bà Chúa Xứ, lăng Thoại Ngọc Hầu, chùa Tây An.",
+        "evening": "Dạo chợ đêm Châu Đốc, thưởng thức các loại mắm đặc sản."
+      },
+      {
+        "day": 2,
+        "activities": "Khám phá rừng tràm Trà Sư bằng xuồng máy, ngắm chim và bèo tai tượng phủ kín mặt nước.",
+        "evening": "Về lại điểm đón tại Cần Thơ."
+      }
+    ]
+  },
+  {
+    "tour_id": "T019",
+    "tour_name": "Đà Nẵng - Lý Sơn: Vương quốc tỏi",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "2.400.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Quảng Ngãi",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến cảng Sa Kỳ, đi tàu cao tốc ra Lý Sơn, tham quan Chùa Hang, cổng Tò Vò.",
+        "evening": "Ăn tối gỏi tỏi, hải sản tại cảng cá Lý Sơn."
+      },
+      {
+        "day": 2,
+        "activities": "Lên đỉnh Thới Lới ngắm toàn đảo, tham quan hang Câu, sang Đảo Bé tắm biển.",
+        "evening": "Quay về đất liền, xe đưa về Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T020",
+    "tour_name": "Hà Nội - Cao Bằng: Thác Bản Giốc",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.950.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Cao Bằng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển từ Hà Nội đi Cao Bằng, tham quan hang Pác Bó, suối Lê-nin.",
+        "evening": "Ăn tối tại TP Cao Bằng, thưởng thức hạt dẻ Trùng Khánh."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan thác Bản Giốc - thác nước lớn thứ 4 thế giới nằm trên biên giới, động Ngườm Ngao.",
+        "evening": "Nghỉ đêm tại homestay gần thác Bản Giốc."
+      },
+      {
+        "day": 3,
+        "activities": "Viếng chùa Phật Tích Trúc Lâm Bản Giốc, mua sắm đặc sản măng ớt, lạp xưởng.",
+        "evening": "Về đến Hà Nội đêm muya."
+      }
+    ]
+  },
+  {
+    "tour_id": "T041",
+    "tour_name": "Hà Nội - Lạng Sơn: Chinh phục Mẫu Sơn",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.450.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lạng Sơn",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan Ải Chi Lăng, Đền Mẫu Đồng Đăng, chợ biên giới Tân Thanh. Di chuyển lên đỉnh Mẫu Sơn.",
+        "evening": "Thưởng thức lợn quay lá mắc mật, ếch hương Mẫu Sơn."
+      },
+      {
+        "day": 2,
+        "activities": "Đón bình minh trên đỉnh Mẫu Sơn, tham quan Động Tam Thanh, núi Tô Thị.",
+        "evening": "Khởi hành về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T042",
+    "tour_name": "HCM - Đảo Phú Quý: Viêng ngọc Bình Thuận",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "3.200.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Bình Thuận",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến cảng Phan Thiết, đi tàu cao tốc ra đảo Phú Quý. Tắm biển Vịnh Triều Dương.",
+        "evening": "Ăn hải sản tại làng bè, thưởng thức cua mặt trăng."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Cột cờ chủ quyền, Gành Hang, hồ Vô Cực, Dốc Phượt, lặn ngắm san hô Hòn Tranh.",
+        "evening": "Dạo quanh đảo, uống cafe ngắm biển đêm."
+      },
+      {
+        "day": 3,
+        "activities": "Viếng chùa Linh Sơn, núi Cao Cát.",
+        "evening": "Lên tàu về đất liền, xe đưa về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T043",
+    "tour_name": "Cần Thơ - Đồng Tháp: Mùa nước nổi Tràm Chim",
+    "duration": "1 Ngày",
+    "price": "850.000 VNĐ",
+    "departure": "Cần Thơ",
+    "destination": "Đồng Tháp",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan Vườn quốc gia Tràm Chim, đi xuồng ba lá ngắm sếu đầu đỏ, hái súng, trải nghiệm giăng lưới bắt cá.",
+        "evening": "Ăn tối với lẩu cá linh bông điên điển trước khi về lại Cần Thơ."
+      }
+    ]
+  },
+  {
+    "tour_id": "T044",
+    "tour_name": "Hà Nội - Na Hang: Tiên cảnh Tuyên Quang",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.750.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Tuyên Quang",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Tuyên Quang, đi thuyền trên hồ sinh thái Na Hang, ngắm cọc Vài Phạ, check-in Thác Khuổi Nhi.",
+        "evening": "Ăn tối trên thuyền, nghe hát Then của đồng bào dân tộc Tày."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan đền Pác Tạ, ghé thăm bản làng ven hồ.",
+        "evening": "Khởi hành về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T045",
+    "tour_name": "HCM - Ninh Thuận: Vĩnh Hy - Hang Rái",
+    "duration": "2 Ngày 2 Đêm",
+    "price": "2.100.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Ninh Thuận",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Tham quan Tháp Po Klong Garai, làng gốm Bàu Trúc. Nhận phòng gần Vịnh Vĩnh Hy.",
+        "evening": "Tự do thưởng thức dông cát nướng, hải sản tươi sống."
+      },
+      {
+        "day": 2,
+        "activities": "Đi tàu đáy kính ngắm san hô Vĩnh Hy, check-in Hang Rái - sao Hỏa trên mặt đất, vườn nho Thái An.",
+        "evening": "Lên xe giường nằm về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T046",
+    "tour_name": "Đà Nẵng - Rừng dừa Bảy Mẫu: Miền Tây thu nhỏ",
+    "duration": "1 Ngày",
+    "price": "600.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Quảng Nam",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển vào Hội An, trải nghiệm ngồi thúng chai quay vòng tại Rừng dừa Bảy Mẫu, xem biểu diễn bơi thúng, quăng chài bắt cá.",
+        "evening": "Kết hợp dạo phố cổ Hội An ăn tối trước khi về lại Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T047",
+    "tour_name": "Hà Nội - Bình Liêu: Sống lưng khủng long vùng biên",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.600.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Quảng Ninh",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến Bình Liêu, trekking lên các cột mốc biên giới 1297, ngắm đồi cỏ lau trắng.",
+        "evening": "Nghỉ tại homestay bản người Dao, thưởng thức gà đồi, phở xào Bình Liêu."
+      },
+      {
+        "day": 2,
+        "activities": "Chinh phục Sống Lưng Khủng Long và Cột mốc 1305 cao nhất Quảng Ninh.",
+        "evening": "Lên xe trở về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T048",
+    "tour_name": "HCM - Bảo Lộc: Trà Đạo và Săn mây",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.650.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Lâm Đồng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Bảo Lộc, tham quan Thác Dambri, đồi chè Tâm Châu, Tu viện Bát Nhã.",
+        "evening": "Cắm trại hoặc nghỉ homestay, BBQ sưởi ấm trong sương mù."
+      },
+      {
+        "day": 2,
+        "activities": "Dậy sớm săn mây tại đồi núi Linh Quy Pháp Ấn.",
+        "evening": "Xuống núi về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T049",
+    "tour_name": "Hà Nội - Hải Phòng: Foodtour & Đồ Sơn",
+    "duration": "1 Ngày",
+    "price": "700.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Hải Phòng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Trải nghiệm đi tàu hỏa xuống Hải Phòng, foodtour với Bánh đa cua, pate cột đèn, dừa dầm. Chiều di chuyển ra biển Đồ Sơn.",
+        "evening": "Lên tàu hỏa chuyến muộn về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T050",
+    "tour_name": "HCM - Bến Tre - Trà Vinh: Hương sắc miền Tây",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.550.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Trà Vinh",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Ghé Bến Tre tham quan lò kẹo dừa, đi xe ngựa. Chiều sang Trà Vinh tham quan Ao Bà Om, Chùa Hang.",
+        "evening": "Thưởng thức bún nước lèo đặc sản Trà Vinh."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Biển Ba Động, Thiền viện Trúc Lâm Trà Vinh.",
+        "evening": "Khởi hành về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T051",
+    "tour_name": "Hà Nội - Y Tý: Mây ngàn biên ải",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.550.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lào Cai",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đi xe giường nằm lên Sapa, chuyển xe nhỏ đi Y Tý. Nhận homestay nhà Trình Tường của người Hà Nhì.",
+        "evening": "Thưởng thức lợn cắp nách, tắm lá thuốc người Dao đỏ."
+      },
+      {
+        "day": 2,
+        "activities": "Săn mây tại Ngải Thầu, tham quan Công viên Choản Thèn, ngã ba Lũng Pô (nơi sông Hồng chảy vào đất Việt).",
+        "evening": "Giao lưu văn hóa bản địa."
+      },
+      {
+        "day": 3,
+        "activities": "Dạo chợ phiên Y Tý, mua nấm hương rừng.",
+        "evening": "Trở về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T052",
+    "tour_name": "HCM - Cần Giờ: Đảo Khỉ & Rừng Sác",
+    "duration": "1 Ngày",
+    "price": "650.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "TP.HCM",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đi phà Bình Khánh sang Cần Giờ. Tham quan Lâm viên Cần Giờ (Đảo Khỉ), đi cano len lỏi vào chiến khu Rừng Sác.",
+        "evening": "Ăn hải sản tại chợ Hàng Dương, chiều tắm biển 30/4 rồi về lại trung tâm TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T053",
+    "tour_name": "Đà Nẵng - Huế - Phong Nha: Di sản miền Trung",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "3.800.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Quảng Bình",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Khởi hành đi Huế, tham quan Đại Nội, Lăng Tự Đức, Chùa Thiên Mụ.",
+        "evening": "Nghe ca Huế trên sông Hương."
+      },
+      {
+        "day": 2,
+        "activities": "Rời Huế đi Quảng Bình, dọc đường ghé Thành Cổ Quảng Trị. Chiều tham quan Động Phong Nha.",
+        "evening": "Nghỉ đêm tại TP. Đồng Hới."
+      },
+      {
+        "day": 3,
+        "activities": "Khám phá Động Thiên Đường.",
+        "evening": "Trả khách tại Đồng Hới hoặc quay về Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T054",
+    "tour_name": "Hà Nội - Quan Lạn: Biển vắng thanh bình",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.650.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Quảng Ninh",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến cảng Vân Đồn, đi tàu ra đảo Quan Lạn. Tắm biển Quan Lạn.",
+        "evening": "Ăn tối hải sản sà sùng, mực nhảy."
+      },
+      {
+        "day": 2,
+        "activities": "Thuê xe tuk tuk tham quan Đình Quan Lạn, tắm biển Minh Châu trong xanh.",
+        "evening": "Tự do khám phá đảo đêm."
+      },
+      {
+        "day": 3,
+        "activities": "Check-in eo gió Quan Lạn.",
+        "evening": "Lên tàu về đất liền và về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T055",
+    "tour_name": "HCM - Làng nổi Tân Lập: Đi giữa rừng tràm",
+    "duration": "1 Ngày",
+    "price": "550.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Long An",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển tới Long An, đi xuồng cáp kéo tham quan Làng nổi Tân Lập, tản bộ trên con đường xuyên rừng tràm dài 5km.",
+        "evening": "Ăn cá lóc nướng trui, lẩu mắm trước khi lên xe về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T056",
+    "tour_name": "Đà Nẵng - Kon Tum: Ngã ba Đông Dương",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "2.200.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Kon Tum",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Vượt đèo Lò Xo lên Kon Tum, check-in Ngã ba Đông Dương (Việt - Lào - Campuchia) tại cửa khẩu Bờ Y.",
+        "evening": "Ăn tối tại Ngọc Hồi, nghỉ ngơi."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan Tòa giám mục Kon Tum, Cầu treo Kon Klor, Nhà rông Kon Klor.",
+        "evening": "Quay về Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T057",
+    "tour_name": "Hà Nội - Thung Nai - Đền Thác Bờ",
+    "duration": "1 Ngày",
+    "price": "650.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Hòa Bình",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến cảng Thung Nai, đi thuyền trên lòng hồ thủy điện Hòa Bình, viếng đền Chúa Thác Bờ, tham quan Động Thác Bờ.",
+        "evening": "Ăn trưa cá nướng sông Đà, chiều lên xe về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T058",
+    "tour_name": "HCM - Bình Châu - Hồ Cốc",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.900.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Bà Rịa - Vũng Tàu",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến suối khoáng nóng Bình Châu, trải nghiệm luộc trứng bằng nước khoáng, tắm bùn, ngâm chân.",
+        "evening": "Di chuyển ra khu vực Hồ Cốc nhận phòng, nghe sóng biển rì rào."
+      },
+      {
+        "day": 2,
+        "activities": "Tắm biển Hồ Cốc, chụp hình tại rừng tràm ven biển.",
+        "evening": "Trở về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T059",
+    "tour_name": "Cần Thơ - Kiên Giang: Quần đảo Hải Tặc",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.850.000 VNĐ",
+    "departure": "Cần Thơ",
+    "destination": "Kiên Giang",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến Hà Tiên, lên tàu ra Quần đảo Hải Tặc. Tắm biển, trải nghiệm lặn bắt nhum, mò cua ốc.",
+        "evening": "Ăn tối BBQ hải sản tự đánh bắt cùng người dân đảo."
+      },
+      {
+        "day": 2,
+        "activities": "Tham quan cột mốc chủ quyền, tìm hiểu về giai thoại cướp biển Cánh Buồm Đen.",
+        "evening": "Về lại Hà Tiên, xe đưa về Cần Thơ."
+      }
+    ]
+  },
+  {
+    "tour_id": "T060",
+    "tour_name": "Hà Nội - Lai Châu: Cầu kính Rồng Mây",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.800.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lai Châu",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Khởi hành đi Sapa qua cao tốc, tiếp tục vượt đèo Ô Quy Hồ sang địa phận Lai Châu. Nhận phòng tại Tam Đường.",
+        "evening": "Nghỉ ngơi, thưởng thức lẩu cá tầm."
+      },
+      {
+        "day": 2,
+        "activities": "Trải nghiệm Cầu kính Rồng Mây trên đỉnh đèo Ô Quy Hồ, tham quan cọn nước Nà Khương.",
+        "evening": "Tự do khám phá thành phố Lai Châu."
+      },
+      {
+        "day": 3,
+        "activities": "Tham quan đồi chè Tân Uyên.",
+        "evening": "Lên xe về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T061",
+    "tour_name": "HCM - Tứ Bình: Bình Hưng - Bình Lập",
+    "duration": "2 Ngày 2 Đêm",
+    "price": "2.250.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Khánh Hòa",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đêm từ HCM. Sáng đến Cam Ranh, đi tàu ra đảo Bình Hưng, tắm biển Bãi Cây Me, lặn san hô Hòn Chút.",
+        "evening": "Thưởng thức tiệc BBQ hải sản tôm hùm trên bè nổi."
+      },
+      {
+        "day": 2,
+        "activities": "Di chuyển sang bán đảo Bình Lập, check-in resort Sao Biển, tắm biển Bãi Ngang trong vắt.",
+        "evening": "Lên xe trở về TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T062",
+    "tour_name": "Đà Nẵng - Vườn Quốc gia Bạch Mã",
+    "duration": "1 Ngày",
+    "price": "900.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Thừa Thiên Huế",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Vượt đèo Hải Vân đến chân núi Bạch Mã. Đổi xe đặc chủng lên đỉnh, tham quan Hải Vọng Đài, trekking Ngũ Hồ, Thác Đỗ Quyên.",
+        "evening": "Xuống núi, kết thúc hành trình và về lại Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T063",
+    "tour_name": "Hà Nội - Sóc Sơn: Cắm trại ven hồ Đồng Đò",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.100.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Hà Nội",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Chạy xe lên Sóc Sơn, tham quan Đền Gióng, Việt Phủ Thành Chương. Chiều tới hồ Đồng Đò dựng lều, chèo SUP.",
+        "evening": "Tổ chức tiệc nướng BBQ ngoài trời, đàn hát quanh lửa trại."
+      },
+      {
+        "day": 2,
+        "activities": "Dậy sớm ngắm bình minh trên hồ, uống cafe chill sương sớm.",
+        "evening": "Thu dọn lều trại về nội thành."
+      }
+    ]
+  },
+  {
+    "tour_id": "T064",
+    "tour_name": "HCM - Madagui: Khám phá rừng thiêng",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.700.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Lâm Đồng",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến KDL Madagui, chơi các trò chơi cảm giác mạnh: zipline, bắn súng sơn, chèo thuyền phao.",
+        "evening": "Nghỉ ngơi tại phòng sinh thái giữa rừng, đốt lửa trại."
+      },
+      {
+        "day": 2,
+        "activities": "Trekking tham quan Hang Dơi, Hang Thầy, rừng cây ăn trái.",
+        "evening": "Về lại TP.HCM."
+      }
+    ]
+  },
+  {
+    "tour_id": "T065",
+    "tour_name": "Hà Nội - Mộc Châu - Tà Xùa: Cao nguyên & Biển mây",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.750.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Sơn La",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Đến Mộc Châu, tham quan đồi chè Trái Tim, thác Dải Yếm, rừng thông Bản Áng.",
+        "evening": "Ăn tối đặc sản Tây Bắc, ngủ homestay Mộc Châu."
+      },
+      {
+        "day": 2,
+        "activities": "Rời Mộc Châu đi Bắc Yên, vượt đèo lên Tà Xùa. Check-in mỏm Cá Heo.",
+        "evening": "Nghỉ đêm tại Tà Xùa."
+      },
+      {
+        "day": 3,
+        "activities": "Đón bình minh tại Sống Lưng Khủng Long, săn biển mây.",
+        "evening": "Xuống núi về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T066",
+    "tour_name": "HCM - Thác Giang Điền - Bửu Long",
+    "duration": "1 Ngày",
+    "price": "450.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Đồng Nai",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Sáng đi KDL Thác Giang Điền tắm thác, tản bộ. Chiều di chuyển qua KDL Bửu Long (Vịnh Hạ Long thu nhỏ) đạp vịt, vãn cảnh chùa.",
+        "evening": "Khởi hành về TP.HCM kết thúc tour."
+      }
+    ]
+  },
+  {
+    "tour_id": "T067",
+    "tour_name": "Hà Nội - Đại Lải: Nghỉ dưỡng Flamingo",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "2.800.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Vĩnh Phúc",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển lên Flamingo Đại Lải Resort. Tự do tắm bơi, đi xe đạp dạo quanh rừng thông, chèo Kayak trên hồ.",
+        "evening": "Ăn tối buffet tại nhà hàng sang trọng."
+      },
+      {
+        "day": 2,
+        "activities": "Thư giãn tại tổ hợp xông hơi Jjim Jil Bang Hàn Quốc, tham quan bảo tàng nghệ thuật ngoài trời.",
+        "evening": "Trả phòng và về Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T068",
+    "tour_name": "Đà Nẵng - Cù Lao Ré (Lý Sơn): Thiên đường xanh",
+    "duration": "3 Ngày 2 Đêm",
+    "price": "2.900.000 VNĐ",
+    "departure": "Đà Nẵng",
+    "destination": "Quảng Ngãi",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Xe đưa vào cảng Sa Kỳ, đi tàu siêu tốc ra đảo Lý Sơn. Nhận phòng, thăm Đạo Nhai Ân Tự.",
+        "evening": "Thưởng thức hải sản tươi và gỏi tỏi Lý Sơn."
+      },
+      {
+        "day": 2,
+        "activities": "Đón bình minh Hang Câu, chinh phục đỉnh Thới Lới. Sang Đảo Bé lặn ngắm san hô.",
+        "evening": "Đi dạo quảng trường biển."
+      },
+      {
+        "day": 3,
+        "activities": "Check-in Cổng Tò Vò, mua sắm tỏi đen.",
+        "evening": "Lên tàu về đất liền, xe đưa về Đà Nẵng."
+      }
+    ]
+  },
+  {
+    "tour_id": "T069",
+    "tour_name": "Hà Nội - Bắc Sơn: Thung lũng lúa vàng",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.300.000 VNĐ",
+    "departure": "Hà Nội",
+    "destination": "Lạng Sơn",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến thung lũng Bắc Sơn, leo núi Nà Lay ngắm toàn cảnh cánh đồng lúa hình bát quái.",
+        "evening": "Nghỉ homestay Làng văn hóa Quỳnh Sơn, ăn xôi cẩm, thịt rang cháy cạnh."
+      },
+      {
+        "day": 2,
+        "activities": "Đạp xe dạo quanh các bản làng dân tộc Tày, tham quan suối Mỏ Mắm.",
+        "evening": "Về lại Hà Nội."
+      }
+    ]
+  },
+  {
+    "tour_id": "T070",
+    "tour_name": "HCM - Cổ Thạch: Mùa rêu phong",
+    "duration": "2 Ngày 1 Đêm",
+    "price": "1.500.000 VNĐ",
+    "departure": "TP.HCM",
+    "destination": "Bình Thuận",
+    "itinerary": [
+      {
+        "day": 1,
+        "activities": "Di chuyển đến Tuy Phong, viếng chùa Hang (Cổ Thạch Tự), tắm biển tại Bãi đá Bảy màu.",
+        "evening": "Thưởng thức hải sản nướng."
+      },
+      {
+        "day": 2,
+        "activities": "Dậy sớm ngắm bình minh và chụp ảnh bãi đá phủ rêu xanh (đặc trưng mùa xuân). Ghé đồi cát Nam Cương.",
+        "evening": "Lên xe về TP.HCM."
+      }
+    ]
+  }
+]

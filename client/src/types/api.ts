@@ -27,6 +27,9 @@ export interface PaginationParams {
   sortBy?: string;
   minPrice?: number;
   maxPrice?: number;
+  area?: string;
+  dish?: string;
+  minScore?: number;
   from?: string;
   to?: string;
 }
@@ -50,7 +53,7 @@ export interface User {
   phone?: string;
   role: string;
   avatar?: string;
-  address_id?: any;
+  address_id?: unknown;
   createdAt: string;
   updatedAt: string;
 }
@@ -80,13 +83,13 @@ export interface Tour {
   name: string;
   tour_code?: string; // Mã tour
   description: string; // Điểm nổi bật tour
-  country_id?: any; // Quốc gia đích đến
+  country_id?: unknown; // Quốc gia đích đến
   departure_location_id?: Province | string; // Điểm khởi hành (province)
   adult_price: number;
   child_price: number;
   duration_days: number;
   rating?: number;
-  guide_id?: any;
+  guide_id?: unknown;
   departure_dates?: string[]; // Các ngày khởi hành
   included_services?: Service[] | string[]; // Dịch vụ bao gồm (ref)
   
@@ -137,7 +140,7 @@ export interface Hotel {
   name: string;
   image_url?: string;
   location: string;
-  address_id?: any; // Populated Address or string ID
+  address_id?: unknown; // Populated Address or string ID
   rating: number;
   rooms: number;
   availableRooms: number;
@@ -159,11 +162,63 @@ export interface Restaurant {
   rating: number;
   priceLevel: number;
   location: string;
-  address_id?: any; // Populated Address or string ID
+  address_id?: unknown; // Populated Address or string ID
   description?: string;
   images?: string[];
   createdAt: string;
   updatedAt: string;
+}
+
+// Food Review Types
+export interface FoodReviewDistrictArea {
+  name: string;
+  count: number;
+}
+
+export interface FoodReviewArea {
+  city: string;
+  count: number;
+  districts: FoodReviewDistrictArea[];
+}
+
+export interface FoodReview {
+  _id: string;
+  title: string;
+  summary: string;
+  content: string;
+  area: {
+    city: string;
+    district?: string | null;
+    ward?: string | null;
+    addressText?: string | null;
+  };
+  dishTags: string[];
+  hashtags: string[];
+  contactPhones: string[];
+  priceMin?: number | null;
+  priceMax?: number | null;
+  imageUrls: string[];
+  postedAt?: string | null;
+  engagement: {
+    likesCount: number;
+    commentsCount: number;
+    sharesCount: number;
+    reactionsCount: number;
+    score: number;
+  };
+  source: {
+    platform: "facebook";
+    groupTitle?: string | null;
+    groupId?: string | null;
+    postUrl: string;
+    postLegacyId?: string | null;
+    rawInputUrl?: string | null;
+    authorName?: string | null;
+    authorId?: string | null;
+  };
+  isActive?: boolean;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // Country Types

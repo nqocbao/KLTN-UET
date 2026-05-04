@@ -2,21 +2,25 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import { createPortal } from "react-dom";
-import { MapPin, Search, TrendingUp, Globe, Ticket } from "lucide-react";
-import { locationsApi, provincesApi, destinationsApi, toursApi } from "@/lib/services";
+import { MapPin, Search, TrendingUp, Globe, Ticket, Hotel } from "lucide-react";
+import { locationsApi, provincesApi, destinationsApi, toursApi, hotelsApi } from "@/lib/services";
 import type { Province, Destination, Tour } from "@/types/api";
 import { cn } from "@/lib/utils";
 
 export interface LocationSuggestion {
   id: string;
   name: string;
-  type: "country" | "province" | "destination" | "district" | "ward" | "tour";
+  type: "country" | "province" | "destination" | "district" | "ward" | "tour" | "hotel";
   country?: string;
   country_id?: string;
   province?: string;
   province_id?: string;
   district?: string;
   district_id?: string;
+  location?: string;
+  thumbnail?: string;
+  propertyToken?: string;
+  serpapiHotelsLink?: string;
   fullName?: string;
 }
 
@@ -26,7 +30,7 @@ interface LocationAutocompleteProps {
   onSelectLocation?: (suggestion: LocationSuggestion) => void;
   placeholder?: string;
   className?: string;
-  mode?: "all" | "destinations-only" | "provinces-only"; // New prop to control what to show
+  mode?: "all" | "destinations-only" | "provinces-only" | "hotels-only";
 }
 
 export function LocationAutocomplete({
@@ -125,6 +129,14 @@ export function LocationAutocomplete({
             });
           }
           setPopularLocations(popular);
+        } else if (mode === "hotels-only") {
+          setPopularLocations([
+            { id: "popular-hn", name: "Hà Nội hotels", type: "hotel" },
+            { id: "popular-hcm", name: "Hồ Chí Minh hotels", type: "hotel" },
+            { id: "popular-dn", name: "Đà Nẵng hotels", type: "hotel" },
+            { id: "popular-pq", name: "Phú Quốc resorts", type: "hotel" },
+            { id: "popular-nt", name: "Nha Trang hotels", type: "hotel" },
+          ]);
         } else {
           // For hotel/general search: show both provinces and destinations
           const [provincesRes, destinationsRes] = await Promise.all([
@@ -221,6 +233,32 @@ export function LocationAutocomplete({
               });
             });
           }
+          setSuggestions(results);
+        } else if (mode === "hotels-only") {
+          const autocompleteRes = await hotelsApi.autocomplete({
+            q: value,
+            gl: "vn",
+            hl: "vi",
+            currency: "VND",
+            limit: 12,
+          });
+
+          const results: LocationSuggestion[] = [];
+          if (autocompleteRes.success && autocompleteRes.data) {
+            autocompleteRes.data.forEach((item) => {
+              results.push({
+                id: item.id,
+                name: item.name,
+                type: "hotel",
+                location: item.location || undefined,
+                thumbnail: item.thumbnail || undefined,
+                propertyToken: item.property_token || undefined,
+                serpapiHotelsLink: item.serpapi_google_hotels_link || undefined,
+                fullName: item.name,
+              });
+            });
+          }
+
           setSuggestions(results);
         } else {
           // For hotel/general search: search locations + tours
@@ -370,6 +408,8 @@ export function LocationAutocomplete({
                   <Globe className="w-5 h-5 text-indigo-500" />
                 ) : suggestion.type === "tour" ? (
                   <Ticket className="w-5 h-5 text-orange-600" />
+                ) : suggestion.type === "hotel" ? (
+                  <Hotel className="w-5 h-5 text-rose-500" />
                 ) : (
                   <MapPin
                     className={cn(
@@ -389,9 +429,9 @@ export function LocationAutocomplete({
                 <div className="font-medium text-gray-900 truncate">
                   {suggestion.fullName || suggestion.name}
                 </div>
-                {(suggestion.country || suggestion.province || suggestion.district) && (
+                {(suggestion.location || suggestion.country || suggestion.province || suggestion.district) && (
                   <div className="text-xs text-gray-500">
-                    {suggestion.country || suggestion.province || suggestion.district}
+                    {suggestion.location || suggestion.country || suggestion.province || suggestion.district}
                   </div>
                 )}
               </div>
@@ -407,6 +447,8 @@ export function LocationAutocomplete({
                     ? "Phường/Xã"
                     : suggestion.type === "tour"
                     ? "Tour"
+                    : suggestion.type === "hotel"
+                    ? "Khách sạn"
                     : "Điểm đến"}
                 </span>
               </div>

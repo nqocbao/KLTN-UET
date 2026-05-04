@@ -108,6 +108,11 @@ nlu:
       - có khách sạn nào ở [Đà Lạt](location) không
       - có khách sạn tốt ở [Sapa](location) không
       - khách sạn đẹp ở [Huế](location)
+      - tôi muốn đặt khách sạn ở [Phú Quốc](location) từ [2026-04-20](check_in_date) đến [2026-04-23](check_out_date)
+      - tìm khách sạn ở [Đà Nẵng](location) ngày [2026-04-20](check_in_date) đến [2026-04-22](check_out_date)
+      - tìm giúp tôi khách sạn ở [Nha Trang](location) cho [2 người](number_of_guests)
+      - đặt phòng ở [Hà Nội](location) từ [20/04/2026](check_in_date) đến [22/04/2026](check_out_date) cho [3 người](number_of_guests)
+      - cần khách sạn tại [Hội An](location) nhận phòng [ngày mai](check_in_date) trả phòng [2026-04-22](check_out_date)
 
   # Hỏi về giá khách sạn
   - intent: ask_hotel_price
@@ -143,8 +148,6 @@ nlu:
       - tôi muốn đặt khách sạn này
       - book phòng
       - đặt [Hilton Hanoi Opera](hotel_name)
-      - tôi muốn đặt phòng từ [ngày 20/1](check_in_date) đến [ngày 25/1](check_out_date)
-      - đặt cho [2 người](number_of_guests)
       - đặt [phòng đôi](room_type)
       - tôi muốn đặt phòng này
       - làm sao để đặt phòng
@@ -195,6 +198,27 @@ nlu:
       - tôi muốn đi tour [sapa](destination)
       - tour du lịch ở [hội an](destination)
       - có tour nào đi [phú quốc](destination) không
+
+  # Hỏi review food tour / món ăn địa phương
+  - intent: ask_foodtour
+    examples: |
+      - ăn gì ở Hà Nội
+      - gợi ý quán ăn ngon ở Đà Nẵng
+      - review đồ ăn ở Huế
+      - food tour Sài Gòn có gì ngon
+      - có review món bún chả không
+      - tìm quán phở ngon ở Hà Nội
+      - món ăn nổi bật ở Hội An
+      - quán ăn giá rẻ ở Nha Trang
+      - review món bánh xèo
+      - ăn hải sản ở Phú Quốc chỗ nào ngon
+      - gợi ý quán bún bò ở Huế
+      - foodtour Đà Lạt có gì
+      - review quán cafe đẹp ở Đà Lạt
+      - ăn vặt ở Sài Gòn
+      - món ngon gần Hồ Gươm
+      - review quán ăn khu Hoàn Kiếm
+      - quán ăn nào hot ở Hải Châu Đà Nẵng
       - tìm tour [3 ngày](duration) ở [đà nẵng](destination)
       - tour tham quan [hà nội](destination)
 
@@ -347,3 +371,9 @@ nlu:
       - cho tôi khách sạn tại [đà nẵng](location)
       - tôi cần phòng ở [nha trang](location)
       - hotel ở [phú quốc](location)
+      - nhận phòng [2026-04-20](check_in_date)
+      - trả phòng [2026-04-22](check_out_date)
+      - ngày nhận [20/04/2026](check_in_date)
+      - ngày trả [22/04/2026](check_out_date)
+      - [2 người](number_of_guests)
+      - [4 khách](number_of_guests)

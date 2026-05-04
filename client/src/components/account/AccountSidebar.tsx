@@ -1,12 +1,12 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Link } from "@/i18n/routing";
+import { Link, routing } from "@/i18n/routing";
 import { User, Heart, MessageSquare, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface SidebarItem {
-  href: string;
+  href: keyof typeof routing.pathnames;
   label: string;
   icon: React.ReactNode;
 }
@@ -47,7 +47,7 @@ export function AccountSidebar() {
         {sidebarItems.map((item) => (
           <li key={item.href}>
             <Link
-              href={item.href as "/account/profile" | "/account/favourites" | "/account/reviews" | "/account/recently-viewed"}
+              href={item.href}
               className={cn(
                 "flex items-center gap-3 px-5 py-4 transition-colors",
                 isActive(item.href)

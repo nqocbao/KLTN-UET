@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -9,7 +9,7 @@ import { GuestRoomPicker, type GuestRoomValue } from "@/components/ui/guest-room
 import { LocationAutocomplete } from "@/components/ui/location-autocomplete";
 import { AirportAutocomplete } from "@/components/ui/airport-autocomplete";
 import { DatePicker } from "@/components/ui/date-picker";
-import { Search, Calendar, User, Hotel, Plane, Bus, Car, MapPin, Grid, Home, Building, ChevronDown, ArrowLeftRight, Clock } from "lucide-react";
+import { Search, Calendar, User, Hotel, Plane, Bus, Car, MapPin, Grid, ChevronDown, ArrowLeftRight, Clock, UtensilsCrossed } from "lucide-react";
 import { useRouter } from "next/navigation";
 
 // Helper function to format date for display
@@ -24,6 +24,8 @@ function formatDateShort(date: Date | null | undefined): string {
 export function HeroSection() {
   const router = useRouter();
   const [location, setLocation] = useState("");
+  const [foodKeyword, setFoodKeyword] = useState("");
+  const [foodArea, setFoodArea] = useState("");
   const [dateRange, setDateRange] = useState<DateRange | undefined>({
     from: new Date(),
     to: new Date(Date.now() + 24 * 60 * 60 * 1000), // Tomorrow
@@ -46,13 +48,13 @@ export function HeroSection() {
   const [busFrom, setBusFrom] = useState("");
   const [busTo, setBusTo] = useState("");
   const [busDate, setBusDate] = useState(new Date());
-  const [busPassengers, setBusPassengers] = useState(1);
+  const [busPassengers] = useState(1);
 
   // Airport transfer states
   const [transferPickup, setTransferPickup] = useState("");
   const [transferDropoff, setTransferDropoff] = useState("");
   const [transferDate, setTransferDate] = useState(new Date());
-  const [transferTime, setTransferTime] = useState("09:00");
+  const [transferTime] = useState("09:00");
 
   const handleBusSearch = () => {
     const params = new URLSearchParams();
@@ -70,6 +72,19 @@ export function HeroSection() {
     params.set("date", transferDate.toISOString());
     params.set("time", transferTime);
     router.push(`/vi/airport-transfer/search?${params.toString()}`);
+  };
+
+  const handleFoodtourSearch = (nextArea?: string) => {
+    const selectedArea = nextArea ?? foodArea;
+    const params = new URLSearchParams();
+    const keyword = foodKeyword.trim();
+    const area = selectedArea.trim();
+
+    if (keyword) params.set("search", keyword);
+    if (area) params.set("area", area);
+
+    const query = params.toString();
+    router.push(`/vi/foodtour${query ? `?${query}` : ""}`);
   };
 
 
@@ -90,9 +105,15 @@ export function HeroSection() {
         </h1>
 
         <div className="w-full max-w-6xl">
-          <Tabs defaultValue="tours" className="w-full">
+          <Tabs defaultValue="foodtour" className="w-full">
             {/* Main Category Tabs */}
             <TabsList className="flex justify-center gap-2 bg-transparent h-auto p-0 mb-6 flex-wrap">
+              <TabsTrigger 
+                value="foodtour" 
+                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:rounded-full bg-transparent text-white/90 hover:bg-white/10 rounded-full px-4 md:px-6 py-2 gap-2 text-sm md:text-base font-medium transition-all"
+              >
+                <UtensilsCrossed className="w-5 h-5" /> Foodtour
+              </TabsTrigger>
               <TabsTrigger 
                 value="tours" 
                 className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:rounded-full bg-transparent text-white/90 hover:bg-white/10 rounded-full px-4 md:px-6 py-2 gap-2 text-sm md:text-base font-medium transition-all"
@@ -112,12 +133,6 @@ export function HeroSection() {
                 <Plane className="w-5 h-5" /> Vé máy bay
               </TabsTrigger>
               <TabsTrigger 
-                value="bus" 
-                className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:rounded-full bg-transparent text-white/90 hover:bg-white/10 rounded-full px-4 md:px-6 py-2 gap-2 text-sm md:text-base font-medium transition-all"
-              >
-                <Bus className="w-5 h-5" /> Vé xe khách
-              </TabsTrigger>
-              <TabsTrigger 
                 value="transfer" 
                 className="data-[state=active]:bg-white data-[state=active]:text-blue-600 data-[state=active]:rounded-full bg-transparent text-white/90 hover:bg-white/10 rounded-full px-4 md:px-6 py-2 gap-2 text-sm md:text-base font-medium transition-all"
               >
@@ -132,6 +147,63 @@ export function HeroSection() {
             </TabsList>
 
             {/* Content Area */}
+            {/* Foodtour Tab */}
+            <TabsContent value="foodtour" className="mt-0">
+               <div className="bg-white rounded-lg p-2 shadow-xl grid grid-cols-12 gap-0.5 relative z-10">
+                  <div className="col-span-12 md:col-span-6 relative group">
+                    <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Món hoặc từ khóa</div>
+                    <div className="relative h-14 bg-white rounded-l-md hover:bg-gray-50 transition-colors border-r border-gray-200">
+                      <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
+                      <Input
+                        value={foodKeyword}
+                        onChange={(e) => setFoodKeyword(e.target.value)}
+                        placeholder="Ví dụ: bún ngan, phở, nướng..."
+                        className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-span-12 md:col-span-4 relative group">
+                    <div className="absolute left-4 top-2 text-gray-500 text-xs font-medium z-10">Khu vực</div>
+                    <div className="relative h-14 bg-white hover:bg-gray-50 transition-colors border-r border-gray-200">
+                      <MapPin className="absolute left-4 top-1/2 -translate-y-1/2 text-blue-500 w-5 h-5 mt-3" />
+                      <Input
+                        value={foodArea}
+                        onChange={(e) => setFoodArea(e.target.value)}
+                        placeholder="Ví dụ: Hoàn Kiếm"
+                        className="pl-12 h-full w-full border-none shadow-none focus-visible:ring-0 text-base pt-6 pb-2 placeholder:text-gray-400"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="col-span-12 md:col-span-2 flex justify-end">
+                    <Button
+                      onClick={() => handleFoodtourSearch()}
+                      className="h-14 w-full md:w-14 bg-[#ff5e1f] hover:bg-[#e04f15] rounded-r-md rounded-l-none shrink-0"
+                    >
+                      <Search className="w-6 h-6 text-white" />
+                    </Button>
+                  </div>
+               </div>
+
+               <div className="flex gap-3 mt-4 flex-wrap">
+                 {["Hoàn Kiếm", "Ba Đình", "Đống Đa", "Cầu Giấy", "Hai Bà Trưng"].map((area) => (
+                   <Button
+                     key={area}
+                     size="sm"
+                     variant="ghost"
+                     className="rounded-full text-white hover:bg-white/20 font-medium px-4 h-8 bg-black/20 backdrop-blur-sm border border-white/10"
+                     onClick={() => {
+                       setFoodArea(area);
+                       handleFoodtourSearch(area);
+                     }}
+                   >
+                     {area}
+                   </Button>
+                 ))}
+               </div>
+            </TabsContent>
+
             {/* Tours Tab */}
             <TabsContent value="tours" className="mt-0">
                {/* Search Bar Container for Tours */}
@@ -237,6 +309,7 @@ export function HeroSection() {
                           value={location}
                           onChange={setLocation}
                           placeholder="Thành phố, khách sạn, điểm đến"
+                          mode="hotels-only"
                         />
                       </div>
                     </div>

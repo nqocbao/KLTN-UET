@@ -29,6 +29,79 @@ export interface SerpApiResponse {
   error?: string;
 }
 
+export interface HotelSearchParams {
+  q: string;
+  check_in_date: string;
+  check_out_date: string;
+  gl?: string;
+  hl?: string;
+  currency?: string;
+  adults?: number;
+  children?: number;
+  children_ages?: string;
+}
+
+export interface HotelAutocompleteParams {
+  q: string;
+  gl?: string;
+  hl?: string;
+  currency?: string;
+}
+
+export interface SerpApiHotelProperty {
+  name?: string;
+  description?: string;
+  overall_rating?: number;
+  reviews?: number;
+  extracted_hotel_class?: number;
+  rate_per_night?: {
+    lowest?: string;
+    extracted_lowest?: number;
+  };
+  total_rate?: {
+    lowest?: string;
+    extracted_lowest?: number;
+  };
+  images?: Array<{
+    thumbnail?: string;
+    original_image?: string;
+  }>;
+  amenities?: string[];
+  gps_coordinates?: {
+    latitude?: number;
+    longitude?: number;
+  };
+  [key: string]: unknown;
+}
+
+export interface SerpApiHotelResponse {
+  search_metadata: { status: string };
+  properties?: SerpApiHotelProperty[];
+  error?: string;
+}
+
+export interface SerpApiHotelAutocompleteSuggestion {
+  position?: number;
+  value?: string;
+  type?: string;
+  location?: string;
+  thumbnail?: string;
+  highlighted_words?: string[];
+  autocomplete_suggestion?: string;
+  kgmid?: string;
+  data_cid?: string;
+  property_token?: string;
+  serpapi_google_hotels_link?: string;
+  serpapi_link?: string;
+  [key: string]: unknown;
+}
+
+export interface SerpApiHotelAutocompleteResponse {
+  search_metadata: { status: string };
+  suggestions?: SerpApiHotelAutocompleteSuggestion[];
+  error?: string;
+}
+
 /**
  * Fetch danh sách chuyến bay từ SerpAPI
  * Gộp best_flights + other_flights → trả về tất cả
@@ -76,4 +149,81 @@ export async function fetchFlightsFromSerpApi(
   ];
 
   return allFlights;
+}
+
+export async function fetchHotelsFromSerpApi(
+  params: HotelSearchParams
+): Promise<SerpApiHotelProperty[]> {
+  const apiKey = process.env.SERPAPI_KEY;
+
+  if (!apiKey) {
+    throw new Error("SERPAPI_KEY chưa được cấu hình trong .env");
+  }
+
+  const response = await axios.get<SerpApiHotelResponse>(SERPAPI_BASE_URL, {
+    params: {
+      engine: "google_hotels",
+      api_key: apiKey,
+      q: params.q,
+      check_in_date: params.check_in_date,
+      check_out_date: params.check_out_date,
+      gl: params.gl ?? "vn",
+      hl: params.hl ?? "vi",
+      currency: params.currency ?? "VND",
+      adults: params.adults ?? 2,
+      children: params.children ?? 0,
+      ...(params.children_ages ? { children_ages: params.children_ages } : {}),
+    },
+    timeout: 15000,
+  });
+
+  const data = response.data;
+
+  if (data.error) {
+    throw new Error(`SerpAPI error: ${data.error}`);
+  }
+
+  if (data.search_metadata?.status !== "Success") {
+    throw new Error(
+      `SerpAPI search failed: ${data.search_metadata?.status ?? "Unknown"}`
+    );
+  }
+
+  return data.properties ?? [];
+}
+
+export async function fetchHotelsAutocompleteFromSerpApi(
+  params: HotelAutocompleteParams
+): Promise<SerpApiHotelAutocompleteSuggestion[]> {
+  const apiKey = process.env.SERPAPI_KEY;
+
+  if (!apiKey) {
+    throw new Error("SERPAPI_KEY chưa được cấu hình trong .env");
+  }
+
+  const response = await axios.get<SerpApiHotelAutocompleteResponse>(SERPAPI_BASE_URL, {
+    params: {
+      engine: "google_hotels_autocomplete",
+      api_key: apiKey,
+      q: params.q,
+      gl: params.gl ?? "vn",
+      hl: params.hl ?? "vi",
+      currency: params.currency ?? "VND",
+    },
+    timeout: 15000,
+  });
+
+  const data = response.data;
+
+  if (data.error) {
+    throw new Error(`SerpAPI error: ${data.error}`);
+  }
+
+  if (data.search_metadata?.status !== "Success") {
+    throw new Error(
+      `SerpAPI search failed: ${data.search_metadata?.status ?? "Unknown"}`
+    );
+  }
+
+  return data.suggestions ?? [];
 }

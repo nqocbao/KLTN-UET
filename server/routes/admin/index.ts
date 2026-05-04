@@ -30,6 +30,7 @@ import intentsRoutes from "./intents.routes.js";
 import entitiesRoutes from "./entities.routes.js";
 import locationsRoutes from "./locations.routes.js";
 import servicesRoutes from "./services.routes.js";
+import foodReviewsRoutes from "./food_reviews.routes.js";
 
 const router = express.Router();
 
@@ -65,5 +66,6 @@ router.use("/intents", intentsRoutes);
 router.use("/entities", entitiesRoutes);
 router.use("/locations", locationsRoutes);
 router.use("/services", servicesRoutes);
+router.use("/food-reviews", foodReviewsRoutes);
 
 export default router;

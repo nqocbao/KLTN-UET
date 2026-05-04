@@ -55,6 +55,25 @@ const MOCK_HOTELS: Hotel[] = [
   }
 ] as any[];
 
+function toDateParam(value: string | null): string | undefined {
+  if (!value) return undefined;
+  const parsed = new Date(value);
+  if (Number.isNaN(parsed.getTime())) return undefined;
+
+  const year = parsed.getFullYear();
+  const month = String(parsed.getMonth() + 1).padStart(2, "0");
+  const day = String(parsed.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function normalizeSearchLocation(value: string): string {
+  return value
+    .toLowerCase()
+    .replace(/\b(hotel|hotels|resort|resorts)\b/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
 export default function HotelSearchPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -95,6 +114,65 @@ export default function HotelSearchPage() {
       console.log(`[HotelSearchPage] Fetching with: location="${location}", sortBy="${sortBy}", nights=${nights}, price=[${minPrice}, ${maxPrice}]`);
       setLoading(true);
       try {
+        const checkInDate = toDateParam(from);
+        const checkOutDate = toDateParam(to);
+
+        if (location && checkInDate && checkOutDate) {
+          const serpRes = await hotelsApi.search({
+            q: location,
+            check_in_date: checkInDate,
+            check_out_date: checkOutDate,
+            adults,
+            children,
+            gl: "vn",
+            hl: "vi",
+            currency: "VND",
+          });
+
+          console.log("[HotelSearchPage] SerpAPI Search Response:", serpRes);
+
+          if (serpRes.success && serpRes.data && serpRes.data.length > 0) {
+            let mappedHotels: Hotel[] = serpRes.data.map((hotel, index) => ({
+              _id: hotel.id || `${hotel.name}-${index}`,
+              name: hotel.name,
+              location: location,
+              rating: hotel.rating ?? 0,
+              rooms,
+              availableRooms: rooms,
+              priceRange: hotel.price_text || "",
+              priceTwoSingleBed: hotel.price ?? 0,
+              images: hotel.image_url ? [hotel.image_url] : [],
+              description: hotel.description || "",
+              createdAt: "",
+              updatedAt: "",
+            }));
+
+            if (minPrice !== undefined) {
+              mappedHotels = mappedHotels.filter(
+                (h) => ((h.priceTwoSingleBed || 0) * nights) >= minPrice
+              );
+            }
+            if (maxPrice !== undefined) {
+              mappedHotels = mappedHotels.filter(
+                (h) => ((h.priceTwoSingleBed || 0) * nights) <= maxPrice
+              );
+            }
+
+            if (sortBy === "price_asc") {
+              mappedHotels.sort((a, b) => (a.priceTwoSingleBed || 0) - (b.priceTwoSingleBed || 0));
+            } else if (sortBy === "price_desc") {
+              mappedHotels.sort((a, b) => (b.priceTwoSingleBed || 0) - (a.priceTwoSingleBed || 0));
+            } else if (sortBy === "alphabet") {
+              mappedHotels.sort((a, b) => (a.name || "").localeCompare(b.name || ""));
+            } else {
+              mappedHotels.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+            }
+
+            setHotels(mappedHotels);
+            return;
+          }
+        }
+
         const res = await hotelsApi.getAll({ 
           limit: 20,
           location: location || undefined,
@@ -113,9 +191,14 @@ export default function HotelSearchPage() {
         } else {
           console.log('[HotelSearchPage] No hotels from API, using mock data');
           // If no results from API, show mock data and sort/filter locally
+          const normalizedLocation = normalizeSearchLocation(location);
           let filteredMock = !location ? [...MOCK_HOTELS] : MOCK_HOTELS.filter(h => 
             h.location.toLowerCase().includes(location.toLowerCase()) ||
-            h.name.toLowerCase().includes(location.toLowerCase())
+            h.name.toLowerCase().includes(location.toLowerCase()) ||
+            (normalizedLocation.length > 0 && (
+              h.location.toLowerCase().includes(normalizedLocation) ||
+              h.name.toLowerCase().includes(normalizedLocation)
+            ))
           );
 
           // Apply price filter locally (Total price based on nights)
