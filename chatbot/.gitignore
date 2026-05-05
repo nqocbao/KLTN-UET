@@ -9,9 +9,13 @@ models/
 results/
 *.tar.gz
 
+# RAG index
+.rag/
+
 # Virtual environment
 venv/
 venv310/
+venv_rag_eval/
 env/
 ENV/
 .venv/

@@ -1,0 +1,4 @@
+config_id,chunking_method,chunk_size,chunk_overlap,embedding_model,topK,similarity_threshold,Recall@1,Recall@3,Recall@5,MRR,average_latency_ms,answer_relevancy_score,faithfulness_score,contextual_relevancy_score,hallucination_score
+sent_800,sentence,800,120,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,5,0.28,0.0,0.0,0.0,0.0,2896.6281,,,,
+para_800,paragraph,800,120,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,5,0.28,0.0,0.0,0.0,0.0,45474.290733,,,,
+fixed_600,fixed,600,80,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,5,0.28,0.0,0.0,0.0,0.0,51036.901567,,,,

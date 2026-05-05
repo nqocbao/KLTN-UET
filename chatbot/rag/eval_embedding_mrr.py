@@ -97,6 +97,7 @@ def load_reviews_from_file(path: str) -> List[Dict[str, Any]]:
 
 def build_docs(
     reviews: List[Dict[str, Any]],
+    chunking_method: str,
     chunk_size: int,
     chunk_overlap: int,
     min_chunk_chars: int,
@@ -116,6 +117,7 @@ def build_docs(
 
         docs = build_documents(
             review,
+            chunking_method=chunking_method,
             chunk_size=chunk_size,
             chunk_overlap=chunk_overlap,
             min_chunk_chars=min_chunk_chars,
@@ -229,6 +231,7 @@ def main() -> None:
     parser.add_argument("--chunk-size", type=int, default=800)
     parser.add_argument("--chunk-overlap", type=int, default=120)
     parser.add_argument("--min-chunk-chars", type=int, default=120)
+    parser.add_argument("--chunking-method", default="sentence")
     parser.add_argument("--top-k", type=int, default=5)
     parser.add_argument("--output", default="")
     args = parser.parse_args()
@@ -249,6 +252,7 @@ def main() -> None:
 
     doc_texts, doc_metas, review_texts = build_docs(
         reviews,
+        chunking_method=args.chunking_method,
         chunk_size=args.chunk_size,
         chunk_overlap=args.chunk_overlap,
         min_chunk_chars=args.min_chunk_chars,

@@ -1,0 +1,23 @@
+[
+  {
+    "test_id": "food_001",
+    "question": "Goi y bun cha ngon o Ha Noi",
+    "expected_chunk_id": "sample_review_id#ts",
+    "expected_output": "TODO: expected answer about bun cha in Ha Noi",
+    "category": "food"
+  },
+  {
+    "test_id": "food_002",
+    "question": "Quan an hai san ngon o Phu Quoc gia re",
+    "expected_chunk_id": "sample_review_id#c01",
+    "expected_output": "TODO: expected answer about seafood in Phu Quoc",
+    "category": "seafood"
+  },
+  {
+    "test_id": "food_003",
+    "question": "Review quan cafe dep o Da Lat",
+    "expected_chunk_id": "sample_review_id#c02",
+    "expected_output": "TODO: expected answer about cafes in Da Lat",
+    "category": "cafe"
+  }
+]

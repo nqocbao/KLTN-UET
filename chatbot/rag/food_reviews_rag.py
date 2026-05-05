@@ -25,6 +25,7 @@ DEFAULT_BACKEND_TIMEOUT = int(os.getenv("RAG_BACKEND_TIMEOUT", "10"))
 DEFAULT_CHUNK_SIZE = int(os.getenv("RAG_CHUNK_SIZE", "800"))
 DEFAULT_CHUNK_OVERLAP = int(os.getenv("RAG_CHUNK_OVERLAP", "120"))
 DEFAULT_MIN_CHUNK_CHARS = int(os.getenv("RAG_MIN_CHUNK_CHARS", "120"))
+DEFAULT_CHUNKING_METHOD = os.getenv("RAG_CHUNKING_METHOD", "sentence")
 
 META_FILE_NAME = "food_reviews.meta.json"
 
@@ -72,6 +73,7 @@ class FoodReviewRagItem:
     chunk_type: str
     title: str
     summary: str
+    doc_text: str
     city: str
     district: str
     image_url: str
@@ -94,6 +96,7 @@ class FoodReviewRagService:
         top_k: int = DEFAULT_TOP_K,
         query_k_multiplier: int = DEFAULT_QUERY_K_MULTIPLIER,
         min_score: float = DEFAULT_MIN_SCORE,
+        chunking_method: str = DEFAULT_CHUNKING_METHOD,
         chunk_size: int = DEFAULT_CHUNK_SIZE,
         chunk_overlap: int = DEFAULT_CHUNK_OVERLAP,
         min_chunk_chars: int = DEFAULT_MIN_CHUNK_CHARS,
@@ -106,6 +109,7 @@ class FoodReviewRagService:
         self.top_k = top_k
         self.query_k_multiplier = max(1, query_k_multiplier)
         self.min_score = min_score
+        self.chunking_method = (chunking_method or "sentence").strip().lower()
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.min_chunk_chars = min_chunk_chars
@@ -137,7 +141,7 @@ class FoodReviewRagService:
         metadatas = raw.get("metadatas", [[]])[0] or []
         distances = raw.get("distances", [[]])[0] or []
 
-        items = self._build_items(docs, metadatas, distances)
+        items = _build_items(docs, metadatas, distances)
         if not items:
             return []
 
@@ -200,6 +204,7 @@ class FoodReviewRagService:
             meta_chunk_size = int(meta.get("chunk_size", 0) or 0)
             meta_chunk_overlap = int(meta.get("chunk_overlap", 0) or 0)
             meta_min_chunk_chars = int(meta.get("min_chunk_chars", 0) or 0)
+            meta_chunking_method = str(meta.get("chunking_method", "")).strip().lower()
         except Exception:
             return False
 
@@ -213,6 +218,9 @@ class FoodReviewRagService:
             return True
 
         if meta_min_chunk_chars and meta_min_chunk_chars != self.min_chunk_chars:
+            return True
+
+        if meta_chunking_method and meta_chunking_method != self.chunking_method:
             return True
 
         age_hours = (time.time() - built_at) / 3600.0
@@ -247,6 +255,7 @@ class FoodReviewRagService:
         for item in reviews:
             docs = build_documents(
                 item,
+                chunking_method=self.chunking_method,
                 chunk_size=self.chunk_size,
                 chunk_overlap=self.chunk_overlap,
                 min_chunk_chars=self.min_chunk_chars,
@@ -288,6 +297,7 @@ class FoodReviewRagService:
             "built_at": time.time(),
             "count": count,
             "model_name": self.model_name,
+            "chunking_method": self.chunking_method,
             "chunk_size": self.chunk_size,
             "chunk_overlap": self.chunk_overlap,
             "min_chunk_chars": self.min_chunk_chars,
@@ -333,6 +343,7 @@ class FoodReviewRagService:
 
 def build_documents(
     item: Dict[str, Any],
+    chunking_method: str,
     chunk_size: int,
     chunk_overlap: int,
     min_chunk_chars: int,
@@ -391,6 +402,7 @@ def build_documents(
 
     content_chunks = split_text_into_chunks(
         content,
+        chunking_method=chunking_method,
         chunk_size=chunk_size,
         chunk_overlap=chunk_overlap,
         min_chunk_chars=min_chunk_chars,
@@ -444,6 +456,7 @@ def build_price_text(price_min: Optional[float], price_max: Optional[float]) -> 
 
 def split_text_into_chunks(
     text: str,
+    chunking_method: str,
     chunk_size: int,
     chunk_overlap: int,
     min_chunk_chars: int,
@@ -451,13 +464,35 @@ def split_text_into_chunks(
     if not text:
         return []
 
+    method = (chunking_method or "sentence").strip().lower()
+
+    if method == "fixed":
+        chunks: List[str] = []
+        clean_text = " ".join(text.replace("\r", " ").replace("\n", " ").split())
+        if not clean_text:
+            return []
+        step = max(1, chunk_size - max(0, chunk_overlap))
+        for start in range(0, len(clean_text), step):
+            chunk = clean_text[start : start + chunk_size].strip()
+            if chunk:
+                chunks.append(chunk)
+        if min_chunk_chars > 0:
+            chunks = [chunk for chunk in chunks if len(chunk) >= min_chunk_chars]
+        return chunks
+
     parts: List[str] = []
-    for raw in text.replace("\r", "\n").split("\n"):
-        raw = raw.strip()
-        if not raw:
-            continue
-        segments = re.split(r"(?<=[.!?！？。])\s+", raw)
-        parts.extend([segment.strip() for segment in segments if segment.strip()])
+    if method == "paragraph":
+        for raw in text.replace("\r", "\n").split("\n"):
+            raw = raw.strip()
+            if raw:
+                parts.append(raw)
+    else:
+        for raw in text.replace("\r", "\n").split("\n"):
+            raw = raw.strip()
+            if not raw:
+                continue
+            segments = re.split(r"(?<=[.!?！？。])\s+", raw)
+            parts.extend([segment.strip() for segment in segments if segment.strip()])
 
     chunks: List[str] = []
     current = ""
@@ -630,6 +665,7 @@ def _build_items(
                 chunk_type=chunk_type,
                 title=title,
                 summary=summary,
+                doc_text=doc_text,
                 city=city,
                 district=district,
                 image_url=image_url,
