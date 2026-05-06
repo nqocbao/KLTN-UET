@@ -1,0 +1,4 @@
+config_id,chunking_method,chunk_size,chunk_overlap,embedding_model,topK,similarity_threshold,average_contextual_recall,average_faithfulness,average_answer_relevancy,average_knowledge_retention,average_mrr,average_latency_ms,pass_rate,thresholds
+sent_800,sentence,800,120,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,5,0.28,,,,,0.0,4142.308,,{}
+fixed_600,fixed,600,80,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,5,0.28,,,,,0.0,4069.467,,{}
+para_800,paragraph,800,120,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,5,0.28,,,,,0.0,4082.311,,{}
