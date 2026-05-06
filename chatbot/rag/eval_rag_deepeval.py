@@ -1,21 +1,8 @@
-if __name__ == "__main__":
-    import os
-    import sys
-
-    current_dir = os.path.dirname(os.path.abspath(__file__))
-    project_root = os.path.abspath(os.path.join(current_dir, ".."))
-    if project_root not in sys.path:
-        sys.path.insert(0, project_root)
-
-    from rag.eval_vivutravel_rag_deepeval import main as vivutravel_main
-
-    vivutravel_main()
-    raise SystemExit
-
 import argparse
 import csv
 import json
 import os
+import re
 import sys
 import time
 from dataclasses import dataclass
@@ -40,6 +27,19 @@ from rag.food_reviews_rag import FoodReviewRagItem, FoodReviewRagService
 
 DEFAULT_BACKEND_URL = os.getenv("BACKEND_API_URL", "http://localhost:5000")
 DEFAULT_OUTPUT_DIR = os.path.join(CURRENT_DIR, "outputs")
+ENV_PATH = os.path.join(PROJECT_ROOT, ".env")
+
+
+def load_environment() -> None:
+    if os.path.exists(ENV_PATH):
+        load_dotenv(ENV_PATH)
+    load_dotenv()
+    workspace_cache = os.path.join(PROJECT_ROOT, ".cache")
+    os.makedirs(workspace_cache, exist_ok=True)
+    os.environ.setdefault("HF_HOME", os.path.join(workspace_cache, "huggingface"))
+    os.environ.setdefault("TRANSFORMERS_CACHE", os.path.join(workspace_cache, "huggingface", "transformers"))
+    os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", os.path.join(workspace_cache, "sentence_transformers"))
+    os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
 
 
 @dataclass
@@ -70,7 +70,15 @@ class AnswerGenerator:
         if self.provider == "openai":
             from openai import OpenAI
 
-            self._client = OpenAI()
+            api_key = os.getenv("OPENAI_API_KEY")
+            if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "openai":
+                api_key = os.getenv("LLM_API_KEY")
+            if not api_key:
+                raise RuntimeError(
+                    "Missing OPENAI_API_KEY for OpenAI provider. "
+                    "Set OPENAI_API_KEY in chatbot/.env."
+                )
+            self._client = OpenAI(api_key=api_key)
         elif self.provider == "gemini":
             import google.generativeai as genai
 
@@ -171,9 +179,24 @@ def parse_expected_ids(raw: Any) -> List[str]:
     return [text]
 
 
-def match_expected(expected_ids: List[str], item: FoodReviewRagItem) -> bool:
-    if not expected_ids:
-        return False
+def parse_expected_contexts(raw: Any) -> List[str]:
+    if raw is None:
+        return []
+    if isinstance(raw, list):
+        return [str(x).strip() for x in raw if str(x).strip()]
+    text = str(raw).strip()
+    return [text] if text else []
+
+
+def normalize_match_text(text: str) -> str:
+    return " ".join(text.lower().split())
+
+
+def match_expected(
+    expected_ids: List[str],
+    item: FoodReviewRagItem,
+    expected_contexts: Optional[List[str]] = None,
+) -> bool:
     doc_id = build_doc_id(item)
     chunk_id = item.chunk_id or ""
     review_id = item.review_id or ""
@@ -188,6 +211,15 @@ def match_expected(expected_ids: List[str], item: FoodReviewRagItem) -> bool:
         exp_lower = exp.lower()
         if exp_lower in {doc_id.lower(), chunk_id.lower(), review_id.lower()}:
             return True
+
+    item_text = normalize_match_text(item.doc_text or item.summary or "")
+    for expected_context in expected_contexts or []:
+        expected_text = normalize_match_text(expected_context)
+        if not expected_text or not item_text:
+            continue
+        if expected_text in item_text or item_text in expected_text:
+            return True
+
     return False
 
 
@@ -197,11 +229,19 @@ def build_doc_id(item: FoodReviewRagItem) -> str:
     return item.chunk_id or item.review_id or ""
 
 
+def config_index_dir(config: RagConfig) -> str:
+    if config.index_dir:
+        return config.index_dir
+    safe_config_id = re.sub(r"[^a-zA-Z0-9_.-]+", "_", config.config_id).strip("_")
+    return os.path.join(PROJECT_ROOT, ".rag_eval", safe_config_id or "default")
+
+
 def compute_retrieval_metrics(
     expected_ids: List[str],
     retrieved: List[FoodReviewRagItem],
+    expected_contexts: Optional[List[str]] = None,
 ) -> Dict[str, Optional[float]]:
-    if not expected_ids:
+    if not expected_ids and not expected_contexts:
         return {
             "Recall@1": None,
             "Recall@3": None,
@@ -211,7 +251,7 @@ def compute_retrieval_metrics(
 
     ranks = []
     for idx, item in enumerate(retrieved, 1):
-        if match_expected(expected_ids, item):
+        if match_expected(expected_ids, item, expected_contexts):
             ranks.append(idx)
             break
 
@@ -305,9 +345,10 @@ def load_testcases(path: str) -> List[Dict[str, Any]]:
             {
                 "test_id": str(raw.get("test_id") or raw.get("id") or f"case_{idx}"),
                 "question": question,
-                "expected_chunk_id": raw.get("expected_chunk_id"),
-                "expected_output": raw.get("expected_output"),
-                "category": raw.get("category") or "",
+                "expected_chunk_id": raw.get("expected_chunk_id") or raw.get("expected_chunk_ids"),
+                "expected_output": raw.get("expected_output") or raw.get("expected_output_outline"),
+                "category": raw.get("category") or raw.get("domain") or "",
+                "expected_contexts": parse_expected_contexts(raw.get("retrieval_context")),
             }
         )
 
@@ -334,7 +375,7 @@ def run_config(
         chunk_overlap=config.chunk_overlap,
         min_chunk_chars=config.min_chunk_chars,
         query_k_multiplier=config.query_k_multiplier,
-        index_dir=config.index_dir,
+        index_dir=config_index_dir(config),
         collection_name=collection_name,
     )
 
@@ -354,6 +395,7 @@ def run_config(
     for case in testcases:
         question = case["question"]
         expected_ids = parse_expected_ids(case.get("expected_chunk_id"))
+        expected_contexts = case.get("expected_contexts") or []
 
         start_time = time.perf_counter()
         items = rag_service.query(question)
@@ -362,7 +404,7 @@ def run_config(
         retrieved_ids = [build_doc_id(item) for item in items]
         retrieved_texts = [item.doc_text or item.summary for item in items if item.doc_text or item.summary]
 
-        metrics = compute_retrieval_metrics(expected_ids, items)
+        metrics = compute_retrieval_metrics(expected_ids, items, expected_contexts)
         if metrics["Recall@1"] is not None:
             retrieval_metrics["Recall@1"].append(metrics["Recall@1"])
             retrieval_metrics["Recall@3"].append(metrics["Recall@3"])
@@ -493,12 +535,12 @@ def sort_summary(rows: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
 
 
 def main() -> None:
-    load_dotenv()
+    load_environment()
 
     parser = argparse.ArgumentParser(description="Evaluate RAG configs with DeepEval")
     parser.add_argument("--testcases", required=True, help="Path to JSON/CSV testcases")
     parser.add_argument("--configs", required=True, help="Path to JSON/CSV configs")
-    parser.add_argument("--backend-url", default=DEFAULT_BACKEND_URL)
+    parser.add_argument("--backend-url", default=os.getenv("BACKEND_API_URL", DEFAULT_BACKEND_URL))
     parser.add_argument("--output-dir", default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--run-id", default="")
     parser.add_argument("--limit", type=int, default=0)

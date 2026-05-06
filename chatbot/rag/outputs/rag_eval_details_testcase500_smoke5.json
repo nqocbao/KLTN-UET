@@ -1,0 +1,317 @@
+[
+  {
+    "config_id": "sent_800",
+    "test_id": "VT_ST_0001",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1113_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0caaf4ecdf655bc5efb#ts|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c176af4ecdf655bc6134#c02",
+    "latency_ms": 50553.042,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về cơm. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Giá/chi phí được nhắc: 40k. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Dĩa cơm 40k á mọi người :) 2 cục sườn 1 cục thịt 1 lát trứng"
+  },
+  {
+    "config_id": "sent_800",
+    "test_id": "VT_ST_0002",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1190_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0caaf4ecdf655bc5efb#ts|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c176af4ecdf655bc6134#c02",
+    "latency_ms": 18.411,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về gà. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Không có gì thay đổi thì 79 ngày nữa là TẾT 🧧🧧"
+  },
+  {
+    "config_id": "sent_800",
+    "test_id": "VT_ST_0003",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1957_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0caaf4ecdf655bc5efb#ts|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c176af4ecdf655bc6134#c02",
+    "latency_ms": 17.149,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về lòng. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Khu vực liên quan: Hà Nội. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: ✨ Phát hiện vườn hoa Cẩm Tú Cầu siêu xinh giữa lòng Hà Nội 📍SH2-12B The Matrix One, Số 1 Lê Quang Đạo, Mễ Trì, Nam Từ Liêm, HN"
+  },
+  {
+    "config_id": "sent_800",
+    "test_id": "VT_ST_0004",
+    "category": "destination",
+    "question": "Nội dung chính của bài viết về 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh là gì?",
+    "expected_chunk_id": [
+      "chunk_doc_0834_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0dbaf4ecdf655bc5fff#ts|69e87947af4ecdf655bc9026#ts|69e7c098af4ecdf655bc5e8b#ts|69e87952af4ecdf655bc905e#c02|69e87963af4ecdf655bc90c4#c02",
+    "latency_ms": 31.053,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh. Cần nêu địa điểm/khu vực được nhắc tới và điểm đáng chú ý cho người đi chơi/du lịch. Khu vực liên quan: Sài Gòn. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh 🏖️Mini beach 🏖️Làng Chài 🏖️Hòn Tằm Quý ACE khách đến với Nha Trang liên hệ em Đạt để có chuyến đi tour đảo vui vẻ nhé cả nhà,em có đủ các loại tour cả nhà 😍 👉tour 3 đảo( đi riêng gia đình ) 👉tour 3 đảo( ghép đoàn ) 👉cho thuê cano riêng gia đình ( giá rẻ ) 👉cano bao gồm 🏖️thuyền trưởng 🏖️bảo..."
+  },
+  {
+    "config_id": "sent_800",
+    "test_id": "VT_ST_0005",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_0180_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0caaf4ecdf655bc5efb#ts|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c176af4ecdf655bc6134#c02",
+    "latency_ms": 16.778,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về ốc, mì, nem. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Khu vực liên quan: Hà Nội. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Đặt được mâm cỗ chay bên Phúc An Chay tiện thật sự. Các món được hút chân không nên bảo quản ở tủ lạnh rồi làm nóng lại là xong. Làm mất khoảng 15-20p thui là lên mâm được rồi."
+  },
+  {
+    "config_id": "fixed_600",
+    "test_id": "VT_ST_0001",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1113_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0e0af4ecdf655bc6057#c03|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c0e1af4ecdf655bc606a#c01",
+    "latency_ms": 10066.683,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về cơm. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Giá/chi phí được nhắc: 40k. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Dĩa cơm 40k á mọi người :) 2 cục sườn 1 cục thịt 1 lát trứng"
+  },
+  {
+    "config_id": "fixed_600",
+    "test_id": "VT_ST_0002",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1190_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0e0af4ecdf655bc6057#c03|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c0e1af4ecdf655bc606a#c01",
+    "latency_ms": 15.274,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về gà. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Không có gì thay đổi thì 79 ngày nữa là TẾT 🧧🧧"
+  },
+  {
+    "config_id": "fixed_600",
+    "test_id": "VT_ST_0003",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1957_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0e0af4ecdf655bc6057#c03|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c0e1af4ecdf655bc606a#c01",
+    "latency_ms": 15.33,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về lòng. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Khu vực liên quan: Hà Nội. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: ✨ Phát hiện vườn hoa Cẩm Tú Cầu siêu xinh giữa lòng Hà Nội 📍SH2-12B The Matrix One, Số 1 Lê Quang Đạo, Mễ Trì, Nam Từ Liêm, HN"
+  },
+  {
+    "config_id": "fixed_600",
+    "test_id": "VT_ST_0004",
+    "category": "destination",
+    "question": "Nội dung chính của bài viết về 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh là gì?",
+    "expected_chunk_id": [
+      "chunk_doc_0834_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0dbaf4ecdf655bc5fff#ts|69e87947af4ecdf655bc9026#ts|69e87949af4ecdf655bc9032#c03|69e7c098af4ecdf655bc5e8b#ts|69e7c16daf4ecdf655bc60a0#c04",
+    "latency_ms": 24.411,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh. Cần nêu địa điểm/khu vực được nhắc tới và điểm đáng chú ý cho người đi chơi/du lịch. Khu vực liên quan: Sài Gòn. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh 🏖️Mini beach 🏖️Làng Chài 🏖️Hòn Tằm Quý ACE khách đến với Nha Trang liên hệ em Đạt để có chuyến đi tour đảo vui vẻ nhé cả nhà,em có đủ các loại tour cả nhà 😍 👉tour 3 đảo( đi riêng gia đình ) 👉tour 3 đảo( ghép đoàn ) 👉cho thuê cano riêng gia đình ( giá rẻ ) 👉cano bao gồm 🏖️thuyền trưởng 🏖️bảo..."
+  },
+  {
+    "config_id": "fixed_600",
+    "test_id": "VT_ST_0005",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_0180_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0e0af4ecdf655bc6057#c03|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c0e1af4ecdf655bc606a#c01",
+    "latency_ms": 17.121,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về ốc, mì, nem. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Khu vực liên quan: Hà Nội. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Đặt được mâm cỗ chay bên Phúc An Chay tiện thật sự. Các món được hút chân không nên bảo quản ở tủ lạnh rồi làm nóng lại là xong. Làm mất khoảng 15-20p thui là lên mâm được rồi."
+  },
+  {
+    "config_id": "para_800",
+    "test_id": "VT_ST_0001",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1113_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0caaf4ecdf655bc5efb#ts|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c0e1af4ecdf655bc606a#c01",
+    "latency_ms": 9981.662,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về cơm. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Giá/chi phí được nhắc: 40k. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Dĩa cơm 40k á mọi người :) 2 cục sườn 1 cục thịt 1 lát trứng"
+  },
+  {
+    "config_id": "para_800",
+    "test_id": "VT_ST_0002",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1190_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0caaf4ecdf655bc5efb#ts|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c0e1af4ecdf655bc606a#c01",
+    "latency_ms": 14.422,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về gà. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Không có gì thay đổi thì 79 ngày nữa là TẾT 🧧🧧"
+  },
+  {
+    "config_id": "para_800",
+    "test_id": "VT_ST_0003",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_1957_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0caaf4ecdf655bc5efb#ts|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c0e1af4ecdf655bc606a#c01",
+    "latency_ms": 13.45,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về lòng. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Khu vực liên quan: Hà Nội. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: ✨ Phát hiện vườn hoa Cẩm Tú Cầu siêu xinh giữa lòng Hà Nội 📍SH2-12B The Matrix One, Số 1 Lê Quang Đạo, Mễ Trì, Nam Từ Liêm, HN"
+  },
+  {
+    "config_id": "para_800",
+    "test_id": "VT_ST_0004",
+    "category": "destination",
+    "question": "Nội dung chính của bài viết về 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh là gì?",
+    "expected_chunk_id": [
+      "chunk_doc_0834_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0dbaf4ecdf655bc5fff#ts|69e87947af4ecdf655bc9026#ts|69e7c098af4ecdf655bc5e8b#ts|69e87952af4ecdf655bc905e#c02|69e87963af4ecdf655bc90c4#c02",
+    "latency_ms": 25.772,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh. Cần nêu địa điểm/khu vực được nhắc tới và điểm đáng chú ý cho người đi chơi/du lịch. Khu vực liên quan: Sài Gòn. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: 👉LỊCH TRÌNH THUÊ CANO RIÊNG 8️⃣0️⃣0️⃣k 🏖️Lặn San Hô 🏖️Bãi Tranh 🏖️Mini beach 🏖️Làng Chài 🏖️Hòn Tằm Quý ACE khách đến với Nha Trang liên hệ em Đạt để có chuyến đi tour đảo vui vẻ nhé cả nhà,em có đủ các loại tour cả nhà 😍 👉tour 3 đảo( đi riêng gia đình ) 👉tour 3 đảo( ghép đoàn ) 👉cho thuê cano riêng gia đình ( giá rẻ ) 👉cano bao gồm 🏖️thuyền trưởng 🏖️bảo..."
+  },
+  {
+    "config_id": "para_800",
+    "test_id": "VT_ST_0005",
+    "category": "food",
+    "question": "Bài viết này đang nhắc đến món ăn, quán hoặc địa điểm nào?",
+    "expected_chunk_id": [
+      "chunk_doc_0180_001"
+    ],
+    "retrieved_chunk_ids": "69e7c0caaf4ecdf655bc5efb#ts|69e7c0d3af4ecdf655bc5f84#ts|69e7c182af4ecdf655bc61ee#c01|69e87976af4ecdf655bc9178#c01|69e7c0e1af4ecdf655bc606a#c01",
+    "latency_ms": 15.629,
+    "Recall@1": 0.0,
+    "Recall@3": 0.0,
+    "Recall@5": 0.0,
+    "MRR": 0.0,
+    "answer_relevancy_score": null,
+    "faithfulness_score": null,
+    "contextual_relevancy_score": null,
+    "hallucination_score": null,
+    "actual_output": "",
+    "expected_output": "Câu trả lời cần dựa vào bài viết nguồn, nêu đúng nội dung chính về ốc, mì, nem. Cần nêu món/quán, trải nghiệm ăn uống, điểm nổi bật và thông tin giá/địa chỉ nếu có. Khu vực liên quan: Hà Nội. Không được tự bịa thêm thông tin ngoài context. Tóm tắt nguồn: Đặt được mâm cỗ chay bên Phúc An Chay tiện thật sự. Các món được hút chân không nên bảo quản ở tủ lạnh rồi làm nóng lại là xong. Làm mất khoảng 15-20p thui là lên mâm được rồi."
+  }
+]

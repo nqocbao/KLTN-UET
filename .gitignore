@@ -1,2 +1,6 @@
 # Local editor documentation (internal use only)
 .vscode/document/
+
+# Local RAG evaluation artifacts
+chatbot/.cache/
+chatbot/.rag_eval/

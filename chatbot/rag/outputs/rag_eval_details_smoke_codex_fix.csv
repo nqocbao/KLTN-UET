@@ -1,0 +1,4 @@
+config_id,test_id,category,question,expected_chunk_id,retrieved_chunk_ids,latency_ms,Recall@1,Recall@3,Recall@5,MRR,answer_relevancy_score,faithfulness_score,contextual_relevancy_score,hallucination_score,actual_output,expected_output
+sent_800,food_001,food,Goi y bun cha ngon o Ha Noi,sample_review_id#ts,,4190.107,0.0,0.0,0.0,0.0,,,,,,TODO: expected answer about bun cha in Ha Noi
+fixed_600,food_001,food,Goi y bun cha ngon o Ha Noi,sample_review_id#ts,,4143.29,0.0,0.0,0.0,0.0,,,,,,TODO: expected answer about bun cha in Ha Noi
+para_800,food_001,food,Goi y bun cha ngon o Ha Noi,sample_review_id#ts,,4140.842,0.0,0.0,0.0,0.0,,,,,,TODO: expected answer about bun cha in Ha Noi

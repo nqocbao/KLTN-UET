@@ -31,5 +31,38 @@
     "similarity_threshold": 0.28,
     "min_chunk_chars": 120,
     "query_k_multiplier": 4
+  },
+  {
+    "config_id": "sent_800_bge_m3",
+    "chunking_method": "sentence",
+    "chunk_size": 800,
+    "chunk_overlap": 120,
+    "embedding_model": "BAAI/bge-m3",
+    "topK": 5,
+    "similarity_threshold": 0.28,
+    "min_chunk_chars": 120,
+    "query_k_multiplier": 4
+  },
+  {
+    "config_id": "fixed_600_bge_m3",
+    "chunking_method": "fixed",
+    "chunk_size": 600,
+    "chunk_overlap": 80,
+    "embedding_model": "BAAI/bge-m3",
+    "topK": 5,
+    "similarity_threshold": 0.28,
+    "min_chunk_chars": 120,
+    "query_k_multiplier": 4
+  },
+  {
+    "config_id": "para_800_bge_m3",
+    "chunking_method": "paragraph",
+    "chunk_size": 800,
+    "chunk_overlap": 120,
+    "embedding_model": "BAAI/bge-m3",
+    "topK": 5,
+    "similarity_threshold": 0.28,
+    "min_chunk_chars": 120,
+    "query_k_multiplier": 4
   }
 ]
