@@ -1,0 +1,78 @@
+{
+  "LP-002-hotels": {
+    "meta": {
+      "title": "GET /api/client/hotels",
+      "conn": 20,
+      "dur": 30
+    },
+    "requests": 467,
+    "rps_avg": 15.57,
+    "duration_s": 30.15,
+    "latency_avg_ms": 1255.26,
+    "latency_p50_ms": 1061,
+    "latency_p95_ms": 2787,
+    "latency_p99_ms": 2877,
+    "latency_max_ms": 3204,
+    "errors": 0,
+    "timeouts": 0,
+    "non2xx": 0,
+    "throughput_kb_avg": 238
+  },
+  "LP-003-search": {
+    "meta": {
+      "title": "GET /api/client/search?q=Đà Nẵng",
+      "conn": 15,
+      "dur": 30
+    },
+    "requests": 113277,
+    "rps_avg": 3776.47,
+    "duration_s": 30.01,
+    "latency_avg_ms": 3.49,
+    "latency_p50_ms": 3,
+    "latency_p95_ms": 7,
+    "latency_p99_ms": 8,
+    "latency_max_ms": 31,
+    "errors": 0,
+    "timeouts": 0,
+    "non2xx": 113277,
+    "throughput_kb_avg": 2909
+  },
+  "LP-004-login": {
+    "meta": {
+      "title": "POST /api/client/auth/login",
+      "conn": 10,
+      "dur": 30
+    },
+    "requests": 3148,
+    "rps_avg": 104.94,
+    "duration_s": 30.09,
+    "latency_avg_ms": 94.09,
+    "latency_p50_ms": 57,
+    "latency_p95_ms": 468,
+    "latency_p99_ms": 482,
+    "latency_max_ms": 526,
+    "errors": 0,
+    "timeouts": 0,
+    "non2xx": 3148,
+    "throughput_kb_avg": 101
+  },
+  "LP-005-chatbot": {
+    "meta": {
+      "title": "POST /api/chatbot/message",
+      "conn": 5,
+      "dur": 30
+    },
+    "requests": 1149,
+    "rps_avg": 38.3,
+    "duration_s": 30.15,
+    "latency_avg_ms": 130.42,
+    "latency_p50_ms": 129,
+    "latency_p95_ms": 155,
+    "latency_p99_ms": 165,
+    "latency_max_ms": 224,
+    "errors": 0,
+    "timeouts": 0,
+    "non2xx": 1149,
+    "throughput_kb_avg": 40
+  }
+}

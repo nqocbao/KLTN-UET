@@ -1,0 +1,46 @@
+sequenceDiagram
+    autonumber
+    actor User as Người dùng
+    participant UI as Chat UI<br/>Next.js
+    participant BE as Backend API<br/>Express
+    participant RASA as RASA<br/>NLU + Core
+    participant Action as Action Server<br/>RASA SDK
+    participant RAG as RAG Service<br/>Python
+    participant Chroma as ChromaDB<br/>Vector store
+
+    User->>UI: Nhập câu hỏi food review
+    UI->>BE: POST /api/chatbot/message
+    BE->>BE: Tạo conversation nếu cần<br/>và lưu tin nhắn người dùng
+    BE->>RASA: Gửi message tới RASA webhook
+    RASA->>RASA: Phân loại intent ask_foodtour
+    RASA->>Action: Gọi action_rag_food_reviews
+    Action->>RAG: query(question)
+
+    alt Chỉ mục chưa có hoặc đã quá hạn
+        RAG->>RAG: Build/rebuild index<br/>(xem hình build index)
+    end
+
+    RAG->>RAG: Chuẩn hóa truy vấn<br/>city aliases, dish keywords
+    RAG->>RAG: Encode câu hỏi thành vector
+    RAG->>Chroma: Tìm kiếm vector top-k
+    Chroma-->>RAG: Chunks + metadata + scores
+
+    opt Hybrid retrieval
+        RAG->>RAG: Kết hợp BM25 + vector bằng RRF
+    end
+
+    RAG->>RAG: Lọc min_score, bonus city/dish,<br/>collapse theo review_id
+    RAG-->>Action: Top review phù hợp
+
+    alt Có kết quả
+        Action->>Action: Format text + food_review_cards
+        Action-->>RASA: Bot responses
+    else Không có kết quả hoặc lỗi
+        Action-->>RASA: Thông báo fallback
+    end
+
+    RASA-->>BE: Array bot responses
+    BE->>BE: Lưu message của bot
+    BE-->>UI: JSON botResponses
+    UI->>UI: Render bubble + FoodReviewCard
+    UI-->>User: Hiển thị review, ảnh, giá,<br/>địa điểm, link nguồn

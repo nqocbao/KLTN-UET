@@ -1,6 +1,6 @@
 [
   {
-    "config_id": "sent_800",
+    "config_id": "minilm_sent_800",
     "chunking_method": "sentence",
     "chunk_size": 800,
     "chunk_overlap": 120,
@@ -11,55 +11,22 @@
     "query_k_multiplier": 4
   },
   {
-    "config_id": "fixed_600",
-    "chunking_method": "fixed",
-    "chunk_size": 600,
-    "chunk_overlap": 80,
-    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    "topK": 5,
-    "similarity_threshold": 0.28,
-    "min_chunk_chars": 120,
-    "query_k_multiplier": 4
-  },
-  {
-    "config_id": "para_800",
-    "chunking_method": "paragraph",
-    "chunk_size": 800,
-    "chunk_overlap": 120,
-    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
-    "topK": 5,
-    "similarity_threshold": 0.28,
-    "min_chunk_chars": 120,
-    "query_k_multiplier": 4
-  },
-  {
-    "config_id": "sent_800_bge_m3",
+    "config_id": "e5_small_sent_800",
     "chunking_method": "sentence",
     "chunk_size": 800,
     "chunk_overlap": 120,
-    "embedding_model": "BAAI/bge-m3",
+    "embedding_model": "intfloat/multilingual-e5-small",
     "topK": 5,
     "similarity_threshold": 0.28,
     "min_chunk_chars": 120,
     "query_k_multiplier": 4
   },
   {
-    "config_id": "fixed_600_bge_m3",
-    "chunking_method": "fixed",
-    "chunk_size": 600,
-    "chunk_overlap": 80,
-    "embedding_model": "BAAI/bge-m3",
-    "topK": 5,
-    "similarity_threshold": 0.28,
-    "min_chunk_chars": 120,
-    "query_k_multiplier": 4
-  },
-  {
-    "config_id": "para_800_bge_m3",
-    "chunking_method": "paragraph",
+    "config_id": "vn_emb_sent_800",
+    "chunking_method": "sentence",
     "chunk_size": 800,
     "chunk_overlap": 120,
-    "embedding_model": "BAAI/bge-m3",
+    "embedding_model": "dangvantuan/vietnamese-embedding",
     "topK": 5,
     "similarity_threshold": 0.28,
     "min_chunk_chars": 120,

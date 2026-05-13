@@ -1,0 +1,4 @@
+config_id,chunking_method,chunk_size,chunk_overlap,embedding_model,topK,similarity_threshold,average_contextual_recall,average_faithfulness,average_answer_relevancy,average_knowledge_retention,average_mrr,average_latency_ms,pass_rate,thresholds
+minilm_sent_800,sentence,800,120,sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2,5,0.28,,,,,0.086333,1964.1758,,{}
+e5_small_sent_800,sentence,800,120,intfloat/multilingual-e5-small,5,0.28,,,,,0.091333,5171.85616,,{}
+vn_emb_sent_800,sentence,800,120,dangvantuan/vietnamese-embedding,5,0.28,,,,,0.076667,13224.62916,,{}

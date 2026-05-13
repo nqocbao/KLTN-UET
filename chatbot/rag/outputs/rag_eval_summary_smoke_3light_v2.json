@@ -1,0 +1,53 @@
+[
+  {
+    "config_id": "minilm_sent_800",
+    "chunking_method": "sentence",
+    "chunk_size": 800,
+    "chunk_overlap": 120,
+    "embedding_model": "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+    "topK": 5,
+    "similarity_threshold": 0.28,
+    "average_contextual_recall": null,
+    "average_faithfulness": null,
+    "average_answer_relevancy": null,
+    "average_knowledge_retention": null,
+    "average_mrr": 0.086333,
+    "average_latency_ms": 1964.1758,
+    "pass_rate": null,
+    "thresholds": {}
+  },
+  {
+    "config_id": "e5_small_sent_800",
+    "chunking_method": "sentence",
+    "chunk_size": 800,
+    "chunk_overlap": 120,
+    "embedding_model": "intfloat/multilingual-e5-small",
+    "topK": 5,
+    "similarity_threshold": 0.28,
+    "average_contextual_recall": null,
+    "average_faithfulness": null,
+    "average_answer_relevancy": null,
+    "average_knowledge_retention": null,
+    "average_mrr": 0.091333,
+    "average_latency_ms": 5171.85616,
+    "pass_rate": null,
+    "thresholds": {}
+  },
+  {
+    "config_id": "vn_emb_sent_800",
+    "chunking_method": "sentence",
+    "chunk_size": 800,
+    "chunk_overlap": 120,
+    "embedding_model": "dangvantuan/vietnamese-embedding",
+    "topK": 5,
+    "similarity_threshold": 0.28,
+    "average_contextual_recall": null,
+    "average_faithfulness": null,
+    "average_answer_relevancy": null,
+    "average_knowledge_retention": null,
+    "average_mrr": 0.076667,
+    "average_latency_ms": 13224.62916,
+    "pass_rate": null,
+    "thresholds": {}
+  }
+]
