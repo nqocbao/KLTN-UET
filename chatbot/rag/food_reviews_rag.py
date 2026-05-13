@@ -258,7 +258,9 @@ class FoodReviewRagService:
         scores: Dict[str, float] = {}
 
         def _key(it: FoodReviewRagItem) -> str:
-            return it.chunk_id or f"{it.review_id}#auto"
+            if it.review_id and it.chunk_id:
+                return f"{it.review_id}#{it.chunk_id}"
+            return it.review_id or it.chunk_id or it.post_url or "unknown"
 
         for rank, item in enumerate(dense_items, 1):
             key = _key(item)
@@ -807,7 +809,7 @@ def _build_items(
         price_max = to_float(metadata.get("priceMax"))
         engagement_score = to_float(metadata.get("score")) or 0.0
 
-        if not title or not post_url:
+        if not title:
             continue
 
         items.append(

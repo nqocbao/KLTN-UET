@@ -38,6 +38,7 @@ from rag.food_reviews_rag import FoodReviewRagItem, FoodReviewRagService
 DEFAULT_BACKEND_URL = os.getenv("BACKEND_API_URL", "http://localhost:5000")
 DEFAULT_OUTPUT_DIR = os.path.join(CURRENT_DIR, "outputs")
 ENV_PATH = os.path.join(PROJECT_ROOT, ".env")
+DEFAULT_DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 
 
 def load_environment() -> None:
@@ -65,6 +66,8 @@ def default_answer_model() -> str:
     provider = default_answer_provider().lower().strip()
     if provider == "gemini":
         return "gemini-1.5-flash"
+    if provider == "deepseek":
+        return "deepseek-chat"
     return "gpt-4o-mini"
 
 
@@ -115,6 +118,19 @@ class AnswerGenerator:
                 raise RuntimeError("Missing GEMINI_API_KEY for Gemini provider")
             genai.configure(api_key=api_key)
             self._client = genai
+        elif self.provider == "deepseek":
+            from openai import OpenAI
+
+            api_key = env_first("DEEPSEEK_API_KEY")
+            if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "deepseek":
+                api_key = os.getenv("LLM_API_KEY")
+            if not api_key:
+                raise RuntimeError(
+                    "Missing DEEPSEEK_API_KEY for DeepSeek provider. "
+                    "Set DEEPSEEK_API_KEY in chatbot/.env."
+                )
+            base_url = os.getenv("DEEPSEEK_BASE_URL", DEFAULT_DEEPSEEK_BASE_URL)
+            self._client = OpenAI(api_key=api_key, base_url=base_url)
         elif self.provider == "none":
             self._client = None
         else:
@@ -135,6 +151,18 @@ class AnswerGenerator:
         prompt = build_prompt(question, contexts, history, extra_context, scenario)
 
         if self.provider == "openai":
+            response = self._client.chat.completions.create(
+                model=self.model,
+                temperature=0.2,
+                messages=[
+                    {"role": "system", "content": "You are a helpful travel assistant."},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            content = response.choices[0].message.content or ""
+            return content.strip()
+
+        if self.provider == "deepseek":
             response = self._client.chat.completions.create(
                 model=self.model,
                 temperature=0.2,
@@ -315,7 +343,25 @@ def average(values: Iterable[Optional[float]]) -> Optional[float]:
     return round(mean(items), 6)
 
 
-def create_turn_metrics(model: Optional[str]) -> List[Any]:
+def create_deepeval_model(provider: str, deepeval_model: Optional[str], answer_model: str) -> Any:
+    provider = provider.lower().strip()
+    if provider == "deepseek":
+        from deepeval.models.llms.deepseek_model import DeepSeekModel
+
+        api_key = env_first("DEEPSEEK_API_KEY")
+        if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "deepseek":
+            api_key = os.getenv("LLM_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "Missing DEEPSEEK_API_KEY for DeepEval DeepSeek metrics. "
+                "Set DEEPSEEK_API_KEY in chatbot/.env."
+            )
+        model_name = deepeval_model or answer_model or "deepseek-chat"
+        return DeepSeekModel(model=model_name, api_key=api_key, temperature=0.0)
+    return deepeval_model
+
+
+def create_turn_metrics(model: Any) -> List[Any]:
     if ContextualRecallMetric is None:
         raise RuntimeError("ContextualRecallMetric is not available. Upgrade deepeval.")
 
@@ -404,6 +450,17 @@ def normalize_turns(raw_turns: Any) -> List[Dict[str, Any]]:
     return turns
 
 
+def parse_retrieval_context(value: Any) -> List[str]:
+    if value is None:
+        return []
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()]
+    if isinstance(value, str):
+        text = value.strip()
+        return [text] if text else []
+    return [format_context(value)] if format_context(value) else []
+
+
 def load_testcases(path: str) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     payload = load_records(path)
     raw_cases = get_list_payload(payload)
@@ -461,6 +518,7 @@ def load_testcases(path: str) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
                     raw.get("expected_chunk_id") or raw.get("expected_chunk_ids")
                 ),
                 "context": format_context(raw.get("context")),
+                "retrieval_context": parse_retrieval_context(raw.get("retrieval_context")),
                 "target_metadata": raw.get("target_metadata") or {},
             }
         )
@@ -470,6 +528,7 @@ def load_testcases(path: str) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
 
 def evaluate_turn(
     question: str,
+    retrieval_query: str,
     expected_output: str,
     expected_ids: List[str],
     rag_service: FoodReviewRagService,
@@ -481,7 +540,7 @@ def evaluate_turn(
     skip_deepeval: bool,
 ) -> Tuple[Dict[str, Any], str, float, float]:
     retrieval_start = time.perf_counter()
-    items = rag_service.query(question)
+    items = rag_service.query(retrieval_query or question)
     retrieval_latency_ms = (time.perf_counter() - retrieval_start) * 1000.0
 
     retrieved_ids = [build_doc_id(item) for item in items]
@@ -571,6 +630,7 @@ def run_config(
     deepeval_model: Optional[str],
     skip_deepeval: bool,
     thresholds: Dict[str, Optional[float]],
+    retrieval_query_source: str,
 ) -> Tuple[List[Dict[str, Any]], Dict[str, Any]]:
     collection_name = config.collection_name or "food_reviews"
     rag_service = FoodReviewRagService(
@@ -591,8 +651,17 @@ def run_config(
     for case in testcases:
         case_type = case["case_type"]
         if case_type == "single_turn":
+            retrieval_query = case["input"]
+            if retrieval_query_source == "context":
+                retrieval_contexts = case.get("retrieval_context") or []
+                if retrieval_contexts:
+                    retrieval_query = retrieval_contexts[0]
+                elif case.get("context"):
+                    retrieval_query = case.get("context") or retrieval_query
+
             detail, actual_output, _, _ = evaluate_turn(
                 question=case["input"],
+                retrieval_query=retrieval_query,
                 expected_output=case["expected_output_outline"],
                 expected_ids=case["expected_chunk_ids"],
                 rag_service=rag_service,
@@ -623,8 +692,15 @@ def run_config(
         history: List[Tuple[str, str]] = []
         turn_outputs: List[Dict[str, Any]] = []
         for idx, turn in enumerate(case["turns"], 1):
+            retrieval_query = turn["input"]
+            if retrieval_query_source == "context":
+                turn_context = format_context(turn.get("context")) or case.get("context") or ""
+                if turn_context:
+                    retrieval_query = turn_context
+
             detail, actual_output, _, _ = evaluate_turn(
                 question=turn["input"],
+                retrieval_query=retrieval_query,
                 expected_output=turn["expected_output_outline"],
                 expected_ids=case["expected_chunk_ids"],
                 rag_service=rag_service,
@@ -787,6 +863,12 @@ def main() -> None:
     parser.add_argument("--threshold-faithfulness", type=float, default=None)
     parser.add_argument("--threshold-answer-relevancy", type=float, default=None)
     parser.add_argument("--threshold-knowledge-retention", type=float, default=None)
+    parser.add_argument(
+        "--retrieval-query-source",
+        choices=["input", "context"],
+        default="input",
+        help="Use testcase input or source context as retrieval query.",
+    )
     args = parser.parse_args()
 
     configs = load_configs(args.configs)
@@ -832,6 +914,7 @@ def main() -> None:
     deepeval_model = args.deepeval_model or None
     if not deepeval_model and args.llm_provider.lower().strip() in {"gemini", "openai"}:
         deepeval_model = args.llm_model
+    deepeval_model = create_deepeval_model(args.llm_provider, deepeval_model, args.llm_model)
 
     all_details: List[Dict[str, Any]] = []
     summaries: List[Dict[str, Any]] = []
@@ -846,6 +929,7 @@ def main() -> None:
             deepeval_model=deepeval_model,
             skip_deepeval=args.skip_deepeval,
             thresholds=thresholds,
+            retrieval_query_source=args.retrieval_query_source,
         )
         all_details.extend(details)
         summaries.append(summary)

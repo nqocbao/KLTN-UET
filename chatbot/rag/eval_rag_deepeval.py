@@ -28,6 +28,7 @@ from rag.food_reviews_rag import FoodReviewRagItem, FoodReviewRagService
 DEFAULT_BACKEND_URL = os.getenv("BACKEND_API_URL", "http://localhost:5000")
 DEFAULT_OUTPUT_DIR = os.path.join(CURRENT_DIR, "outputs")
 ENV_PATH = os.path.join(PROJECT_ROOT, ".env")
+DEFAULT_DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 
 
 def load_environment() -> None:
@@ -40,6 +41,30 @@ def load_environment() -> None:
     os.environ.setdefault("TRANSFORMERS_CACHE", os.path.join(workspace_cache, "huggingface", "transformers"))
     os.environ.setdefault("SENTENCE_TRANSFORMERS_HOME", os.path.join(workspace_cache, "sentence_transformers"))
     os.environ.setdefault("ANONYMIZED_TELEMETRY", "False")
+
+
+def env_first(*names: str, default: str = "") -> str:
+    for name in names:
+        value = os.getenv(name)
+        if value:
+            return value
+    return default
+
+
+def default_answer_provider() -> str:
+    return env_first("RAG_ANSWER_PROVIDER", "LLM_PROVIDER", default="openai")
+
+
+def default_answer_model() -> str:
+    configured = env_first("RAG_ANSWER_MODEL")
+    if configured:
+        return configured
+    provider = default_answer_provider().lower().strip()
+    if provider == "gemini":
+        return "gemini-1.5-flash"
+    if provider == "deepseek":
+        return "deepseek-chat"
+    return "gpt-4o-mini"
 
 
 @dataclass
@@ -83,10 +108,25 @@ class AnswerGenerator:
             import google.generativeai as genai
 
             api_key = os.getenv("GEMINI_API_KEY")
+            if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "gemini":
+                api_key = os.getenv("LLM_API_KEY")
             if not api_key:
                 raise RuntimeError("Missing GEMINI_API_KEY for Gemini provider")
             genai.configure(api_key=api_key)
             self._client = genai
+        elif self.provider == "deepseek":
+            from openai import OpenAI
+
+            api_key = env_first("DEEPSEEK_API_KEY")
+            if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "deepseek":
+                api_key = os.getenv("LLM_API_KEY")
+            if not api_key:
+                raise RuntimeError(
+                    "Missing DEEPSEEK_API_KEY for DeepSeek provider. "
+                    "Set DEEPSEEK_API_KEY in chatbot/.env."
+                )
+            base_url = os.getenv("DEEPSEEK_BASE_URL", DEFAULT_DEEPSEEK_BASE_URL)
+            self._client = OpenAI(api_key=api_key, base_url=base_url)
         elif self.provider == "none":
             self._client = None
         else:
@@ -100,6 +140,18 @@ class AnswerGenerator:
         prompt = build_prompt(question, contexts)
 
         if self.provider == "openai":
+            response = self._client.chat.completions.create(
+                model=self.model,
+                temperature=0.2,
+                messages=[
+                    {"role": "system", "content": "You are a helpful travel assistant."},
+                    {"role": "user", "content": prompt},
+                ],
+            )
+            content = response.choices[0].message.content or ""
+            return content.strip()
+
+        if self.provider == "deepseek":
             response = self._client.chat.completions.create(
                 model=self.model,
                 temperature=0.2,
@@ -276,7 +328,25 @@ def average(values: Iterable[Optional[float]]) -> Optional[float]:
     return round(mean(items), 6)
 
 
-def create_metrics(model: Optional[str], enable_hallucination: bool) -> List[Any]:
+def create_deepeval_model(provider: str, deepeval_model: Optional[str], answer_model: str) -> Any:
+    provider = provider.lower().strip()
+    if provider == "deepseek":
+        from deepeval.models.llms.deepseek_model import DeepSeekModel
+
+        api_key = env_first("DEEPSEEK_API_KEY")
+        if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "deepseek":
+            api_key = os.getenv("LLM_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "Missing DEEPSEEK_API_KEY for DeepEval DeepSeek metrics. "
+                "Set DEEPSEEK_API_KEY in chatbot/.env."
+            )
+        model_name = deepeval_model or answer_model or "deepseek-chat"
+        return DeepSeekModel(model=model_name, api_key=api_key, temperature=0.0)
+    return deepeval_model
+
+
+def create_metrics(model: Any, enable_hallucination: bool) -> List[Any]:
     metrics: List[Any] = [
         AnswerRelevancyMetric(model=model) if model else AnswerRelevancyMetric(),
         FaithfulnessMetric(model=model) if model else FaithfulnessMetric(),
@@ -544,8 +614,8 @@ def main() -> None:
     parser.add_argument("--output-dir", default=DEFAULT_OUTPUT_DIR)
     parser.add_argument("--run-id", default="")
     parser.add_argument("--limit", type=int, default=0)
-    parser.add_argument("--llm-provider", default=os.getenv("RAG_ANSWER_PROVIDER", "openai"))
-    parser.add_argument("--llm-model", default=os.getenv("RAG_ANSWER_MODEL", "gpt-4o-mini"))
+    parser.add_argument("--llm-provider", default=default_answer_provider())
+    parser.add_argument("--llm-model", default=default_answer_model())
     parser.add_argument("--deepeval-model", default=os.getenv("DEEPEVAL_MODEL", ""))
     parser.add_argument("--enable-hallucination", action="store_true")
     parser.add_argument("--skip-deepeval", action="store_true")
@@ -568,8 +638,9 @@ def main() -> None:
 
     answer_generator = AnswerGenerator(args.llm_provider, args.llm_model)
     deepeval_model = args.deepeval_model or None
-    if not deepeval_model and args.llm_provider.lower().strip() == "gemini":
+    if not deepeval_model and args.llm_provider.lower().strip() in {"gemini", "openai"}:
         deepeval_model = args.llm_model
+    deepeval_model = create_deepeval_model(args.llm_provider, deepeval_model, args.llm_model)
 
     all_details: List[Dict[str, Any]] = []
     summaries: List[Dict[str, Any]] = []

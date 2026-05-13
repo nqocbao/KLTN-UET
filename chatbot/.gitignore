@@ -11,6 +11,20 @@ results/
 
 # RAG index
 .rag/
+.deepeval/
+
+# RAG evaluation scratch outputs
+rag/outputs/rag_configs_deepseek_smoke.json
+rag/outputs/rag_eval_details_deepseek_smoke*
+rag/outputs/rag_eval_summary_deepseek_smoke*
+rag/outputs/rag_eval_details_facebook_crawl_*retrieval*
+rag/outputs/rag_eval_summary_facebook_crawl_*retrieval*
+rag/outputs/rag_eval_details_facebook_crawl_*smoke*
+rag/outputs/rag_eval_summary_facebook_crawl_*smoke*
+rag/outputs/facebook_crawl_eval/facebook_crawl_corpus_reviews.json
+rag/outputs/facebook_crawl_eval/testcases_facebook_crawl_matched_from_existing.json
+rag/outputs/facebook_crawl_eval/testcases_facebook_crawl_seed_*.json
+rag/outputs/facebook_crawl_eval/testcases_facebook_crawl_verified_*.json
 
 # Virtual environment
 venv/
