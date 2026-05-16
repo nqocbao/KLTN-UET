@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Star, MapPin, Wifi, Utensils, Car, CloudCog, Phone, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactDialog } from "@/components/common/ContactDialog";
+import { favouritesApi, isMongoObjectId } from "@/lib/services/favourites.service";
 import type { Hotel } from "@/types/api";
 
 interface HotelSearchCardProps {
@@ -14,12 +15,39 @@ interface HotelSearchCardProps {
 export function HotelSearchCard({ hotel, nights = 1 }: HotelSearchCardProps) {
   const [showContact, setShowContact] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const hotelId = hotel?._id;
+  const canFavourite = isMongoObjectId(hotelId);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
-  }, []);
+    if (!token || !canFavourite) return;
+    favouritesApi
+      .check("hotel", hotelId as string)
+      .then((res) => setIsSaved(!!res.data?.favourited))
+      .catch(() => {});
+  }, [hotelId, canFavourite]);
+
+  const toggleFavourite = async () => {
+    if (!canFavourite || isSaving) return;
+    setIsSaving(true);
+    try {
+      if (isSaved) {
+        await favouritesApi.remove("hotel", hotelId as string);
+        setIsSaved(false);
+      } else {
+        await favouritesApi.add("hotel", hotelId as string);
+        setIsSaved(true);
+      }
+    } catch (err) {
+      console.error("Toggle favourite failed:", err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   // Mock discount logic for display purposes
   const perNightPrice = hotel.priceTwoSingleBed || 0;
@@ -144,12 +172,13 @@ export function HotelSearchCard({ hotel, nights = 1 }: HotelSearchCardProps) {
            <Phone className="w-4 h-4 mr-2" />
            Liên hệ đặt phòng
          </Button>
-         {isLoggedIn && (
-           <Button 
-             variant="outline" 
+         {isLoggedIn && canFavourite && (
+           <Button
+             variant="outline"
              size="sm"
+             disabled={isSaving}
              className={`w-full h-8 text-xs mt-2 ${isSaved ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-600'}`}
-             onClick={() => setIsSaved(!isSaved)}
+             onClick={toggleFavourite}
            >
              <Heart className={`w-3 h-3 mr-1 ${isSaved ? 'fill-red-500' : ''}`} />
              {isSaved ? 'Đã lưu' : 'Lưu yêu thích'}

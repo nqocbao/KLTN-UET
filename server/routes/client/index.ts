@@ -14,6 +14,7 @@ import wardsRoutes from "../admin/wards.routes.js";
 import locationsRoutes from "../admin/locations.routes.js";
 import restaurantsRoutes from "../admin/restaurants.routes.js";
 import foodReviewsRoutes from "./food_reviews.routes.js";
+import favouritesRoutes from "./favourites.routes.js";
 import guidesRoutes from "../admin/guides.routes.js";
 import partnersRoutes from "../admin/partners.routes.js";
 import servicesRoutes from "../admin/services.routes.js";
@@ -40,5 +41,8 @@ router.use("/services", servicesRoutes);
 router.use("/buses", busesRoutes);
 router.use("/airport-transfers", airportTransfersRoutes);
 router.use("/flights", flightsRoutes);
+
+// Authenticated user routes
+router.use("/favourites", favouritesRoutes);
 
 export default router;

@@ -417,7 +417,7 @@ export const sendMessageToRasa = async (req: Request, res: Response) => {
         message: message,
       },
       {
-        timeout: 10000,
+        timeout: 60000,
         headers: {
           "Content-Type": "application/json",
         },

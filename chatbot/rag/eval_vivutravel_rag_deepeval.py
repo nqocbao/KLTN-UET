@@ -8,20 +8,26 @@ from dataclasses import dataclass
 from statistics import mean
 from typing import Any, Dict, Iterable, List, Optional, Tuple
 
-from dotenv import load_dotenv
-from deepeval.metrics import AnswerRelevancyMetric, FaithfulnessMetric
+try:
+    from dotenv import load_dotenv
+except Exception:  # pragma: no cover - optional dependency for local retrieval runs
+    def load_dotenv(*_args: Any, **_kwargs: Any) -> bool:
+        return False
 
 try:
+    from deepeval.metrics import AnswerRelevancyMetric, FaithfulnessMetric
     from deepeval.metrics import ContextualRecallMetric
-except Exception:  # pragma: no cover - runtime import guard
+    from deepeval.test_case import LLMTestCase
+except Exception:  # pragma: no cover - optional when --skip-deepeval is used
+    AnswerRelevancyMetric = None
+    FaithfulnessMetric = None
     ContextualRecallMetric = None
+    LLMTestCase = None
 
 try:
     from deepeval.metrics import KnowledgeRetentionMetric
 except Exception:  # pragma: no cover - runtime import guard
     KnowledgeRetentionMetric = None
-
-from deepeval.test_case import LLMTestCase
 
 try:
     from deepeval.test_case import ConversationalTestCase
@@ -34,41 +40,24 @@ if PROJECT_ROOT not in sys.path:
     sys.path.insert(0, PROJECT_ROOT)
 
 from rag.food_reviews_rag import FoodReviewRagItem, FoodReviewRagService
+from rag.answer_generator import (
+    AnswerGenerator,
+    DEFAULT_DEEPSEEK_BASE_URL,
+    build_user_prompt as build_prompt,
+    default_answer_model,
+    default_answer_provider,
+    env_first,
+)
 
 DEFAULT_BACKEND_URL = os.getenv("BACKEND_API_URL", "http://localhost:5000")
 DEFAULT_OUTPUT_DIR = os.path.join(CURRENT_DIR, "outputs")
 ENV_PATH = os.path.join(PROJECT_ROOT, ".env")
-DEFAULT_DEEPSEEK_BASE_URL = "https://api.deepseek.com"
 
 
 def load_environment() -> None:
     if os.path.exists(ENV_PATH):
         load_dotenv(ENV_PATH)
     load_dotenv()
-
-
-def env_first(*names: str, default: str = "") -> str:
-    for name in names:
-        value = os.getenv(name)
-        if value:
-            return value
-    return default
-
-
-def default_answer_provider() -> str:
-    return env_first("RAG_ANSWER_PROVIDER", "LLM_PROVIDER", default="openai")
-
-
-def default_answer_model() -> str:
-    configured = env_first("RAG_ANSWER_MODEL")
-    if configured:
-        return configured
-    provider = default_answer_provider().lower().strip()
-    if provider == "gemini":
-        return "gemini-1.5-flash"
-    if provider == "deepseek":
-        return "deepseek-chat"
-    return "gpt-4o-mini"
 
 
 @dataclass
@@ -84,142 +73,6 @@ class RagConfig:
     query_k_multiplier: int
     index_dir: Optional[str]
     collection_name: Optional[str]
-
-
-class AnswerGenerator:
-    def __init__(self, provider: str, model: str) -> None:
-        self.provider = provider.lower().strip()
-        self.model = model
-        self._client = None
-
-    def _ensure_client(self) -> None:
-        if self._client is not None:
-            return
-
-        if self.provider == "openai":
-            from openai import OpenAI
-
-            api_key = os.getenv("OPENAI_API_KEY")
-            if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "openai":
-                api_key = os.getenv("LLM_API_KEY")
-            if not api_key:
-                raise RuntimeError(
-                    "Missing OPENAI_API_KEY for OpenAI provider. "
-                    "Set OPENAI_API_KEY in chatbot/.env."
-                )
-            self._client = OpenAI(api_key=api_key)
-        elif self.provider == "gemini":
-            import google.generativeai as genai
-
-            api_key = os.getenv("GEMINI_API_KEY")
-            if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "gemini":
-                api_key = os.getenv("LLM_API_KEY")
-            if not api_key:
-                raise RuntimeError("Missing GEMINI_API_KEY for Gemini provider")
-            genai.configure(api_key=api_key)
-            self._client = genai
-        elif self.provider == "deepseek":
-            from openai import OpenAI
-
-            api_key = env_first("DEEPSEEK_API_KEY")
-            if not api_key and os.getenv("LLM_PROVIDER", "").lower().strip() == "deepseek":
-                api_key = os.getenv("LLM_API_KEY")
-            if not api_key:
-                raise RuntimeError(
-                    "Missing DEEPSEEK_API_KEY for DeepSeek provider. "
-                    "Set DEEPSEEK_API_KEY in chatbot/.env."
-                )
-            base_url = os.getenv("DEEPSEEK_BASE_URL", DEFAULT_DEEPSEEK_BASE_URL)
-            self._client = OpenAI(api_key=api_key, base_url=base_url)
-        elif self.provider == "none":
-            self._client = None
-        else:
-            raise RuntimeError(f"Unsupported LLM provider: {self.provider}")
-
-    def generate(
-        self,
-        question: str,
-        contexts: List[str],
-        history: List[Tuple[str, str]],
-        extra_context: str,
-        scenario: str,
-    ) -> str:
-        if self.provider == "none":
-            return ""
-
-        self._ensure_client()
-        prompt = build_prompt(question, contexts, history, extra_context, scenario)
-
-        if self.provider == "openai":
-            response = self._client.chat.completions.create(
-                model=self.model,
-                temperature=0.2,
-                messages=[
-                    {"role": "system", "content": "You are a helpful travel assistant."},
-                    {"role": "user", "content": prompt},
-                ],
-            )
-            content = response.choices[0].message.content or ""
-            return content.strip()
-
-        if self.provider == "deepseek":
-            response = self._client.chat.completions.create(
-                model=self.model,
-                temperature=0.2,
-                messages=[
-                    {"role": "system", "content": "You are a helpful travel assistant."},
-                    {"role": "user", "content": prompt},
-                ],
-            )
-            content = response.choices[0].message.content or ""
-            return content.strip()
-
-        if self.provider == "gemini":
-            model = self._client.GenerativeModel(self.model)
-            response = model.generate_content(prompt)
-            return (response.text or "").strip()
-
-        return ""
-
-
-def build_prompt(
-    question: str,
-    contexts: List[str],
-    history: List[Tuple[str, str]],
-    extra_context: str,
-    scenario: str,
-) -> str:
-    context_block = "\n\n".join(
-        [f"[Chunk {idx + 1}]\n{ctx}" for idx, ctx in enumerate(contexts) if ctx]
-    )
-
-    history_lines = []
-    for user_text, assistant_text in history:
-        if user_text:
-            history_lines.append(f"User: {user_text}")
-        if assistant_text:
-            history_lines.append(f"Assistant: {assistant_text}")
-    history_block = "\n".join(history_lines)
-
-    parts = [
-        "Answer in Vietnamese using only the retrieved context.",
-        "If the answer is not in the context, say you do not know.",
-    ]
-
-    if scenario:
-        parts.append(f"Scenario: {scenario}")
-
-    if extra_context:
-        parts.append(f"Additional context: {extra_context}")
-
-    if history_block:
-        parts.append(f"Conversation history:\n{history_block}")
-
-    if context_block:
-        parts.append(f"Retrieved context:\n{context_block}")
-
-    parts.append(f"Question: {question}\nAnswer:")
-    return "\n\n".join(parts)
 
 
 def load_records(path: str) -> Any:

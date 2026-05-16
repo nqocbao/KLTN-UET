@@ -1,12 +1,22 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { ThemeToggle } from "./ThemeToggle";
 
 export default function Navbar() {
+  const router = useRouter();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    setShowProfileMenu(false);
+    router.push("/");
+    router.refresh();
+  };
 
   return (
     <header className="fixed top-0 right-0 left-64 z-30 h-16 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">
@@ -140,12 +150,13 @@ export default function Navbar() {
                   Settings
                 </a>
                 <hr className="my-2 border-gray-200 dark:border-gray-700" />
-                <a
-                  href="#"
-                  className="block px-4 py-2 text-sm text-red-600 hover:bg-gray-50 dark:hover:bg-gray-700"
+                <button
+                  type="button"
+                  onClick={handleLogout}
+                  className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 dark:hover:bg-gray-700"
                 >
                   Logout
-                </a>
+                </button>
               </div>
             )}
           </div>

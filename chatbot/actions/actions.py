@@ -21,6 +21,10 @@ load_dotenv()
 BACKEND_URL = os.getenv("BACKEND_API_URL", "http://localhost:5000")
 _FOOD_REVIEW_RAG = None
 _RAG_IMPORT_ERROR: Optional[str] = None
+_ANSWER_GENERATOR = None
+_ANSWER_IMPORT_ERROR: Optional[str] = None
+_RAG_HISTORY_TURNS = int(os.getenv("RAG_ANSWER_HISTORY_TURNS", "3"))
+_RAG_CONTEXT_CHUNKS = int(os.getenv("RAG_ANSWER_CONTEXT_CHUNKS", "5"))
 
 
 def get_food_review_rag():
@@ -36,6 +40,49 @@ def get_food_review_rag():
 
     _FOOD_REVIEW_RAG = FoodReviewRagService(backend_url=BACKEND_URL)
     return _FOOD_REVIEW_RAG
+
+
+def get_answer_generator():
+    global _ANSWER_GENERATOR, _ANSWER_IMPORT_ERROR
+    if _ANSWER_GENERATOR is not None or _ANSWER_IMPORT_ERROR:
+        return _ANSWER_GENERATOR
+
+    try:
+        from rag.answer_generator import AnswerGenerator
+    except Exception as e:
+        _ANSWER_IMPORT_ERROR = str(e)
+        return None
+
+    try:
+        _ANSWER_GENERATOR = AnswerGenerator()
+    except Exception as e:
+        _ANSWER_IMPORT_ERROR = str(e)
+        return None
+
+    return _ANSWER_GENERATOR
+
+
+def _extract_conversation_history(tracker: "Tracker", max_turns: int) -> List[tuple]:
+    """Trả về danh sách cặp (user, assistant) cũ nhất → mới nhất, tối đa max_turns cặp.
+
+    Cặp đang dang dở (user mới nhất chưa có bot reply — chính là câu hỏi hiện tại)
+    được bỏ qua.
+    """
+    if max_turns <= 0:
+        return []
+    pairs: List[tuple] = []
+    pending_user: Optional[str] = None
+    for event in tracker.events or []:
+        ev_type = event.get("event")
+        text = (event.get("text") or "").strip()
+        if not text:
+            continue
+        if ev_type == "user":
+            pending_user = text
+        elif ev_type == "bot" and pending_user is not None:
+            pairs.append((pending_user, text))
+            pending_user = None
+    return pairs[-max_turns:]
 
 # Alias địa điểm -> mã sân bay IATA, ưu tiên các route phổ biến của hệ thống.
 AIRPORT_IATA_ALIASES: Dict[str, str] = {
@@ -918,14 +965,42 @@ class ActionRagFoodReviews(Action):
 
         if not results:
             dispatcher.utter_message(
-                text="Mình chưa tìm được review phù hợp. "
+                text="Mình chưa tìm được review phù hợp trong ngữ cảnh hiện có. "
                 "Bạn thử nêu rõ khu vực hoặc món ăn nhé."
             )
             return []
-        dispatcher.utter_message(text="Mình tìm được một số review food tour phù hợp:")
+
+        top_items = results[: _RAG_CONTEXT_CHUNKS]
+        contexts = [
+            (item.doc_text or item.summary or "").strip()
+            for item in top_items
+        ]
+        contexts = [c for c in contexts if c]
+
+        answer_text = ""
+        generator = get_answer_generator()
+        if generator is None:
+            if _ANSWER_IMPORT_ERROR:
+                print(f"[action_rag_food_reviews] Answer generator unavailable: {_ANSWER_IMPORT_ERROR}")
+        elif contexts:
+            try:
+                history = _extract_conversation_history(tracker, _RAG_HISTORY_TURNS)
+                answer_text = generator.generate(
+                    question=question,
+                    contexts=contexts,
+                    history=history,
+                ).strip()
+            except Exception as e:
+                print(f"[action_rag_food_reviews] LLM error: {e}")
+                answer_text = ""
+
+        if answer_text:
+            dispatcher.utter_message(text=answer_text)
+        else:
+            dispatcher.utter_message(text="Mình tìm được một số review food tour phù hợp:")
 
         items = []
-        for item in results[:5]:
+        for item in top_items:
             location = ", ".join([p for p in [item.district, item.city] if p])
             items.append(
                 {

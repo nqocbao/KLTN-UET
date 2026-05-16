@@ -219,7 +219,31 @@ nlu:
       - món ngon gần Hồ Gươm
       - review quán ăn khu Hoàn Kiếm
       - quán ăn nào hot ở Hải Châu Đà Nẵng
-      - tìm tour [3 ngày](duration) ở [đà nẵng](destination)
+      - bún bò huế ở Hà Nội
+      - phở bò ở Hà Nội
+      - quán bún chả khu Hoàn Kiếm
+      - review bún đậu mắm tôm ở Hà Nội
+      - quán nướng nào ngon ở Sài Gòn
+      - bánh canh cá lóc ở Huế
+      - quán hủ tiếu nào hot ở Sài Gòn
+      - cơm tấm ngon ở quận 1
+      - mì quảng ở Đà Nẵng chỗ nào ngon
+      - chè Huế chỗ nào ngon
+      # Pattern clarification / follow-up trong cùng cuộc trò chuyện food review
+      - ý tôi là bún bò huế ở Hà Nội
+      - ý mình là phở bò ở Hà Nội
+      - ý tôi là quán ở Hà Nội cơ
+      - tôi muốn hỏi về bún bò ở Hà Nội
+      - tôi muốn hỏi quán ở Đà Nẵng cơ
+      - chỉ ở Hà Nội thôi
+      - tôi chỉ quan tâm Hà Nội
+      - ở Hà Nội nhé
+      - ở Sài Gòn cơ
+      - ở Đà Nẵng cơ
+      - tôi muốn ăn ở Hà Nội
+      - khu vực Hà Nội thôi nhé
+      - bún bò huế nhưng ở Hà Nội
+      - phở Hà Nội cơ
       - tour tham quan [hà nội](destination)
 
   # Đặt tour
@@ -332,23 +356,16 @@ nlu:
       - [mũi né](location)
       - [quy nhơn](location)
       - bay từ [hà nội](flight_from)
-      - từ [hồ chí minh](flight_from)
+      - từ [hồ chí minh](flight_from) đi
       - xuất phát từ [đà nẵng](flight_from)
-      - [hà nội](flight_from)
-      - [đà nẵng](flight_from)
       - tôi muốn bay từ [hà nội](flight_from)
       - cho tôi bay từ [hồ chí minh](flight_from)
-      - tôi ở [hà nội](flight_from)
       - khởi hành từ [đà nẵng](flight_from)
       - bay từ [đà nẵng](flight_from) đến hồ chí minh
       - từ [hà nội](flight_from) đi
-      - đến [đà nẵng](flight_to)
       - bay đến [phú quốc](flight_to)
-      - đi [hồ chí minh](flight_to)
-      - [phú quốc](flight_to)
-      - [singapore](flight_to)
       - tôi muốn bay đến [đà nẵng](flight_to)
-      - tôi muốn đi [phú quốc](flight_to)
+      - tôi muốn đi [phú quốc](flight_to) bằng máy bay
       - cho tôi vé đến [hồ chí minh](flight_to)
       - bay đến [nha trang](flight_to) nhé
       - tôi cần vé đến [hà nội](flight_to)

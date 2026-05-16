@@ -11,6 +11,8 @@ export { hotelsApi } from "./hotels.service";
 export { restaurantsApi } from "./restaurants.service";
 export { foodReviewsApi } from "./food-reviews.service";
 export { adminFoodReviewsApi } from "./admin-food-reviews.service";
+export { favouritesApi } from "./favourites.service";
+export type { FavouriteType, FavouriteItem } from "./favourites.service";
 export {
   countriesApi,
   provincesApi,

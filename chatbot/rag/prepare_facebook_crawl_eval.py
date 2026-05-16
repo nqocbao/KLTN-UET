@@ -589,6 +589,12 @@ def post_subject(post: Dict[str, Any]) -> str:
     return terms[0] if terms else "quán này"
 
 
+def trim_subject_for_question(subject: str, max_len: int = 70) -> str:
+    subject = compact_prompt_text(subject, max_len)
+    subject = re.sub(r"^[^\wÀ-ỹ]+", "", subject, flags=re.UNICODE).strip()
+    return subject or "quán này"
+
+
 def realistic_question_for_post(post: Dict[str, Any], variant: int = 0) -> Tuple[str, str]:
     content = post.get("content") or ""
     source = post.get("source") or {}
@@ -596,7 +602,9 @@ def realistic_question_for_post(post: Dict[str, Any], variant: int = 0) -> Tuple
     city = ((post.get("area") or {}).get("city") or "").strip()
     group_title = source.get("groupTitle") or ""
     area = city or infer_city(content, group_title) or extract_address_hint(content)
-    subject = post_subject(post)
+    subject = trim_subject_for_question(post_subject(post))
+    address = extract_address_hint(content)
+    place_hint = address or area
     topics = extract_topic_terms(content)
     topic = topics[0] if topics else subject
     prices = extract_prices(content)
@@ -625,14 +633,17 @@ def realistic_question_for_post(post: Dict[str, Any], variant: int = 0) -> Tuple
         return f"Bài này đang nói về thông tin gì?", "general_context"
 
     food_templates = []
-    if area and topic:
-        food_templates.append((f"Ở {area} có món {topic} nào ngon đáng thử không?", "food_discovery"))
+    if place_hint and topic:
+        food_templates.append((f"Ở {place_hint} có món {topic} nào ngon đáng thử không?", "food_discovery"))
     if subject and prices:
         food_templates.append((f"{subject} giá có ổn không, nên gọi món gì?", "price_quality"))
     if subject:
         food_templates.append((f"{subject} có ngon không, có đáng ghé thử không?", "quality_check"))
     if has_ship and topic:
-        food_templates.append((f"Món {topic} này có đặt ship được không, giá tầm bao nhiêu?", "delivery_price"))
+        if place_hint:
+            food_templates.append((f"Món {topic} ở {place_hint} có đặt ship được không, giá tầm bao nhiêu?", "delivery_price"))
+        else:
+            food_templates.append((f"{subject} có đặt ship được không, giá tầm bao nhiêu?", "delivery_price"))
     if has_address and subject:
         food_templates.append((f"{subject} ở đâu, có gì nổi bật?", "location_detail"))
     if not food_templates:
@@ -727,13 +738,15 @@ def make_conversation_case(case: Dict[str, Any], index: int) -> Dict[str, Any]:
     question_type = str(case.get("question_type") or "")
     topic = (extract_topic_terms(context, 1) or [post_subject({"title": case.get("question") or ""})])[0]
     prices = extract_prices(context)
+    address = extract_address_hint(context)
+    place_hint = address or "đó"
     if question_type.startswith("stay"):
         followup = "Chỗ đó có tiện đi food tour không, giá trong bài có nhắc không?"
     elif question_type.startswith("travel"):
         followup = "Đi trải nghiệm đó có đáng không, chi phí trong bài ghi thế nào?"
     else:
         ask_price = "rẻ không, giá tầm bao nhiêu?" if prices else "giá trong bài có nhắc không?"
-        followup = f"Món {topic} ở đó có ngon không, {ask_price}"
+        followup = f"Món {topic} ở {place_hint} có ngon không, {ask_price}"
     source_doc_id = ((case.get("target_metadata") or {}).get("source_doc_id") or case.get("expected_chunk_id") or "")
     return {
         "id": f"FB_CONV_{index:04d}",

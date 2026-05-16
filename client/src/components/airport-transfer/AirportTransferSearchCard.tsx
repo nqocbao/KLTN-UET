@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Star, Users, Clock, MapPin, Wifi, User, Shield, Coffee, Phone, Heart } from "lucide-react";
 import { ContactDialog } from "@/components/common/ContactDialog";
+import { favouritesApi, isMongoObjectId } from "@/lib/services/favourites.service";
 
 interface AirportTransferSearchCardProps {
   transfer: {
@@ -33,12 +34,39 @@ const featureIcons: Record<string, React.ComponentType<{ className?: string }>> 
 export function AirportTransferSearchCard({ transfer }: AirportTransferSearchCardProps) {
   const [showContact, setShowContact] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const transferRefId = transfer._id || transfer.id;
+  const canFavourite = isMongoObjectId(transferRefId);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
-  }, []);
+    if (!token || !canFavourite) return;
+    favouritesApi
+      .check("transport", transferRefId as string)
+      .then((res) => setIsSaved(!!res.data?.favourited))
+      .catch(() => {});
+  }, [transferRefId, canFavourite]);
+
+  const toggleFavourite = async () => {
+    if (!canFavourite || isSaving) return;
+    setIsSaving(true);
+    try {
+      if (isSaved) {
+        await favouritesApi.remove("transport", transferRefId as string);
+        setIsSaved(false);
+      } else {
+        await favouritesApi.add("transport", transferRefId as string);
+        setIsSaved(true);
+      }
+    } catch (err) {
+      console.error("Toggle favourite failed:", err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <>
@@ -130,12 +158,13 @@ export function AirportTransferSearchCard({ transfer }: AirportTransferSearchCar
               <Phone className="w-4 h-4 mr-2" />
               Liên hệ tư vấn
             </Button>
-            {isLoggedIn && (
-              <Button 
-                variant="outline" 
+            {isLoggedIn && canFavourite && (
+              <Button
+                variant="outline"
                 size="sm"
+                disabled={isSaving}
                 className={`w-full ${isSaved ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-600'}`}
-                onClick={() => setIsSaved(!isSaved)}
+                onClick={toggleFavourite}
               >
                 <Heart className={`w-4 h-4 mr-1 ${isSaved ? 'fill-red-500' : ''}`} />
                 {isSaved ? 'Đã lưu' : 'Lưu yêu thích'}

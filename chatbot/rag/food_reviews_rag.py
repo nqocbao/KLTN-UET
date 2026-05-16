@@ -7,6 +7,7 @@ from dataclasses import dataclass
 from typing import Any, Dict, Iterable, List, Optional
 
 import chromadb
+from chromadb.config import Settings as ChromaSettings
 import requests
 from sentence_transformers import SentenceTransformer
 
@@ -31,6 +32,14 @@ DEFAULT_CHUNK_SIZE = int(os.getenv("RAG_CHUNK_SIZE", "800"))
 DEFAULT_CHUNK_OVERLAP = int(os.getenv("RAG_CHUNK_OVERLAP", "120"))
 DEFAULT_MIN_CHUNK_CHARS = int(os.getenv("RAG_MIN_CHUNK_CHARS", "120"))
 DEFAULT_CHUNKING_METHOD = os.getenv("RAG_CHUNKING_METHOD", "sentence")
+DEFAULT_LOCAL_REVIEWS_PATH = os.path.abspath(
+    os.path.join(
+        os.path.dirname(__file__),
+        "outputs",
+        "foodtour_cleaning",
+        "foodtour_clean_posts_with_comments_merged_650.json",
+    )
+)
 
 META_FILE_NAME = "food_reviews.meta.json"
 
@@ -304,7 +313,10 @@ class FoodReviewRagService:
 
     def _ensure_client(self) -> None:
         if self._client is None:
-            self._client = chromadb.PersistentClient(path=self.index_dir)
+            self._client = chromadb.PersistentClient(
+                path=self.index_dir,
+                settings=ChromaSettings(anonymized_telemetry=False),
+            )
 
     def _ensure_collection(self) -> None:
         if self._client is None:
@@ -493,7 +505,27 @@ class FoodReviewRagService:
 
             page += 1
 
-        return reviews[: self.max_docs]
+        if reviews:
+            return reviews[: self.max_docs]
+
+        local_path = os.getenv("RAG_LOCAL_REVIEWS_PATH", DEFAULT_LOCAL_REVIEWS_PATH)
+        if not local_path or not os.path.exists(local_path):
+            return []
+
+        try:
+            with open(local_path, "r", encoding="utf-8") as f:
+                payload = json.load(f)
+        except Exception:
+            return []
+
+        if isinstance(payload, list):
+            records = payload
+        elif isinstance(payload, dict):
+            records = payload.get("records") or payload.get("data") or payload.get("items") or []
+        else:
+            records = []
+
+        return [record for record in records if isinstance(record, dict)][: self.max_docs]
 
 
 def build_documents(
@@ -503,7 +535,17 @@ def build_documents(
     chunk_overlap: int,
     min_chunk_chars: int,
 ) -> List[Dict[str, Any]]:
-    review_id = str(item.get("_id") or "").strip()
+    source = item.get("source") or {}
+    source_post_id = safe_text(
+        source.get("postLegacyId")
+        or source.get("postId")
+        or source.get("id")
+        or item.get("postLegacyId")
+        or item.get("postId")
+    )
+    review_id = safe_text(item.get("_id") or item.get("review_id") or item.get("id"))
+    if not review_id and source_post_id:
+        review_id = f"fb_{source_post_id}"
     title = safe_text(item.get("title"))
     summary = safe_text(item.get("summary"))
     content = safe_text(item.get("content"))
@@ -529,8 +571,9 @@ def build_documents(
     engagement = item.get("engagement") or {}
     score = to_float(engagement.get("score"))
 
-    source = item.get("source") or {}
     post_url = safe_text(source.get("postUrl"))
+    post_type = safe_text(item.get("postType"))
+    comment_signal_text = build_comment_signal_text(item)
 
     location_bits = ", ".join([bit for bit in [address_text, ward, district, city] if bit])
     price_text = build_price_text(price_min, price_max)
@@ -538,6 +581,7 @@ def build_documents(
     dish_text = f"Mon: {', '.join(dish_tags)}" if dish_tags else ""
     hashtag_text = f"Hashtag: {', '.join(hashtags)}" if hashtags else ""
     price_line = f"Gia: {price_text}" if price_text else ""
+    post_type_line = f"Loai bai: {post_type}" if post_type else ""
 
     metadata_base = {
         "review_id": review_id,
@@ -551,6 +595,8 @@ def build_documents(
         "score": score or 0,
         "postUrl": post_url,
         "dishTags": ",".join(dish_tags)[:200],
+        "postType": post_type,
+        "commentSentimentLabel": safe_text((item.get("commentSentiment") or {}).get("label")),
     }
 
     docs: List[Dict[str, Any]] = []
@@ -566,7 +612,20 @@ def build_documents(
     total_chunks = len(content_chunks)
 
     title_summary_text = "\n".join(
-        [part for part in [title, summary, location_text, dish_text, hashtag_text, price_line] if part]
+        [
+            part
+            for part in [
+                title,
+                summary,
+                location_text,
+                dish_text,
+                hashtag_text,
+                price_line,
+                post_type_line,
+                comment_signal_text,
+            ]
+            if part
+        ]
     )
     docs.append(
         {
@@ -583,7 +642,19 @@ def build_documents(
     )
     for idx, chunk_text in enumerate(content_chunks, 1):
         chunk_doc = "\n".join(
-            [part for part in [title, chunk_text, location_text, dish_text, hashtag_text, price_line] if part]
+            [
+                part
+                for part in [
+                    title,
+                    chunk_text,
+                    location_text,
+                    dish_text,
+                    hashtag_text,
+                    price_line,
+                    post_type_line,
+                ]
+                if part
+            ]
         )
         docs.append(
             {
@@ -599,7 +670,73 @@ def build_documents(
             }
         )
 
+    if comment_signal_text and len(comment_signal_text) >= min_chunk_chars:
+        docs.append(
+            {
+                "id": f"{review_id}#comments",
+                "text": "\n".join([part for part in [title, location_text, dish_text, comment_signal_text] if part]),
+                "metadata": {
+                    **metadata_base,
+                    "chunk_id": "comments",
+                    "chunk_index": total_chunks + 1,
+                    "total_chunks": total_chunks,
+                    "chunk_type": "comment_summary",
+                },
+            }
+        )
+
     return docs
+
+
+def build_comment_signal_text(item: Dict[str, Any]) -> str:
+    sentiment = item.get("commentSentiment") if isinstance(item.get("commentSentiment"), dict) else {}
+    valid_comments = item.get("validComments") if isinstance(item.get("validComments"), list) else []
+    if not sentiment and not valid_comments:
+        return ""
+
+    lines: List[str] = []
+    label = safe_text(sentiment.get("label"))
+    if label:
+        lines.append(f"Nhan sentiment comment: {label}")
+
+    valid_count = to_float(sentiment.get("validCommentCount"))
+    raw_count = to_float(sentiment.get("rawCommentCount"))
+    spam_count = to_float(sentiment.get("spamFilteredCount"))
+    if raw_count is not None or valid_count is not None or spam_count is not None:
+        lines.append(
+            "Thong ke comment: "
+            f"raw={int(raw_count or 0)}, valid={int(valid_count or 0)}, spam_filtered={int(spam_count or 0)}"
+        )
+
+    top_positive = [
+        safe_text(text)
+        for text in (sentiment.get("topPositiveComments") if isinstance(sentiment.get("topPositiveComments"), list) else [])
+        if safe_text(text)
+    ][:3]
+    top_negative = [
+        safe_text(text)
+        for text in (sentiment.get("topNegativeComments") if isinstance(sentiment.get("topNegativeComments"), list) else [])
+        if safe_text(text)
+    ][:3]
+    if top_positive:
+        lines.append("Comment tich cuc noi bat: " + " | ".join(top_positive))
+    if top_negative:
+        lines.append("Comment tieu cuc noi bat: " + " | ".join(top_negative))
+
+    highlights = []
+    for comment in valid_comments[:6]:
+        if not isinstance(comment, dict):
+            continue
+        text = safe_text(comment.get("text"))
+        if not text:
+            continue
+        sentiment_label = safe_text(comment.get("sentiment"))
+        likes = to_float(comment.get("likesCount")) or 0
+        highlights.append(f"[{sentiment_label or 'unknown'}, likes={int(likes)}] {text[:220]}")
+    if highlights:
+        lines.append("Valid comments: " + " | ".join(highlights))
+
+    return "\n".join(lines)
 
 
 def build_price_text(price_min: Optional[float], price_max: Optional[float]) -> str:

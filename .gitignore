@@ -4,3 +4,7 @@
 # Local RAG evaluation artifacts
 chatbot/.cache/
 chatbot/.rag_eval/
+chatbot/rag/outputs/foodtour_cleaning/
+chatbot/rag/outputs/foodtour_clean_eval/
+chatbot/rag/outputs/rag_eval_*_foodtour_clean_*
+.rag_eval_foodtour_clean/

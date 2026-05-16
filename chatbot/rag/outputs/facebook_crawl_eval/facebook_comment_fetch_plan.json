@@ -1,0 +1,37 @@
+{
+  "schema_version": "facebook_comment_fetch_plan_v1",
+  "created_at": "2026-05-15T08:00:29.062447+00:00",
+  "data_dir": "F:\\dataVivutravel",
+  "actor_id": "apify/facebook-comments-scraper",
+  "fetch_enabled": true,
+  "candidate_count": 3,
+  "candidates": [
+    {
+      "post_id": "fb_3940897139547977",
+      "score": 11004,
+      "commentsCount": 483,
+      "existing_topComments": 2,
+      "groupTitle": "Hội Review đồ ăn có tâm!!!",
+      "url": "https://www.facebook.com/groups/reviewdoan/permalink/3940897139547977/",
+      "text_preview": "Vì tôi quá bức xúc nên tôi phải lên bài =)) Review Gogi lê văn lương Trải nghiệm 1/10^140348483 Phục vụ 1/tổng tất cả nguyên tử trên cái vũ trụ Tôi với gia đình hôm qua đi ăn ở cái Gogi Lê Văn Lương , 10ng và trẻ em mà n"
+    },
+    {
+      "post_id": "fb_2366891100450594",
+      "score": 6562,
+      "commentsCount": 299,
+      "existing_topComments": 1,
+      "groupTitle": "Hà Nội, Hải Phòng: Ăn gì? Ở đâu?",
+      "url": "https://www.facebook.com/groups/hanoiangiodau/permalink/2366891100450594/",
+      "text_preview": "Đã đến lúc đi ăn sườn bò hầm cay Hàn Quốc rùiiiii Đợi mãi trời mới đủ lạnh để đi ăn món sườn bò hầm cay chân ái này 😝 bữa nay bọn tui ăn ở nhà hàng Woowol Hồ Tây nha, lần nào đi qua cũng thấy đẹp lung linh như quán cafe,"
+    },
+    {
+      "post_id": "fb_2402771530195884",
+      "score": 5897,
+      "commentsCount": 264,
+      "existing_topComments": 2,
+      "groupTitle": "Hà Nội, Hải Phòng: Ăn gì? Ở đâu?",
+      "url": "https://www.facebook.com/groups/hanoiangiodau/permalink/2402771530195884/",
+      "text_preview": "Tầm này ai rủ đi ăn buffet nướng 99k với 139k xin phép từ chối vội 🥲 thêm có mấy chục là được ăn nướng thịt tươi rồi ấy? Quán này t ăn nhẵn mặt từ năm ngoái rồi, phải công nhận là thịt siêu tươi, đến mức miếng nầm còn ch"
+    }
+  ]
+}

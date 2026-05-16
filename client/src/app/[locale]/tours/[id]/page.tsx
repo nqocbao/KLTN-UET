@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toursApi } from "@/lib/services";
+import { favouritesApi, isMongoObjectId } from "@/lib/services/favourites.service";
 import { ContactDialog } from "@/components/common/ContactDialog";
 import { addRecentlyViewed } from "@/lib/recently-viewed";
 import type { Tour, ItineraryDay } from "@/types/api";
@@ -130,6 +131,7 @@ export default function TourDetailPage() {
   // Contact & Save
   const [showContactDialog, setShowContactDialog] = useState(false);
   const [isTourSaved, setIsTourSaved] = useState(false);
+  const [isTourSaving, setIsTourSaving] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [showCopied, setShowCopied] = useState(false);
 
@@ -137,6 +139,35 @@ export default function TourDetailPage() {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
+
+  const canFavouriteTour = isMongoObjectId(tour?._id);
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token || !canFavouriteTour) return;
+    favouritesApi
+      .check("tour", tour!._id as string)
+      .then((res) => setIsTourSaved(!!res.data?.favourited))
+      .catch(() => {});
+  }, [tour?._id, canFavouriteTour]);
+
+  const toggleTourFavourite = async () => {
+    if (!canFavouriteTour || isTourSaving) return;
+    setIsTourSaving(true);
+    try {
+      if (isTourSaved) {
+        await favouritesApi.remove("tour", tour!._id as string);
+        setIsTourSaved(false);
+      } else {
+        await favouritesApi.add("tour", tour!._id as string);
+        setIsTourSaved(true);
+      }
+    } catch (err) {
+      console.error("Toggle favourite failed:", err);
+    } finally {
+      setIsTourSaving(false);
+    }
+  };
 
   useEffect(() => {
     const fetchTour = async () => {
@@ -769,11 +800,12 @@ export default function TourDetailPage() {
                       Liên hệ tư vấn
                     </Button>
                     <div className="flex gap-2">
-                      {isLoggedIn && (
-                        <Button 
-                          variant="outline" 
+                      {isLoggedIn && canFavouriteTour && (
+                        <Button
+                          variant="outline"
+                          disabled={isTourSaving}
                           className={`flex-1 ${isTourSaved ? 'text-red-500 border-red-200 bg-red-50' : 'text-gray-600'}`}
-                          onClick={() => setIsTourSaved(!isTourSaved)}
+                          onClick={toggleTourFavourite}
                         >
                           <Heart className={`w-4 h-4 mr-2 ${isTourSaved ? 'fill-red-500' : ''}`} />
                           {isTourSaved ? 'Đã lưu' : 'Lưu yêu thích'}

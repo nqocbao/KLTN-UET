@@ -334,3 +334,24 @@ stories:
       - action: utter_book_tour
       - intent: goodbye
       - action: utter_goodbye
+
+  # Story 24: Food review với clarification follow-up
+  # Dạy policy biết: sau action_rag_food_reviews, nếu user làm rõ thì vẫn route về food
+  - story: Food review with location clarification
+    steps:
+      - intent: ask_foodtour
+      - action: action_rag_food_reviews
+      - intent: ask_foodtour
+      - action: action_rag_food_reviews
+
+  # Story 25: Food review nhiều turn liên tiếp
+  - story: Food review multi-turn
+    steps:
+      - intent: ask_foodtour
+      - action: action_rag_food_reviews
+      - intent: ask_foodtour
+      - action: action_rag_food_reviews
+      - intent: ask_foodtour
+      - action: action_rag_food_reviews
+      - intent: thank_you
+      - action: utter_thank_you

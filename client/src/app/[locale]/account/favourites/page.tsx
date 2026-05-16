@@ -1,16 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Heart, MapPin, Star, Trash2, Hotel, Plane, Bus, Map } from "lucide-react";
+import { useState, useEffect, useMemo } from "react";
+import { Heart, MapPin, Star, Trash2, Hotel, Plane, Bus, Map, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { Link } from "@/i18n/routing";
+import { favouritesApi, type FavouriteType, type FavouriteItem } from "@/lib/services/favourites.service";
 
-type FavouriteType = "all" | "tour" | "hotel" | "flight" | "transport" | "destination";
+type TabKey = "all" | FavouriteType;
 
-interface FavouriteItem {
-  id: string;
+interface FlatItem {
+  favouriteId: string;
   type: FavouriteType;
+  itemId: string;
   name: string;
   image: string;
   location?: string;
@@ -19,71 +21,145 @@ interface FavouriteItem {
   savedAt: string;
 }
 
+const TYPE_LABELS: Record<FavouriteType, string> = {
+  hotel: "Khách sạn",
+  tour: "Tour",
+  restaurant: "Nhà hàng",
+  destination: "Điểm đến",
+  transport: "Phương tiện",
+  airline: "Hãng bay",
+};
+
+const TYPE_BADGE_COLORS: Record<FavouriteType, string> = {
+  hotel: "bg-blue-100 text-blue-700",
+  tour: "bg-orange-100 text-orange-700",
+  restaurant: "bg-pink-100 text-pink-700",
+  destination: "bg-teal-100 text-teal-700",
+  transport: "bg-green-100 text-green-700",
+  airline: "bg-purple-100 text-purple-700",
+};
+
+const getTypeIcon = (type: FavouriteType) => {
+  switch (type) {
+    case "tour":
+      return <Map className="w-3 h-3" />;
+    case "hotel":
+      return <Hotel className="w-3 h-3" />;
+    case "airline":
+      return <Plane className="w-3 h-3" />;
+    case "transport":
+      return <Bus className="w-3 h-3" />;
+    case "destination":
+      return <MapPin className="w-3 h-3" />;
+    case "restaurant":
+      return <Utensils className="w-3 h-3" />;
+    default:
+      return <Heart className="w-3 h-3" />;
+  }
+};
+
+const flattenFavourite = (fav: FavouriteItem): FlatItem | null => {
+  const pairs: Array<[FavouriteType, any]> = [
+    ["hotel", fav.hotel_id],
+    ["tour", fav.tour_id],
+    ["restaurant", fav.restaurant_id],
+    ["destination", fav.destination_id],
+    ["transport", fav.transport_id],
+    ["airline", fav.airline_id],
+  ];
+  const hit = pairs.find(([, v]) => v && typeof v === "object");
+  if (!hit) return null;
+  const [type, item] = hit;
+  return {
+    favouriteId: fav._id,
+    type,
+    itemId: item._id,
+    name: item.name || item.title || item.service_name || "Mục yêu thích",
+    image:
+      item.image_url ||
+      item.images?.[0] ||
+      item.image ||
+      item.thumbnail ||
+      "https://placehold.co/300x200/png?text=Image",
+    location: item.location || item.address || undefined,
+    price:
+      item.priceTwoSingleBed ||
+      item.adult_price ||
+      item.price ||
+      undefined,
+    rating: item.rating,
+    savedAt: fav.createdAt,
+  };
+};
+
 export default function FavouritesPage() {
-  const [activeTab, setActiveTab] = useState<FavouriteType>("all");
-  const [favourites, setFavourites] = useState<FavouriteItem[]>([]);
+  const [activeTab, setActiveTab] = useState<TabKey>("all");
+  const [favourites, setFavourites] = useState<FlatItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // Load favourites from localStorage
-    const saved = localStorage.getItem("vivutravel_favourites");
-    if (saved) {
+    let mounted = true;
+    (async () => {
+      setLoading(true);
+      setError(null);
       try {
-        setFavourites(JSON.parse(saved));
-      } catch (e) {
-        console.error("Failed to parse favourites:", e);
+        const res = await favouritesApi.list();
+        if (!mounted) return;
+        const flat = (res.data || [])
+          .map(flattenFavourite)
+          .filter((x): x is FlatItem => x !== null);
+        setFavourites(flat);
+      } catch (err: any) {
+        if (!mounted) return;
+        setError(err?.response?.data?.message || "Không tải được danh sách yêu thích");
+      } finally {
+        if (mounted) setLoading(false);
       }
-    }
+    })();
+    return () => {
+      mounted = false;
+    };
   }, []);
 
-  const removeFavourite = (id: string) => {
-    const updated = favourites.filter((f) => f.id !== id);
-    setFavourites(updated);
-    localStorage.setItem("vivutravel_favourites", JSON.stringify(updated));
+  const removeFavourite = async (item: FlatItem) => {
+    try {
+      await favouritesApi.remove(item.type, item.itemId);
+      setFavourites((prev) => prev.filter((f) => f.favouriteId !== item.favouriteId));
+    } catch (err) {
+      console.error("Remove favourite failed:", err);
+    }
   };
 
-  const filteredFavourites = activeTab === "all" 
-    ? favourites 
-    : favourites.filter((f) => f.type === activeTab);
+  const filteredFavourites = useMemo(
+    () => (activeTab === "all" ? favourites : favourites.filter((f) => f.type === activeTab)),
+    [activeTab, favourites]
+  );
 
-  const getTypeLabel = (type: string) => {
-    const labels: Record<string, string> = {
-      tour: "Tour",
-      hotel: "Khách sạn",
-      flight: "Chuyến bay",
-      transport: "Xe buýt",
-      destination: "Điểm đến",
+  const counts = useMemo(() => {
+    const c: Record<TabKey, number> = {
+      all: favourites.length,
+      hotel: 0,
+      tour: 0,
+      restaurant: 0,
+      destination: 0,
+      transport: 0,
+      airline: 0,
     };
-    return labels[type] || type;
-  };
+    favourites.forEach((f) => {
+      c[f.type] += 1;
+    });
+    return c;
+  }, [favourites]);
 
-  const getTypeIcon = (type: string) => {
-    const icons: Record<string, React.ReactNode> = {
-      tour: <Map className="w-3 h-3" />,
-      hotel: <Hotel className="w-3 h-3" />,
-      flight: <Plane className="w-3 h-3" />,
-      transport: <Bus className="w-3 h-3" />,
-      destination: <MapPin className="w-3 h-3" />,
-    };
-    return icons[type] || <Heart className="w-3 h-3" />;
-  };
-
-  const getTypeBadgeColor = (type: string) => {
-    const colors: Record<string, string> = {
-      tour: "bg-orange-100 text-orange-700",
-      hotel: "bg-blue-100 text-blue-700",
-      flight: "bg-purple-100 text-purple-700",
-      transport: "bg-green-100 text-green-700",
-      destination: "bg-teal-100 text-teal-700",
-    };
-    return colors[type] || "bg-gray-100 text-gray-700";
-  };
-
-  const tabs = [
-    { key: "all" as FavouriteType, label: "Tất cả", count: favourites.length },
-    { key: "tour" as FavouriteType, label: "Tour", count: favourites.filter(f => f.type === "tour").length },
-    { key: "hotel" as FavouriteType, label: "Khách sạn", count: favourites.filter(f => f.type === "hotel").length },
-    { key: "flight" as FavouriteType, label: "Chuyến bay", count: favourites.filter(f => f.type === "flight").length },
-    { key: "destination" as FavouriteType, label: "Điểm đến", count: favourites.filter(f => f.type === "destination").length },
+  const tabs: { key: TabKey; label: string }[] = [
+    { key: "all", label: "Tất cả" },
+    { key: "tour", label: "Tour" },
+    { key: "hotel", label: "Khách sạn" },
+    { key: "restaurant", label: "Nhà hàng" },
+    { key: "destination", label: "Điểm đến" },
+    { key: "airline", label: "Hãng bay" },
+    { key: "transport", label: "Phương tiện" },
   ];
 
   const EmptyState = () => (
@@ -93,46 +169,46 @@ export default function FavouritesPage() {
       </div>
       <p className="text-gray-500 text-lg mb-2">Chưa có mục yêu thích nào</p>
       <p className="text-gray-400 text-sm mb-4">
-        Nhấn vào biểu tượng ❤️ trên các tour, khách sạn để lưu lại
+        Nhấn vào biểu tượng trái tim trên các tour, khách sạn để lưu lại
       </p>
       <Link href="/tours">
-        <Button className="bg-blue-600 hover:bg-blue-700">
-          Khám phá tour
-        </Button>
+        <Button className="bg-blue-600 hover:bg-blue-700">Khám phá tour</Button>
       </Link>
     </div>
   );
 
-  const FavouriteCard = ({ item }: { item: FavouriteItem }) => (
+  const FavouriteCard = ({ item }: { item: FlatItem }) => (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden hover:shadow-md transition-shadow group">
       <div className="flex">
         <div className="w-36 h-32 relative flex-shrink-0">
           <img
-            src={item.image || "https://placehold.co/300x200/png?text=Image"}
+            src={item.image}
             alt={item.name}
             className="w-full h-full object-cover"
             onError={(e) => (e.currentTarget.src = "https://placehold.co/300x200/png?text=Image")}
           />
-          <span className={cn(
-            "absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-medium flex items-center gap-1",
-            getTypeBadgeColor(item.type)
-          )}>
+          <span
+            className={cn(
+              "absolute top-2 left-2 px-2 py-0.5 rounded-full text-[10px] font-medium flex items-center gap-1",
+              TYPE_BADGE_COLORS[item.type]
+            )}
+          >
             {getTypeIcon(item.type)}
-            {getTypeLabel(item.type)}
+            {TYPE_LABELS[item.type]}
           </span>
         </div>
         <div className="flex-1 p-4">
           <div className="flex items-start justify-between">
             <h3 className="font-semibold text-gray-900 line-clamp-1 flex-1 mr-2">{item.name}</h3>
-            <button 
-              onClick={() => removeFavourite(item.id)}
+            <button
+              onClick={() => removeFavourite(item)}
               className="text-gray-400 hover:text-red-500 transition-colors opacity-0 group-hover:opacity-100"
               title="Xóa khỏi yêu thích"
             >
               <Trash2 className="w-4 h-4" />
             </button>
           </div>
-          
+
           {item.location && (
             <div className="flex items-center text-sm text-gray-500 mt-1">
               <MapPin className="w-3 h-3 mr-1" />
@@ -142,13 +218,13 @@ export default function FavouritesPage() {
 
           <div className="flex items-center justify-between mt-3">
             <div className="flex items-center gap-3">
-              {item.rating && (
+              {item.rating != null && (
                 <div className="flex items-center gap-1">
                   <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
                   <span className="text-sm font-medium">{item.rating}</span>
                 </div>
               )}
-              {item.price && (
+              {item.price != null && (
                 <span className="text-orange-600 font-bold">
                   {item.price.toLocaleString("vi-VN")} đ
                 </span>
@@ -189,12 +265,16 @@ export default function FavouritesPage() {
               )}
             >
               {tab.label}
-              {tab.count > 0 && (
-                <span className={cn(
-                  "ml-1.5 px-1.5 py-0.5 rounded-full text-xs",
-                  activeTab === tab.key ? "bg-blue-100 text-blue-600" : "bg-gray-100 text-gray-500"
-                )}>
-                  {tab.count}
+              {counts[tab.key] > 0 && (
+                <span
+                  className={cn(
+                    "ml-1.5 px-1.5 py-0.5 rounded-full text-xs",
+                    activeTab === tab.key
+                      ? "bg-blue-100 text-blue-600"
+                      : "bg-gray-100 text-gray-500"
+                  )}
+                >
+                  {counts[tab.key]}
                 </span>
               )}
             </button>
@@ -204,10 +284,14 @@ export default function FavouritesPage() {
 
       {/* Content */}
       <div className="p-6">
-        {filteredFavourites.length > 0 ? (
+        {loading ? (
+          <div className="py-16 text-center text-gray-500">Đang tải danh sách yêu thích…</div>
+        ) : error ? (
+          <div className="py-16 text-center text-red-500">{error}</div>
+        ) : filteredFavourites.length > 0 ? (
           <div className="space-y-4">
             {filteredFavourites.map((item) => (
-              <FavouriteCard key={item.id} item={item} />
+              <FavouriteCard key={item.favouriteId} item={item} />
             ))}
           </div>
         ) : (

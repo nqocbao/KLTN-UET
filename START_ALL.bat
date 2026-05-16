@@ -10,20 +10,21 @@ echo   KLTN Travel Chatbot - Quick Start
 echo ============================================
 echo.
 
-REM Check if model exists
-if not exist "chatbot\models\travel_chatbot.tar.gz" (
+REM Check if any model exists in chatbot\models
+dir /b "chatbot\models\*.tar.gz" >nul 2>&1
+if errorlevel 1 (
     echo ============================================
     echo   FIRST TIME SETUP
     echo ============================================
     echo.
-    echo Model chua duoc train! Dang train model...
+    echo Chua co model nao trong chatbot\models! Dang train...
     echo Thoi gian uoc tinh: 5-15 phut
     echo.
-    
+
     cd chatbot
     call train.bat
     cd ..
-    
+
     if %ERRORLEVEL% NEQ 0 (
         echo.
         echo Training that bai! Vui long kiem tra loi.
@@ -45,15 +46,15 @@ echo.
 echo Frontend: Ban tu chay "npm run dev" trong folder client
 echo.
 
-REM Start RASA Server
+REM Start RASA Server (tu dong nhan model moi nhat trong models/)
 echo [1/3] Starting RASA Server...
-start "RASA Server" cmd /k "cd chatbot && venv\Scripts\activate && rasa run --model models\travel_chatbot.tar.gz --enable-api --cors * --port 5005"
+start "RASA Server" cmd /k "cd chatbot && venv310\Scripts\activate && rasa run --enable-api --cors * --port 5005"
 
 timeout /t 5 /nobreak >nul
 
-REM Start Actions Server
+REM Start Actions Server (chua RAG food review)
 echo [2/3] Starting Actions Server...
-start "Actions Server" cmd /k "cd chatbot && venv\Scripts\activate && rasa run actions --port 5055"
+start "Actions Server" cmd /k "cd chatbot && venv310\Scripts\activate && rasa run actions --port 5055"
 
 timeout /t 3 /nobreak >nul
 

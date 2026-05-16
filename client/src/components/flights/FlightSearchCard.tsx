@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plane, Luggage, Briefcase, Phone, Heart } from "lucide-react";
 import { ContactDialog } from "@/components/common/ContactDialog";
+import { favouritesApi, isMongoObjectId } from "@/lib/services/favourites.service";
 
 export interface Flight {
   id: string;
@@ -29,12 +30,39 @@ interface FlightSearchCardProps {
 export function FlightSearchCard({ flight }: FlightSearchCardProps) {
   const [showContact, setShowContact] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const flightRefId = (flight as any)?._id || flight?.id;
+  const canFavourite = isMongoObjectId(flightRefId);
 
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
-  }, []);
+    if (!token || !canFavourite) return;
+    favouritesApi
+      .check("airline", flightRefId as string)
+      .then((res) => setIsSaved(!!res.data?.favourited))
+      .catch(() => {});
+  }, [flightRefId, canFavourite]);
+
+  const toggleFavourite = async () => {
+    if (!canFavourite || isSaving) return;
+    setIsSaving(true);
+    try {
+      if (isSaved) {
+        await favouritesApi.remove("airline", flightRefId as string);
+        setIsSaved(false);
+      } else {
+        await favouritesApi.add("airline", flightRefId as string);
+        setIsSaved(true);
+      }
+    } catch (err) {
+      console.error("Toggle favourite failed:", err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <>
@@ -126,12 +154,13 @@ export function FlightSearchCard({ flight }: FlightSearchCardProps) {
               <Phone className="w-4 h-4 mr-2" />
               Liên hệ
             </Button>
-            {isLoggedIn && (
-              <Button 
-                variant="ghost" 
+            {isLoggedIn && canFavourite && (
+              <Button
+                variant="ghost"
                 size="sm"
+                disabled={isSaving}
                 className={`w-full h-7 text-xs mt-1 ${isSaved ? 'text-red-500' : 'text-gray-500'}`}
-                onClick={() => setIsSaved(!isSaved)}
+                onClick={toggleFavourite}
               >
                 <Heart className={`w-3 h-3 mr-1 ${isSaved ? 'fill-red-500' : ''}`} />
                 {isSaved ? 'Đã lưu' : 'Lưu yêu thích'}

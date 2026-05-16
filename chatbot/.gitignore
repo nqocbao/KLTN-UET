@@ -1,4 +1,4 @@
-# Byte-compiled / optimized / DLL files
+﻿# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
@@ -49,3 +49,6 @@ Thumbs.db
 
 # Logs
 *.log
+
+rag/outputs/facebook_crawl_eval/apify_comments_cache/
+rag/outputs/facebook_crawl_eval/facebook_comments_enriched_posts.json
